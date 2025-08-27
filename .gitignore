@@ -1,0 +1,17 @@
+# Build results
+bin/
+obj/
+*.exe
+*.dll
+
+# Visual Studio files
+*.user
+*.suo
+*.vs/
+
+# Logs
+*.log
+
+# Secrets
+appsettings.Development.json
+appsettings.json

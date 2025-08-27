@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Travel.Genie", "Travel.Genie.csproj", "{FB286AA2-638F-E593-2F1D-D6827903AA9D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FB286AA2-638F-E593-2F1D-D6827903AA9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB286AA2-638F-E593-2F1D-D6827903AA9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB286AA2-638F-E593-2F1D-D6827903AA9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB286AA2-638F-E593-2F1D-D6827903AA9D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DC47092B-E64C-4B93-929D-3728E949ECB8}
+	EndGlobalSection
+EndGlobal
