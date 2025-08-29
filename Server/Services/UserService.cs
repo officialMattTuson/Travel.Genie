@@ -1,11 +1,12 @@
 using System.Text;
 using System.Collections.Concurrent;
-using Travel.Genie.Models;
+using Server.Models;
 using Konscious.Security.Cryptography;
+using Server.Services.Interfaces;
 
-namespace Travel.Genie.Services;
+namespace Server.Services;
 
-public class UserService
+public class UserService: IUserService
 {
   private readonly ConcurrentDictionary<string, User> _users = new();
   private readonly HashSet<string> _verifiedEmails = new();

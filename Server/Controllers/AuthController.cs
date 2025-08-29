@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using Travel.Genie.Models;
-using Travel.Genie.Services;
+using Server.Models;
+using Server.Services;
 
-namespace Travel.Genie.Controllers;
+namespace Server.Controllers;
 
 [ApiController]
 [Route("auth")]

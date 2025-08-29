@@ -1,13 +1,14 @@
 using System.Collections.Concurrent;
+using Server.Services.Interfaces;
 
-namespace Travel.Genie.Services;
+namespace Server.Services;
 
-public class OtpService
+public class OtpService: IOtpService
 {
   private readonly ConcurrentDictionary<string, (string Otp, DateTime Expiry)> _otps = new();
-  private readonly EmailService _emailService;
+  private readonly IEmailService _emailService;
 
-  public OtpService(EmailService emailService)
+  public OtpService(IEmailService emailService)
   {
     _emailService = emailService;
   }

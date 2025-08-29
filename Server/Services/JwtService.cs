@@ -2,10 +2,11 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using Server.Services.Interfaces;
 
-namespace Travel.Genie.Services;
+namespace Server.Services;
 
-public class JwtService
+public class JwtService: IJwtService
 {
   private readonly string _secret;
   private readonly string _issuer;

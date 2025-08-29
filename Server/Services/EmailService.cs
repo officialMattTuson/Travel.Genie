@@ -1,9 +1,10 @@
 using SendGrid;
 using SendGrid.Helpers.Mail;
+using Server.Services.Interfaces;
 
-namespace Travel.Genie.Services;
+namespace Server.Services;
 
-public class EmailService
+public class EmailService : IEmailService
 {
   private readonly string _apiKey;
   private readonly string _from;
@@ -11,8 +12,8 @@ public class EmailService
 
   public EmailService(IConfiguration config)
   {
-    _apiKey = config["SendGrid:ApiKey"]!;
-    _from = config["SendGrid:From"]!;
+    _apiKey = config["SendGrid:ApiKey"] ?? throw new ArgumentNullException(nameof(config));
+    _from = config["SendGrid:From"] ?? throw new ArgumentNullException(nameof(config));
     _templatePath = Path.Combine(AppContext.BaseDirectory, "Templates", "otp-template.html");
   }
 
