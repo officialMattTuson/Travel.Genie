@@ -3,12 +3,13 @@
     <!-- Step 1 -->
     <app-otp-request-step
       *ngSwitchCase="AuthStep.RequestOtp"
-      (otpRequested)="next()">
+      (otpRequested)="receiveOtpRequest($event)">
     </app-otp-request-step>
 
     <!-- Step 2 -->
     <app-otp-verify-step
       *ngSwitchCase="AuthStep.VerifyOtp"
+      [emailAddress]="emailAddress"
       (otpVerified)="next()">
     </app-otp-verify-step>
 

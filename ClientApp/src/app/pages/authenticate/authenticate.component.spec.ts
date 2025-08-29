@@ -41,6 +41,13 @@ describe('AuthenticateComponent', () => {
     expect(component.step as AuthStep).toBe(AuthStep.VerifyOtp);
   });
 
+  it('should increment step and update signal when receiveOtpRequest is called', () => {
+    component.step = AuthStep.RequestOtp;
+    component.receiveOtpRequest('test@example.com');
+    expect(component.emailAddress()).toBe('test@example.com');
+    expect(component.step as AuthStep).toBe(AuthStep.VerifyOtp);
+  });
+
   it('should not increment step beyond Login', () => {
     component.step = AuthStep.Login;
     component.next();

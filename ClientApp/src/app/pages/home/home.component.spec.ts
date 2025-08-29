@@ -47,4 +47,30 @@ describe('HomeComponent', () => {
     // Assert
     expect(spy).toHaveBeenCalled();
   });
+
+  describe('handleRegister', () => {
+    it('should navigate to the register page', () => {
+      // Arrange
+      const navigateSpy = spyOn(component['router'], 'navigate');
+
+      // Act
+      component.handleRegister();
+
+      // Assert
+      expect(navigateSpy).toHaveBeenCalledWith(['/auth']);
+    });
+  });
+
+  describe('goToLogin', () => {
+    it('should navigate to the login page', () => {
+      // Arrange
+      const navigateSpy = spyOn(component['router'], 'navigate');
+
+      // Act
+      component.goToLogin();
+
+      // Assert
+      expect(navigateSpy).toHaveBeenCalledWith(['/auth'], { queryParams: { step: 'login' } });
+    });
+  });
 });

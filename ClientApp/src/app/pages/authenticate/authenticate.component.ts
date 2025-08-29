@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RegisterStepComponent } from './components/register-step/register-step.component';
 import { OtpRequestStepComponent } from './components/otp-request-step/otp-request-step.component';
 import { LoginStepComponent } from './components/login-step/login-step.component';
@@ -28,6 +28,7 @@ export enum AuthStep {
 export class AuthenticateComponent {
   step = AuthStep.RequestOtp;
   AuthStep = AuthStep;
+  emailAddress = signal('');
 
   private readonly route = inject(ActivatedRoute);
 
@@ -37,6 +38,11 @@ export class AuthenticateComponent {
         this.step = AuthStep.Login;
       }
     });
+  }
+
+  receiveOtpRequest(email: string) {
+    this.emailAddress.set(email);
+    this.next();
   }
 
   next() {
