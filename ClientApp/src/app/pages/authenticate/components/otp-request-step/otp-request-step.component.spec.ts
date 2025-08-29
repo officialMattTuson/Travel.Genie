@@ -91,14 +91,16 @@ describe('OtpRequestStepComponent', () => {
 
     it('should not emit otpRequested event on invalid form submission', () => {
       // Arrange
-      spyOn(component.otpRequested, 'emit');
+      const spy = spyOn(component.otpRequested, 'emit');
+      const formSpy = spyOn(component.emailForm, 'markAllAsTouched');
       component.emailForm.setValue({ email: 'invalid-email' });
 
       // Act
       component.sendVerificationEmail();
 
       // Assert
-      expect(component.otpRequested.emit).not.toHaveBeenCalled();
+      expect(spy).not.toHaveBeenCalled();
+      expect(formSpy).toHaveBeenCalled();
     });
   });
 

@@ -26,7 +26,6 @@ import { Router } from '@angular/router';
   styleUrl: './otp-request-step.component.scss',
 })
 export class OtpRequestStepComponent {
-
   @Output() otpRequested = new EventEmitter<string>();
 
   submissionAttempted = false;
@@ -38,10 +37,11 @@ export class OtpRequestStepComponent {
 
   sendVerificationEmail() {
     this.submissionAttempted = true;
-    if (this.emailForm.valid) {
-      const email = String(this.emailForm.get('email')?.value);
-      this.otpRequested.emit(email);
+    if (this.emailForm.invalid) {
+      return this.emailForm.markAllAsTouched();
     }
+    const email = String(this.emailForm.get('email')?.value);
+    this.otpRequested.emit(email);
   }
 
   returnHome() {

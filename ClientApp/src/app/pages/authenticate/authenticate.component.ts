@@ -5,6 +5,7 @@ import { LoginStepComponent } from './components/login-step/login-step.component
 import { OtpVerifyStepComponent } from './components/otp-verify-step/otp-verify-step.component';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { RegistrationDetails } from './Models/registration-details.model';
 
 export enum AuthStep {
   RequestOtp,
@@ -42,6 +43,10 @@ export class AuthenticateComponent {
 
   receiveOtpRequest(email: string) {
     this.emailAddress.set(email);
+    this.next();
+  }
+
+  receiveSignUpRequest(registrationDetails: RegistrationDetails) {
     this.next();
   }
 

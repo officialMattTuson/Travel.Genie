@@ -16,7 +16,8 @@
     <!-- Step 3 -->
     <app-register-step
       *ngSwitchCase="AuthStep.Register"
-      (registered)="next()">
+      [emailAddress]="emailAddress"
+      (registrationRequest)="receiveSignUpRequest($event)">
     </app-register-step>
 
     <!-- Step 4 -->

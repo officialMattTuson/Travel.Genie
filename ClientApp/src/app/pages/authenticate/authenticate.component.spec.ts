@@ -36,21 +36,47 @@ describe('AuthenticateComponent', () => {
   });
 
   it('should increment step when next() is called', () => {
+    // Arrange
     component.step = AuthStep.RequestOtp;
+
+    // Act
     component.next();
+
+    // Assert
     expect(component.step as AuthStep).toBe(AuthStep.VerifyOtp);
   });
 
   it('should increment step and update signal when receiveOtpRequest is called', () => {
+    // Arrange
     component.step = AuthStep.RequestOtp;
+
+    // Act
     component.receiveOtpRequest('test@example.com');
+
+    // Assert
     expect(component.emailAddress()).toBe('test@example.com');
     expect(component.step as AuthStep).toBe(AuthStep.VerifyOtp);
   });
 
+  it('should increment step and update signal when receiveSignUpRequest is called', () => {
+    // Arrange
+    component.step = AuthStep.Register;
+
+    // Act
+    component.receiveSignUpRequest({ email: 'test@example.com', password: 'Valid1@password' });
+    
+    // Assert
+    expect(component.step as AuthStep).toBe(AuthStep.Login);
+  });
+
   it('should not increment step beyond Login', () => {
+    // Arrange
     component.step = AuthStep.Login;
+
+    // Act
     component.next();
+
+    // Assert
     expect(component.step).toBe(AuthStep.Login);
   });
 });
