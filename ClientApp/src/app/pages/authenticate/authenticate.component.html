@@ -1,1 +1,26 @@
-<p>authenticate works!</p>
+<div class="auth-container">
+  <ng-container [ngSwitch]="step">
+    <!-- Step 1 -->
+    <app-otp-request-step
+      *ngSwitchCase="AuthStep.RequestOtp"
+      (otpRequested)="next()">
+    </app-otp-request-step>
+
+    <!-- Step 2 -->
+    <app-otp-verify-step
+      *ngSwitchCase="AuthStep.VerifyOtp"
+      (otpVerified)="next()">
+    </app-otp-verify-step>
+
+    <!-- Step 3 -->
+    <app-register-step
+      *ngSwitchCase="AuthStep.Register"
+      (registered)="next()">
+    </app-register-step>
+
+    <!-- Step 4 -->
+    <app-login-step
+      *ngSwitchCase="AuthStep.Login">
+    </app-login-step>
+  </ng-container>
+</div>
