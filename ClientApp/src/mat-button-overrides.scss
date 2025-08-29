@@ -9,3 +9,8 @@
   border-radius: 50%;
   padding: 8px;
 }
+
+.mat-mdc-outlined-button.mat-warn {
+  --mdc-outlined-button-label-text-color: #d32f2f;
+  --mdc-outlined-button-outline-color: #d32f2f;
+}

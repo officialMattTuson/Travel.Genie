@@ -6,7 +6,7 @@ import { OtpVerifyStepComponent } from './components/otp-verify-step/otp-verify-
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 
-enum AuthStep {
+export enum AuthStep {
   RequestOtp,
   VerifyOtp,
   Register,

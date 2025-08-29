@@ -1,0 +1,11 @@
+.auth {
+  &__container {
+    background: linear-gradient(135deg, #3db5c5 20%, #e0b471 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 30%;
+    height: 100vh;
+  }
+}

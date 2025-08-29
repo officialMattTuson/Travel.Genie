@@ -13,10 +13,10 @@ export class HomeComponent {
   private readonly router = inject(Router);
 
   handleRegister() {
-    // Handle registration logic here
+    this.router.navigate(['/auth']);
   }
 
   goToLogin() {
-    this.router.navigate(['/authenticate'], { queryParams: { step: 'login' } });
+    this.router.navigate(['/auth'], { queryParams: { step: 'login' } });
   }
 }

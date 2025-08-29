@@ -1,4 +1,5 @@
 @use "./mat-button-overrides";
+@use "./mat-card-overrides";
 @use '@angular/material' as mat;
 
 $my-theme: mat.define-theme((
