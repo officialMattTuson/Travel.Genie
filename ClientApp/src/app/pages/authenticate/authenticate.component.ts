@@ -61,7 +61,7 @@ export class AuthenticateComponent {
     }
   }
 
-  private navigateToDashboard() {
+  navigateToDashboard() {
     this.router.navigate(['/dashboard']);
   }
 }

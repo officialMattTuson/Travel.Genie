@@ -70,9 +70,10 @@ export class RegisterStepComponent {
   signUp() {
     this.submissionAttempted = true;
     if (this.registrationForm.valid) {
-      this.registrationRequest.emit(
-        this.registrationForm.value as RegistrationDetails
-      );
+      this.registrationRequest.emit({
+        email: String(this.registrationForm.get('email')?.value),
+        password: String(this.registrationForm.get('password')?.value),
+      });
     }
   }
 }

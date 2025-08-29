@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AuthenticateComponent, AuthStep } from './authenticate.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
 describe('AuthenticateComponent', () => {
@@ -63,8 +63,11 @@ describe('AuthenticateComponent', () => {
     component.step = AuthStep.Register;
 
     // Act
-    component.receiveSignUpRequest({ email: 'test@example.com', password: 'Valid1@password' });
-    
+    component.receiveSignUpRequest({
+      email: 'test@example.com',
+      password: 'Valid1@password',
+    });
+
     // Assert
     expect(component.step as AuthStep).toBe(AuthStep.Login);
   });
@@ -78,5 +81,20 @@ describe('AuthenticateComponent', () => {
 
     // Assert
     expect(component.step).toBe(AuthStep.Login);
+  });
+
+  it('should navigate to dashboard when receiveLoginRequest is called', () => {
+    spyOn(component, 'navigateToDashboard');
+    component.receiveLoginRequest({
+      email: 'test@example.com',
+      password: 'Valid1@password',
+    });
+    expect(component.navigateToDashboard).toHaveBeenCalled();
+  });
+
+  it('should navigate to dashboard when navigateToDashboard is called', () => {
+    spyOn(TestBed.inject(Router), 'navigate');
+    component.navigateToDashboard();
+    expect(TestBed.inject(Router).navigate).toHaveBeenCalledWith(['/dashboard']);
   });
 });

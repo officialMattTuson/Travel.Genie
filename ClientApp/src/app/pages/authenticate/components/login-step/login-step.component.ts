@@ -52,7 +52,7 @@ export class LoginStepComponent {
   constructor() {
     effect(() => {
       this.registrationForm.get('email')?.setValue(this.emailAddress());
-    }); 
+    });
   }
 
   signIn() {
@@ -60,6 +60,9 @@ export class LoginStepComponent {
     if (!this.registrationForm.valid) {
       return this.registrationForm.markAllAsTouched();
     }
-    this.loginRequest.emit(this.registrationForm.value as RegistrationDetails);
+    this.loginRequest.emit({
+      email: String(this.registrationForm.get('email')?.value),
+      password: String(this.registrationForm.get('password')?.value),
+    });
   }
 }
