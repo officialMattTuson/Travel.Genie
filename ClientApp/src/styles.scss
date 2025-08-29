@@ -1,20 +1,22 @@
 @use "./mat-button-overrides";
 @use "./mat-card-overrides";
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 
-$my-theme: mat.define-theme((
-  color: (
-    theme-type: light,
-    primary: mat.$blue-palette,
-    tertiary: mat.$magenta-palette,
-  ),
-));
+$my-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: light,
+      primary: mat.$blue-palette,
+      tertiary: mat.$magenta-palette,
+    ),
+  )
+);
 
 :root {
   @include mat.all-component-themes($my-theme);
 }
 :root {
-  --mat-icon-color: #fff
+  --mat-icon-color: #fff;
 }
 
 html,
@@ -23,5 +25,38 @@ body {
 }
 body {
   margin: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.auth__container {
+  mat-card-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+    margin-block-end: 2rem;
+  }
+
+  mat-card-subtitle {
+    text-align: center;
+    padding-inline: 0.5rem;
+    margin-block-end: 1rem;
+  }
+
+  mat-card-actions {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .button {
+    width: 100%;
+    font-size: 1.15rem;
+    padding-block: 1.5rem;
+    margin-block-start: 1.5rem;
+  }
+
+  #invisibility-icon {
+    color: #000;
+  }
 }

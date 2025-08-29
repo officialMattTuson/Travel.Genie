@@ -22,7 +22,9 @@
 
     <!-- Step 4 -->
     <app-login-step
-      *ngSwitchCase="AuthStep.Login">
+      *ngSwitchCase="AuthStep.Login"
+      [emailAddress]="emailAddress"
+      (loginRequest)="receiveLoginRequest($event)">
     </app-login-step>
   </ng-container>
 </div>

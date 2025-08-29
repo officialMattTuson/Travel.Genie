@@ -1,40 +1,40 @@
-<mat-card>
-  <mat-card-title>Verification</mat-card-title>
-  <mat-card-subtitle
-    >An email was sent to <b>{{ emailAddress() }}</b>. Please enter the one time password (OTP) to verify your account.</mat-card-subtitle
-  >
-  <mat-card-content>
-    <form [formGroup]="otpRequestForm">
-      <mat-form-field appearance="outline">
-        <mat-label>One time password</mat-label>
-        <input
-          matInput
-          formControlName="otp"
-          type="number"
-          required
-          placeholder="Enter your one time password"
-        />
-        @if (submissionAttempted && otpRequestForm.get('otp')?.invalid) {
-        <mat-error> One time password is incorrect. </mat-error>
-        }
-      </mat-form-field>
-    </form>
-  </mat-card-content>
-  <mat-card-actions>
-    <button
-      class="button send"
-      mat-stroked-button
-      color="primary"
-      (click)="verifyOtpRequest()"
+<div class="auth__container">
+  <mat-card>
+    <mat-card-title>Verification</mat-card-title>
+    <mat-card-subtitle
+      >An email was sent to <b>{{ emailAddress() }}</b
+      >. Please enter the one time password (OTP) to verify your
+      account.</mat-card-subtitle
     >
-      Verify email
-    </button>
-    <button
-      class="button return"
-      mat-stroked-button
-      color="warn"
-    >
-      Resend verification email
-    </button>
-  </mat-card-actions>
-</mat-card>
+    <mat-card-content>
+      <form [formGroup]="otpRequestForm">
+        <mat-form-field appearance="outline">
+          <mat-label>One time password</mat-label>
+          <input
+            matInput
+            formControlName="otp"
+            type="number"
+            required
+            placeholder="Enter your one time password"
+          />
+          @if (submissionAttempted && otpRequestForm.get('otp')?.invalid) {
+          <mat-error> One time password is incorrect. </mat-error>
+          }
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+    <mat-card-actions>
+      <button
+        class="button send"
+        mat-stroked-button
+        color="primary"
+        (click)="verifyOtpRequest()"
+      >
+        Verify email
+      </button>
+      <button class="button return" mat-stroked-button color="warn">
+        Resend verification email
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

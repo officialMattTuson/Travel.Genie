@@ -4,7 +4,7 @@ import { OtpRequestStepComponent } from './components/otp-request-step/otp-reque
 import { LoginStepComponent } from './components/login-step/login-step.component';
 import { OtpVerifyStepComponent } from './components/otp-verify-step/otp-verify-step.component';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RegistrationDetails } from './Models/registration-details.model';
 
 export enum AuthStep {
@@ -32,6 +32,7 @@ export class AuthenticateComponent {
   emailAddress = signal('');
 
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
 
   constructor() {
     this.route.queryParams.subscribe((params) => {
@@ -50,9 +51,17 @@ export class AuthenticateComponent {
     this.next();
   }
 
+  receiveLoginRequest(loginDetails: RegistrationDetails) {
+    this.navigateToDashboard();
+  }
+
   next() {
     if (this.step < AuthStep.Login) {
       this.step++;
     }
+  }
+
+  private navigateToDashboard() {
+    this.router.navigate(['/dashboard']);
   }
 }

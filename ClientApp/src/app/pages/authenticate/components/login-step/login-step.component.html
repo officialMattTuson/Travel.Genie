@@ -1,1 +1,49 @@
-<p>login-step works!</p>
+<div class="auth__container">
+  <mat-card>
+    <mat-card-title>Sign in</mat-card-title>
+    <mat-card-subtitle>
+      Sign in to your Travel Genie account.
+    </mat-card-subtitle>
+    <mat-card-content>
+      <form [formGroup]="registrationForm">
+        <mat-form-field appearance="outline">
+          <mat-label>Email address</mat-label>
+          <input matInput formControlName="email" type="email" required />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            [type]="hidePassword ? 'password' : 'text'"
+            formControlName="password"
+            required
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="hidePassword = !hidePassword"
+          >
+            <mat-icon id="invisibility-icon" color="primary">{{
+              hidePassword ? "visibility_off" : "visibility"
+            }}</mat-icon>
+          </button>
+          @if (registrationForm.get('password')?.invalid && submissionAttempted)
+          {
+          <mat-error> Please enter valid password </mat-error>
+          }
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+    <mat-card-actions>
+      <button
+        class="button send"
+        mat-stroked-button
+        color="primary"
+        (click)="signIn()"
+      >
+        Sign in
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

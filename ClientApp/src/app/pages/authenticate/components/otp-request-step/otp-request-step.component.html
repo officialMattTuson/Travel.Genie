@@ -1,42 +1,44 @@
-<mat-card>
-  <mat-card-title>Welcome</mat-card-title>
-  <mat-card-subtitle
-    >To register an account with Travel Genie, we first need to verify your
-    email address</mat-card-subtitle
-  >
-  <mat-card-content>
-    <form [formGroup]="emailForm">
-      <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <input
-          matInput
-          formControlName="email"
-          type="email"
-          required
-          placeholder="Enter your email address"
-        />
-        @if (submissionAttempted && emailForm.get('email')?.invalid) {
-        <mat-error> Please enter a valid email address. </mat-error>
-        }
-      </mat-form-field>
-    </form>
-  </mat-card-content>
-  <mat-card-actions>
-    <button
-      class="button send"
-      mat-stroked-button
-      color="primary"
-      (click)="sendVerificationEmail()"
+<div class="auth__container">
+  <mat-card>
+    <mat-card-title>Welcome</mat-card-title>
+    <mat-card-subtitle
+      >To register an account with Travel Genie, we first need to verify your
+      email address</mat-card-subtitle
     >
-      Send email verification
-    </button>
-    <button
-      class="button return"
-      mat-stroked-button
-      color="warn"
-      (click)="returnHome()"
-    >
-      Return
-    </button>
-  </mat-card-actions>
-</mat-card>
+    <mat-card-content>
+      <form [formGroup]="emailForm">
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input
+            matInput
+            formControlName="email"
+            type="email"
+            required
+            placeholder="Enter your email address"
+          />
+          @if (submissionAttempted && emailForm.get('email')?.invalid) {
+          <mat-error> Please enter a valid email address. </mat-error>
+          }
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+    <mat-card-actions>
+      <button
+        class="button send"
+        mat-stroked-button
+        color="primary"
+        (click)="sendVerificationEmail()"
+      >
+        Send email verification
+      </button>
+      <button
+        class="button return"
+        mat-stroked-button
+        color="warn"
+        (click)="returnHome()"
+      >
+        Return
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

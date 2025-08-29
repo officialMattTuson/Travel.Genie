@@ -1,47 +1,58 @@
-<mat-card>
-  <mat-card-title>Sign up</mat-card-title>
-  <mat-card-subtitle>
-    Your email has been verified!  Complete the form below to complete the sign up process! We have prefilled your address already.
-  </mat-card-subtitle>
-  <mat-card-content>
-    <form [formGroup]="registrationForm">
-      <mat-form-field appearance="outline">
-        <mat-label>Email address</mat-label>
-        <input
-          matInput
-          formControlName="email"
-          type="email"
-          required
-        />
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Password</mat-label>
-        <input
-          matInput
-          [type]="hidePassword ? 'password' : 'text'"
-          formControlName="password"
-          required
-        />
-        <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
-          <mat-icon id="invisibility-icon" color="primary">{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-        </button>
-        <mat-hint align="end">Password must be at least 8 characters, include a number, uppercase, lowercase, and a special character.</mat-hint>
-        @if (registrationForm.get('password')?.invalid && submissionAttempted) {
+<div class="auth__container">
+  <mat-card>
+    <mat-card-title>Sign up</mat-card-title>
+    <mat-card-subtitle>
+      Your email has been verified! Complete the form below to complete the sign
+      up process! We have prefilled your address already.
+    </mat-card-subtitle>
+    <mat-card-content>
+      <form [formGroup]="registrationForm">
+        <mat-form-field appearance="outline">
+          <mat-label>Email address</mat-label>
+          <input matInput formControlName="email" type="email" required />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            [type]="hidePassword ? 'password' : 'text'"
+            formControlName="password"
+            required
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="hidePassword = !hidePassword"
+          >
+            <mat-icon id="invisibility-icon" color="primary">{{
+              hidePassword ? "visibility_off" : "visibility"
+            }}</mat-icon>
+          </button>
+          <mat-hint align="end"
+            >Password must be at least 8 characters, include a number,
+            uppercase, lowercase, and a special character.</mat-hint
+          >
+          @if (registrationForm.get('password')?.invalid && submissionAttempted)
+          {
           <mat-error>
-            {{registrationForm.get('password')?.errors | passwordErrorMessage}}
+            {{
+              registrationForm.get("password")?.errors | passwordErrorMessage
+            }}
           </mat-error>
-        }
-      </mat-form-field>
-    </form>
-  </mat-card-content>
-  <mat-card-actions>
-    <button
-      class="button send"
-      mat-stroked-button
-      color="primary"
-      (click)="signUp()"
-    >
-      Sign up
-    </button>
-  </mat-card-actions>
-</mat-card>
+          }
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+    <mat-card-actions>
+      <button
+        class="button send"
+        mat-stroked-button
+        color="primary"
+        (click)="signUp()"
+      >
+        Sign up
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
