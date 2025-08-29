@@ -6,6 +6,9 @@ import { OtpVerifyStepComponent } from './components/otp-verify-step/otp-verify-
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RegistrationDetails } from './Models/registration-details.model';
+import { AuthService } from '../../services/auth.service';
+import { take } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 export enum AuthStep {
   RequestOtp,
@@ -33,6 +36,7 @@ export class AuthenticateComponent {
 
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
 
   constructor() {
     this.route.queryParams.subscribe((params) => {
@@ -43,16 +47,48 @@ export class AuthenticateComponent {
   }
 
   receiveOtpRequest(email: string) {
-    this.emailAddress.set(email);
-    this.next();
+    this.authService.sendOtpRequest(email).pipe(take(1)).subscribe({
+      next: () => {
+        this.emailAddress.set(email);
+        this.next();
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Error sending OTP request:', error.message);
+      },
+    });
+  }
+
+  receiveOtpVerification(otp: string) {
+    this.authService.verifyOtp(this.emailAddress(), otp).pipe(take(1)).subscribe({
+      next: () => {
+        this.next();
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Error verifying OTP:', error.message);
+      }
+    })
   }
 
   receiveSignUpRequest(registrationDetails: RegistrationDetails) {
-    this.next();
+    this.authService.register(registrationDetails).pipe(take(1)).subscribe({
+      next: () => {
+        this.next();
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Error during sign up:', error.message);
+      }
+    });
   }
 
   receiveLoginRequest(loginDetails: RegistrationDetails) {
-    this.navigateToDashboard();
+    this.authService.login(loginDetails).pipe(take(1)).subscribe({
+      next: () => {
+        this.navigateToDashboard();
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Error during login:', error.message);
+      }
+    });
   }
 
   next() {

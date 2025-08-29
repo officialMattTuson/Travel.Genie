@@ -6,7 +6,7 @@ namespace Server.Services.Interfaces
   {
     bool IsEmailVerified(string email);
     void MarkEmailVerified(string email);
-    bool Register(string email, string username, string password);
+    bool Register(string email, string password);
     bool ValidateCredentials(string email, string password);
     User? GetUser(string email);
   }

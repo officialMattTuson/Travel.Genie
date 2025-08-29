@@ -1,18 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
 using Server.Models;
-using Server.Services;
+using Server.Services.Interfaces;
 
 namespace Server.Controllers;
 
 [ApiController]
-[Route("auth")]
+[Route("api/auth")]
 public class AuthController : ControllerBase
 {
-  private readonly OtpService _otpService;
-  private readonly UserService _userService;
-  private readonly JwtService _jwtService;
+  private readonly IOtpService _otpService;
+  private readonly IUserService _userService;
+  private readonly IJwtService _jwtService;
 
-  public AuthController(OtpService otpService, UserService userService, JwtService jwtService)
+  public AuthController(IOtpService otpService, IUserService userService, IJwtService jwtService)
   {
     _otpService = otpService;
     _userService = userService;
@@ -43,10 +43,10 @@ public class AuthController : ControllerBase
     if (!_userService.IsEmailVerified(req.Email))
       return BadRequest(new { message = "Email not verified" });
 
-    var success = _userService.Register(req.Email, req.Username, req.Password);
+    var success = _userService.Register(req.Email, req.Password);
     if (!success) return Conflict(new { message = "User already exists" });
 
-    var token = _jwtService.GenerateToken(req.Email, req.Username);
+    var token = _jwtService.GenerateToken(req.Email);
     return Ok(new { message = "User registered successfully", token });
   }
 
@@ -57,7 +57,7 @@ public class AuthController : ControllerBase
     if (!valid) return BadRequest(new { message = "Invalid credentials" });
 
     var user = _userService.GetUser(req.Email)!;
-    var token = _jwtService.GenerateToken(user.Email, user.Username);
+    var token = _jwtService.GenerateToken(user.Email);
     return Ok(new { token });
   }
 

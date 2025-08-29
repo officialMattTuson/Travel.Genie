@@ -19,12 +19,11 @@ public class JwtService: IJwtService
     _audience = config["Jwt:Audience"] ?? "AuthDemoUsers";
   }
 
-  public string GenerateToken(string email, string username)
+  public string GenerateToken(string email)
   {
     var claims = new[]
     {
             new Claim(JwtRegisteredClaimNames.Sub, email),
-            new Claim(JwtRegisteredClaimNames.UniqueName, username),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 

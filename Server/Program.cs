@@ -1,21 +1,17 @@
 using Server.Services;
+using Server.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.SpaServices.AngularCli;
 using System.Text;
+using Microsoft.AspNetCore.SpaServices.Extensions; // <-- needed for UseSpa
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddSingleton<OtpService>();
-builder.Services.AddSingleton<UserService>();
-builder.Services.AddSingleton<JwtService>();
-builder.Services.AddSingleton<EmailService>();
-
-builder.Services.AddSpaStaticFiles(config =>
-{
-    config.RootPath = "../ClientApp/dist/client-app";
-});
+builder.Services.AddSingleton<IEmailService, EmailService>();
+builder.Services.AddSingleton<IOtpService, OtpService>();
+builder.Services.AddSingleton<IUserService, UserService>();
+builder.Services.AddSingleton<IJwtService, JwtService>();
 
 var jwtConfig = builder.Configuration.GetSection("Jwt");
 var secret = jwtConfig["Secret"];
@@ -35,25 +31,44 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 var app = builder.Build();
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-}
 
 app.UseAuthentication();
 app.UseAuthorization();
 
+// ✅ Make sure API endpoints are registered before SPA middleware
 app.MapControllers();
+var controllerAssembly = typeof(Server.Controllers.AuthController).Assembly.FullName;
+Console.WriteLine($"Loaded controllers from: {controllerAssembly}");
 
-app.UseSpaStaticFiles();
-app.UseSpa(spa =>
+
+if (app.Environment.IsDevelopment())
 {
-    spa.Options.SourcePath = "../ClientApp";
+    app.UseDeveloperExceptionPage();
 
-    if (app.Environment.IsDevelopment())
+    app.MapWhen(ctx => !ctx.Request.Path.StartsWithSegments("/api"), spaApp =>
+        {
+            spaApp.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "ClientApp";
+                spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+            });
+        });
+}
+else
+{
+    app.UseDefaultFiles();
+    app.UseStaticFiles();
+    app.MapWhen(ctx => !ctx.Request.Path.StartsWithSegments("/api"), spaApp =>
     {
-        spa.UseAngularCliServer(npmScript: "start");
-    }
-});
+        spaApp.UseSpaStaticFiles();
+        spaApp.Run(async context =>
+        {
+            context.Response.ContentType = "text/html";
+            await context.Response.SendFileAsync(Path.Combine(app.Environment.WebRootPath!, "index.html"));
+        });
+    });
 
-app.Run();
+    app.MapFallbackToFile("/index.html");
+}
+
+await app.RunAsync();

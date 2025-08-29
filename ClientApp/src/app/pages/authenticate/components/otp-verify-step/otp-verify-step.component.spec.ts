@@ -57,6 +57,6 @@ describe('OtpVerifyStepComponent', () => {
     spyOn(component.otpVerified, 'emit');
     component.otpRequestForm.get('otp')?.setValue('123456');
     component.verifyOtpRequest();
-    expect(component.otpVerified.emit).toHaveBeenCalled();
+    expect(component.otpVerified.emit).toHaveBeenCalledWith('123456');
   });
 });

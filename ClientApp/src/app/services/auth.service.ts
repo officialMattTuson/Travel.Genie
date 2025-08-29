@@ -31,6 +31,7 @@ export class AuthService {
 
 
   register(registrationDetails: RegistrationDetails): Observable<TokenResponse> {
+    console.log(registrationDetails)
     return this.httpClient.post<TokenResponse>('/api/auth/register', registrationDetails);
   }
 

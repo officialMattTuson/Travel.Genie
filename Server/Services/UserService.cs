@@ -18,7 +18,7 @@ public class UserService: IUserService
     _verifiedEmails.Add(email);
   }
 
-  public bool Register(string email, string username, string password)
+  public bool Register(string email, string password)
   {
     if (_users.ContainsKey(email)) return false;
 
@@ -36,7 +36,7 @@ public class UserService: IUserService
     var hash = Convert.ToBase64String(hashBytes);
     var saltString = Convert.ToBase64String(salt);
 
-    var user = new User { Email = email, Username = username, PasswordHash = $"{saltString}:{hash}" };
+    var user = new User { Email = email, PasswordHash = $"{saltString}:{hash}" };
     _users[email] = user;
 
     return true;
