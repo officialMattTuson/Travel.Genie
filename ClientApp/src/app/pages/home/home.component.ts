@@ -3,12 +3,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'app-register',
+  selector: 'app-home',
   imports: [MatIconModule, MatButtonModule],
-  templateUrl: './register.component.html',
-  styleUrl: './register.component.scss',
+  templateUrl: './home.component.html',
+  styleUrl: './home.component.scss',
 })
-export class RegisterComponent {
+export class HomeComponent {
 
   handleRegister() {
     // Handle registration logic here

@@ -2,15 +2,15 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: 'register',
+    path: 'home',
     loadComponent: () =>
-      import('./pages/register/register.component').then(
-        (m) => m.RegisterComponent
+      import('./pages/home/home.component').then(
+        (m) => m.HomeComponent
       ),
   },
   {
     path: '',
-    redirectTo: 'register',
+    redirectTo: 'home',
     pathMatch: 'full'
   }
 ];
