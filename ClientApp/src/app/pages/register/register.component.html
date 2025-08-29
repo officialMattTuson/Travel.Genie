@@ -12,12 +12,24 @@
 
   <div class="register__actions">
     <div class="register__actions__register">
-      <button mat-stroked-button color="primary">Get Started</button>
+      <button 
+        mat-stroked-button 
+        color="primary"
+        (click)="handleRegister()"
+      >
+        Get Started
+      </button>
       <span class="register__actions__register-text">Planning adventures in 195+ countries</span>
     </div>
     <div class="register__actions__login">
       <span class="register__actions__login-text">Already a member?</span>
-      <button mat-stroked-button color="primary">Log In</button>
+      <button 
+        mat-stroked-button 
+        color="primary"
+        (click)="goToLogin()"
+      >
+        Log In
+      </button>
     </div>
   </div>
 </div>

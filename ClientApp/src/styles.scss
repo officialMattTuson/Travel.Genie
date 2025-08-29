@@ -1,12 +1,11 @@
 @use "./mat-button-overrides";
 @use '@angular/material' as mat;
-@use '@angular/material/core/theming/palettes' as mat-palettes;
 
 $my-theme: mat.define-theme((
   color: (
     theme-type: light,
-    primary: mat-palettes.$blue-palette,
-    tertiary: mat-palettes.$magenta-palette,
+    primary: mat.$blue-palette,
+    tertiary: mat.$magenta-palette,
   ),
 ));
 

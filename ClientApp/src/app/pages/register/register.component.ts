@@ -10,4 +10,11 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class RegisterComponent {
 
+  handleRegister() {
+    // Handle registration logic here
+  }
+
+  goToLogin() {
+    // Handle navigation to login page here
+  }
 }
