@@ -1,0 +1,11 @@
+.mat-mdc-raised-button:not(:disabled), .mat-mdc-outlined-button:not(:disabled) {
+  padding: 0 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  border: none;
+}
+
+.mat-mdc-icon-button {
+  border-radius: 50%;
+  padding: 8px;
+}

@@ -1,0 +1,27 @@
+@use "./mat-button-overrides";
+@use '@angular/material' as mat;
+@use '@angular/material/core/theming/palettes' as mat-palettes;
+
+$my-theme: mat.define-theme((
+  color: (
+    theme-type: light,
+    primary: mat-palettes.$blue-palette,
+    tertiary: mat-palettes.$magenta-palette,
+  ),
+));
+
+:root {
+  @include mat.all-component-themes($my-theme);
+}
+:root {
+  --mat-icon-color: #fff
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
