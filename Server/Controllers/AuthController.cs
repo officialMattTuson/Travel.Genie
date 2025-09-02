@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Server.Models;
 using Server.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Server.Controllers;
 
@@ -58,18 +59,19 @@ public class AuthController : ControllerBase
 
     var user = _userService.GetUser(req.Email)!;
     var token = _jwtService.GenerateToken(user.Email);
+    Response.Cookies.Append("auth_token", token, new CookieOptions
+    {
+      HttpOnly = true,
+      Secure = false,
+      SameSite = SameSiteMode.Lax
+    });
     return Ok(new { token });
   }
 
-  [HttpGet("protected")]
-  [Microsoft.AspNetCore.Authorization.Authorize]
-  public IActionResult Protected()
+  [HttpGet("is-authenticated")]
+  [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+  public IActionResult IsAuthenticated()
   {
-    return Ok(new
-    {
-      message = "You accessed a protected route!",
-      user = User.Identity?.Name,
-      claims = User.Claims.Select(c => new { c.Type, c.Value })
-    });
+    return Ok(User?.Identity?.IsAuthenticated == true);
   }
 }

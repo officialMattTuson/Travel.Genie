@@ -100,4 +100,16 @@ describe('AuthService', () => {
     expect(req.request.body).toEqual({ email, otp });
     req.flush(mockResponse);
   });
+
+  it('should call isAuthenticated and return boolean', () => {
+    const mockResponse = true;
+
+    service.isAuthenticated().subscribe((res) => {
+      expect(res).toEqual(mockResponse);
+    });
+
+    const req = httpMock.expectOne('/api/auth/is-authenticated');
+    expect(req.request.method).toBe('GET');
+    req.flush(mockResponse);
+  });
 });
