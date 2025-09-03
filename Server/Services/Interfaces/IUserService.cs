@@ -1,4 +1,4 @@
-using Server.Models;
+using Server.Models.Authentication;
 
 namespace Server.Services.Interfaces
 {

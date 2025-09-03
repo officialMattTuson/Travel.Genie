@@ -1,5 +1,5 @@
 using Server.Services;
-using Server.Models;
+using Server.Models.Authentication;
 using Xunit;
 using FluentAssertions;
 

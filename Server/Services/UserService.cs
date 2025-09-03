@@ -1,6 +1,6 @@
 using System.Text;
 using System.Collections.Concurrent;
-using Server.Models;
+using Server.Models.Authentication;
 using Konscious.Security.Cryptography;
 using Server.Services.Interfaces;
 
