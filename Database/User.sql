@@ -1,0 +1,6 @@
+CREATE TABLE [User] (
+    Id FLOAT PRIMARY KEY,
+    Email NVARCHAR(256) NOT NULL,
+    PasswordHash NVARCHAR(256) NOT NULL,
+    IsEmailVerified BIT NOT NULL
+);

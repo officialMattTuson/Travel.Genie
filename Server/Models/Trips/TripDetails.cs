@@ -16,6 +16,6 @@ namespace Server.Models.Trips
     public double ActualPrice { get; set; }
     public required ItineraryType Itinerary { get; set; }
     public required TripType TripType { get; set; }
-    public required List<TransportType> TransportTypes { get; set; }
+  public ICollection<TransportType> TransportTypes { get; set; } = new List<TransportType>();
   }
 }

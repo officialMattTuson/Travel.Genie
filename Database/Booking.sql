@@ -1,0 +1,10 @@
+CREATE TABLE Booking (
+    Id NVARCHAR(50) PRIMARY KEY,
+    TripId FLOAT NOT NULL,
+    UserId FLOAT NOT NULL,
+    CreatedAt DATETIMEOFFSET NOT NULL,
+    UpdatedAt DATETIMEOFFSET NOT NULL,
+    BookingType INT NOT NULL,
+    FOREIGN KEY (TripId) REFERENCES TripDetails(Id),
+    FOREIGN KEY (UserId) REFERENCES [User](Id)
+);

@@ -1,0 +1,17 @@
+CREATE TABLE TripDetails (
+    Id FLOAT PRIMARY KEY,
+    Destination NVARCHAR(256) NOT NULL,
+    StartDate DATETIMEOFFSET NOT NULL,
+    EndDate DATETIMEOFFSET NOT NULL,
+    CreatedAt DATETIMEOFFSET NOT NULL,
+    UpdatedAt DATETIMEOFFSET NOT NULL,
+    UserId FLOAT NOT NULL,
+    Status NVARCHAR(50) NOT NULL,
+    CurrencyCode NVARCHAR(10) NOT NULL,
+    BudgetedPrice FLOAT NOT NULL,
+    KeepToBudget BIT NOT NULL,
+    ActualPrice FLOAT NOT NULL,
+    Itinerary INT NOT NULL,
+    TripType INT NOT NULL,
+    FOREIGN KEY (UserId) REFERENCES [User](Id)
+);

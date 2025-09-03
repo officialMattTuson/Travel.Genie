@@ -1,12 +1,9 @@
 namespace Server.Models.Trips
 {
-  public enum TransportType
+  public class TransportType
   {
-    Car,
-    Bus,
-    Train,
-    Plane,
-    RideShare,
-    Walking
+    public int Id { get; set; }
+    public required string Name { get; set; }
+    public ICollection<TripDetails> TripDetails { get; set; } = new List<TripDetails>();
   }
 }
