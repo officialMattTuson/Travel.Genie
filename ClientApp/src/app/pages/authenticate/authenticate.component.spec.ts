@@ -67,6 +67,7 @@ describe('AuthenticateComponent', () => {
 
     // Assert
     expect(component.emailAddress()).toBe('test@example.com');
+    expect(alertServiceSpy.displaySuccess).toHaveBeenCalledWith('A One Time Password has been sent to your email inbox.');
     expect(component.step as AuthStep).toBe(AuthStep.VerifyOtp);
   });
 
@@ -82,6 +83,7 @@ describe('AuthenticateComponent', () => {
     });
 
     // Assert
+    expect(alertServiceSpy.displaySuccess).toHaveBeenCalledWith('Registration successful! You can now log in.');
     expect(component.step as AuthStep).toBe(AuthStep.Login);
   });
 
@@ -136,29 +138,29 @@ describe('AuthenticateComponent', () => {
   describe('Error Handling', () => {
     it('should call alertService.displayError on OTP request failure', () => {
       // Arrange
-      const errorResponse = { message: 'Failed to send OTP' } as HttpErrorResponse;
+      const errorResponse = { error: { message: 'Failed to send OTP' } } as HttpErrorResponse;
       authServiceSpy.sendOtpRequest.and.returnValue(throwError(() => errorResponse));
       // Act
       component.receiveOtpRequest('test@example.com');
 
       // Assert
-      expect(alertServiceSpy.displayError).toHaveBeenCalledWith(`Failed to send OTP: ${errorResponse.message}`);
+      expect(alertServiceSpy.displayError).toHaveBeenCalledWith(errorResponse.error.message);
     });
 
     it('should call alertService.displayError on OTP verification failure', () => {
       // Arrange
-      const errorResponse = { message: 'Failed to verify OTP' } as HttpErrorResponse;
+      const errorResponse = { error: { message: 'Failed to verify OTP' } } as HttpErrorResponse;
       authServiceSpy.verifyOtp.and.returnValue(throwError(() => errorResponse));
       // Act
       component.receiveOtpVerification('123456');
 
       // Assert
-      expect(alertServiceSpy.displayError).toHaveBeenCalledWith(`Failed to verify OTP: ${errorResponse.message}`);
+      expect(alertServiceSpy.displayError).toHaveBeenCalledWith(errorResponse.error.message);
     });
 
     it('should call alertService.displayError on sign-up failure', () => {
       // Arrange
-      const errorResponse = { message: 'Failed to sign up' } as HttpErrorResponse;
+      const errorResponse = { error: { message: 'Failed to sign up' } } as HttpErrorResponse;
       authServiceSpy.register.and.returnValue(throwError(() => errorResponse));
 
       // Act
@@ -168,12 +170,12 @@ describe('AuthenticateComponent', () => {
       });
 
       // Assert
-      expect(alertServiceSpy.displayError).toHaveBeenCalledWith(`Failed to sign up: ${errorResponse.message}`);
+      expect(alertServiceSpy.displayError).toHaveBeenCalledWith(errorResponse.error.message);
     });
 
     it('should call alertService.displayError on login failure', () => {
       // Arrange
-      const errorResponse = { message: 'Failed to log in' } as HttpErrorResponse;
+      const errorResponse = { error: { message: 'Failed to log in' } } as HttpErrorResponse;
       authServiceSpy.login.and.returnValue(throwError(() => errorResponse));
 
       // Act
@@ -183,7 +185,7 @@ describe('AuthenticateComponent', () => {
       });
 
       // Assert
-      expect(alertServiceSpy.displayError).toHaveBeenCalledWith(`Failed to log in: ${errorResponse.message}`);
+      expect(alertServiceSpy.displayError).toHaveBeenCalledWith(errorResponse.error.message);
     });
   });
 });

@@ -32,7 +32,11 @@
       >
         Verify email
       </button>
-      <button class="button return" mat-stroked-button color="warn">
+      <button
+        class="button return"
+        mat-stroked-button
+        color="warn"
+        (click)="resendOtpRequest()">
         Resend verification email
       </button>
     </mat-card-actions>

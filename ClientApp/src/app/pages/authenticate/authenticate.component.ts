@@ -49,16 +49,18 @@ export class AuthenticateComponent {
   }
 
   receiveOtpRequest(email: string) {
+    console.log('Received OTP request for email:', email);
     this.authService
       .sendOtpRequest(email)
       .pipe(take(1))
       .subscribe({
         next: () => {
           this.emailAddress.set(email);
-          this.next();
+          this.alertService.displaySuccess('A One Time Password has been sent to your email inbox.');
+          this.step = AuthStep.VerifyOtp;
         },
-        error: (error: HttpErrorResponse) => {
-          this.alertService.displayError(`Failed to send OTP: ${error.message}`);
+        error: (errorResponse: HttpErrorResponse) => {
+          this.alertService.displayError(errorResponse.error.message);
         },
       });
   }
@@ -71,8 +73,8 @@ export class AuthenticateComponent {
         next: () => {
           this.next();
         },
-        error: (error: HttpErrorResponse) => {
-          this.alertService.displayError(`Failed to verify OTP: ${error.message}`);
+        error: (errorResponse: HttpErrorResponse) => {
+          this.alertService.displayError(errorResponse.error.message);
         },
       });
   }
@@ -83,10 +85,11 @@ export class AuthenticateComponent {
       .pipe(take(1))
       .subscribe({
         next: () => {
+          this.alertService.displaySuccess('Registration successful! You can now log in.');
           this.next();
         },
-        error: (error: HttpErrorResponse) => {
-          this.alertService.displayError(`Failed to sign up: ${error.message}`);
+        error: (errorResponse: HttpErrorResponse) => {
+          this.alertService.displayError(errorResponse.error.message);
         },
       });
   }
@@ -99,8 +102,8 @@ export class AuthenticateComponent {
         next: () => {
           this.navigateToDashboard();
         },
-        error: (error: HttpErrorResponse) => {
-          this.alertService.displayError(`Failed to log in: ${error.message}`);
+        error: (errorResponse: HttpErrorResponse) => {
+          this.alertService.displayError(errorResponse.error.message);
         },
       });
   }
