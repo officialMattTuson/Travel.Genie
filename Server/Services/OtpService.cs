@@ -3,7 +3,15 @@ using Server.Services.Interfaces;
 
 namespace Server.Services;
 
-public class OtpService: IOtpService
+public enum OtpVerificationResult
+{
+  Success,
+  Incorrect,
+  Expired,
+  NotFound
+}
+
+public class OtpService : IOtpService
 {
   private readonly ConcurrentDictionary<string, (string Otp, DateTime Expiry)> _otps = new();
   private readonly IEmailService _emailService;
@@ -25,16 +33,17 @@ public class OtpService: IOtpService
     return otp;
   }
 
-  public bool VerifyOtp(string email, string otp)
+  public OtpVerificationResult VerifyOtp(string email, string otp)
   {
     if (_otps.TryGetValue(email, out var entry))
     {
-      if (entry.Otp == otp && entry.Expiry > DateTime.UtcNow)
-      {
-        _otps.TryRemove(email, out _);
-        return true;
-      }
+      if (entry.Expiry < DateTime.UtcNow)
+        return OtpVerificationResult.Expired;
+      if (entry.Otp != otp)
+        return OtpVerificationResult.Incorrect;
+      _otps.TryRemove(email, out _);
+      return OtpVerificationResult.Success;
     }
-    return false;
+    return OtpVerificationResult.NotFound;
   }
 }
