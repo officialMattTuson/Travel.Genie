@@ -9,6 +9,7 @@ import { RegistrationDetails } from './Models/registration-details.model';
 import { AuthService } from '../../services/auth.service';
 import { take } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import { AlertService } from '../../services/alert.service';
 
 export enum AuthStep {
   RequestOtp,
@@ -37,6 +38,7 @@ export class AuthenticateComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
+  private readonly alertService = inject(AlertService);
 
   constructor() {
     this.route.queryParams.subscribe((params) => {
@@ -47,48 +49,60 @@ export class AuthenticateComponent {
   }
 
   receiveOtpRequest(email: string) {
-    this.authService.sendOtpRequest(email).pipe(take(1)).subscribe({
-      next: () => {
-        this.emailAddress.set(email);
-        this.next();
-      },
-      error: (error: HttpErrorResponse) => {
-        console.error('Error sending OTP request:', error.message);
-      },
-    });
+    this.authService
+      .sendOtpRequest(email)
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this.emailAddress.set(email);
+          this.next();
+        },
+        error: (error: HttpErrorResponse) => {
+          this.alertService.displayError(`Failed to send OTP: ${error.message}`);
+        },
+      });
   }
 
   receiveOtpVerification(otp: string) {
-    this.authService.verifyOtp(this.emailAddress(), otp).pipe(take(1)).subscribe({
-      next: () => {
-        this.next();
-      },
-      error: (error: HttpErrorResponse) => {
-        console.error('Error verifying OTP:', error.message);
-      }
-    })
+    this.authService
+      .verifyOtp(this.emailAddress(), otp)
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this.next();
+        },
+        error: (error: HttpErrorResponse) => {
+          this.alertService.displayError(`Failed to verify OTP: ${error.message}`);
+        },
+      });
   }
 
   receiveSignUpRequest(registrationDetails: RegistrationDetails) {
-    this.authService.register(registrationDetails).pipe(take(1)).subscribe({
-      next: () => {
-        this.next();
-      },
-      error: (error: HttpErrorResponse) => {
-        console.error('Error during sign up:', error.message);
-      }
-    });
+    this.authService
+      .register(registrationDetails)
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this.next();
+        },
+        error: (error: HttpErrorResponse) => {
+          this.alertService.displayError(`Failed to sign up: ${error.message}`);
+        },
+      });
   }
 
   receiveLoginRequest(loginDetails: RegistrationDetails) {
-    this.authService.login(loginDetails).pipe(take(1)).subscribe({
-      next: () => {
-        this.navigateToDashboard();
-      },
-      error: (error: HttpErrorResponse) => {
-        console.error('Error during login:', error.message);
-      }
-    });
+    this.authService
+      .login(loginDetails)
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this.navigateToDashboard();
+        },
+        error: (error: HttpErrorResponse) => {
+          this.alertService.displayError(`Failed to log in: ${error.message}`);
+        },
+      });
   }
 
   next() {

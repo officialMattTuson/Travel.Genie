@@ -60,3 +60,14 @@ body {
     color: #000;
   }
 }
+
+// Success Snackbar
+.mat-mdc-snack-bar-container.snackbar-error .mat-mdc-snackbar-surface {
+  background-color: #9e2927;
+  color: #fff;
+}
+
+.mat-mdc-snack-bar-container.snackbar-success .mat-mdc-snackbar-surface {
+  background-color: #2d6f30;
+  color: #fff;
+}
