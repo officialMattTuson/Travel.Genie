@@ -2,9 +2,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
-using Server.Services.Interfaces;
+using Travel.Genie.Services.Interfaces;
 
-namespace Server.Services;
+namespace Travel.Genie.Services;
 
 public class JwtService: IJwtService
 {

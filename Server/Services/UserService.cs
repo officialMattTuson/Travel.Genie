@@ -1,10 +1,10 @@
 using System.Text;
 using System.Collections.Concurrent;
-using Server.Models.Authentication;
+using Travel.Genie.Models.Authentication;
 using Konscious.Security.Cryptography;
-using Server.Services.Interfaces;
+using Travel.Genie.Services.Interfaces;
 
-namespace Server.Services;
+namespace Travel.Genie.Services;
 
 public class UserService: IUserService
 {

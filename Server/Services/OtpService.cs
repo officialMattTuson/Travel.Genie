@@ -1,7 +1,7 @@
 using System.Collections.Concurrent;
-using Server.Services.Interfaces;
+using Travel.Genie.Services.Interfaces;
 
-namespace Server.Services;
+namespace Travel.Genie.Services;
 
 public enum OtpVerificationResult
 {

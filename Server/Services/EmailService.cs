@@ -1,8 +1,8 @@
 using SendGrid;
 using SendGrid.Helpers.Mail;
-using Server.Services.Interfaces;
+using Travel.Genie.Services.Interfaces;
 
-namespace Server.Services;
+namespace Travel.Genie.Services;
 
 public class EmailService : IEmailService
 {

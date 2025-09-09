@@ -1,4 +1,4 @@
-namespace Server.Models.Authentication
+namespace Travel.Genie.Models.Authentication
 {
   public class User
   {

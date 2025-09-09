@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Server.Models.Authentication;
-using Server.Models.Trips;
+using Travel.Genie.Models.Authentication;
+using Travel.Genie.Models.Trips;
 
-namespace Server.Data
+namespace Travel.Genie.Data
 {
   public class AppDbContext : DbContext
   {

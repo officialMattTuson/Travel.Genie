@@ -1,6 +1,6 @@
-using Server.Models.Authentication;
+using Travel.Genie.Models.Authentication;
 
-namespace Server.Services.Interfaces
+namespace Travel.Genie.Services.Interfaces
 {
   public interface IUserService
   {

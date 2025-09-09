@@ -1,4 +1,4 @@
-namespace Server.Services.Interfaces
+namespace Travel.Genie.Services.Interfaces
 {
   public interface IEmailService
   {

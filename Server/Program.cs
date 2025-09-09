@@ -1,9 +1,9 @@
-using Server.Services;
-using Server.Services.Interfaces;
+using Travel.Genie.Services;
+using Travel.Genie.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Server.Data;
+using Travel.Genie.Data;
 using Microsoft.AspNetCore.SpaServices.Extensions;
 using Microsoft.EntityFrameworkCore;
 
@@ -63,7 +63,7 @@ app.UseAuthorization();
 
 // ✅ Make sure API endpoints are registered before SPA middleware
 app.MapControllers();
-var controllerAssembly = typeof(Server.Controllers.AuthController).Assembly.FullName;
+var controllerAssembly = typeof(Travel.Genie.Controllers.AuthController).Assembly.FullName;
 Console.WriteLine($"Loaded controllers from: {controllerAssembly}");
 
 

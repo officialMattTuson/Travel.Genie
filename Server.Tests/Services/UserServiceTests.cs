@@ -1,5 +1,5 @@
-using Server.Services;
-using Server.Models.Authentication;
+using Travel.Genie.Services;
+using Travel.Genie.Models.Authentication;
 using Xunit;
 using FluentAssertions;
 

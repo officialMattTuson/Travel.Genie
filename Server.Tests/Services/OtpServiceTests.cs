@@ -1,5 +1,5 @@
-using Server.Services;
-using Server.Services.Interfaces;
+using Travel.Genie.Services;
+using Travel.Genie.Services.Interfaces;
 using Xunit;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;

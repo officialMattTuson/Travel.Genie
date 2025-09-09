@@ -1,4 +1,4 @@
-using Server.Services;
+using Travel.Genie.Services;
 using Microsoft.Extensions.Configuration;
 using Xunit;
 using System.IO;

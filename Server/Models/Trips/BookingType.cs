@@ -1,4 +1,4 @@
-namespace Server.Models.Trips
+namespace Travel.Genie.Models.Trips
 {
   public enum BookingType
   {
