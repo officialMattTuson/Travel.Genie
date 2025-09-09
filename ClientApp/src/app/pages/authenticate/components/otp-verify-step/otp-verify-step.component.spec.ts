@@ -59,4 +59,13 @@ describe('OtpVerifyStepComponent', () => {
     component.verifyOtpRequest();
     expect(component.otpVerified.emit).toHaveBeenCalledWith('123456');
   });
+
+  it('should emit otpRequest if form is valid', () => {
+    spyOn(component.otpRequest, 'emit');
+    component.otpRequestForm.get('otp')?.setValue('123456');
+    component.resendOtpRequest();
+    expect(component.submissionAttempted).toBeFalse();
+    expect(component.otpRequestForm.get('otp')?.value).toBeNull();
+    expect(component.otpRequest.emit).toHaveBeenCalledWith('test@example.com');
+  });
 });

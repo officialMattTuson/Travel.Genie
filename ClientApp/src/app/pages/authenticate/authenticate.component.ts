@@ -9,6 +9,7 @@ import { RegistrationDetails } from './Models/registration-details.model';
 import { AuthService } from '../../services/auth.service';
 import { take } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import { AlertService } from '../../services/alert.service';
 
 export enum AuthStep {
   RequestOtp,
@@ -37,6 +38,7 @@ export class AuthenticateComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
+  private readonly alertService = inject(AlertService);
 
   constructor() {
     this.route.queryParams.subscribe((params) => {
@@ -47,48 +49,63 @@ export class AuthenticateComponent {
   }
 
   receiveOtpRequest(email: string) {
-    this.authService.sendOtpRequest(email).pipe(take(1)).subscribe({
-      next: () => {
-        this.emailAddress.set(email);
-        this.next();
-      },
-      error: (error: HttpErrorResponse) => {
-        console.error('Error sending OTP request:', error.message);
-      },
-    });
+    console.log('Received OTP request for email:', email);
+    this.authService
+      .sendOtpRequest(email)
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this.emailAddress.set(email);
+          this.alertService.displaySuccess('A One Time Password has been sent to your email inbox.');
+          this.step = AuthStep.VerifyOtp;
+        },
+        error: (errorResponse: HttpErrorResponse) => {
+          this.alertService.displayError(errorResponse.error.message);
+        },
+      });
   }
 
   receiveOtpVerification(otp: string) {
-    this.authService.verifyOtp(this.emailAddress(), otp).pipe(take(1)).subscribe({
-      next: () => {
-        this.next();
-      },
-      error: (error: HttpErrorResponse) => {
-        console.error('Error verifying OTP:', error.message);
-      }
-    })
+    this.authService
+      .verifyOtp(this.emailAddress(), otp)
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this.next();
+        },
+        error: (errorResponse: HttpErrorResponse) => {
+          this.alertService.displayError(errorResponse.error.message);
+        },
+      });
   }
 
   receiveSignUpRequest(registrationDetails: RegistrationDetails) {
-    this.authService.register(registrationDetails).pipe(take(1)).subscribe({
-      next: () => {
-        this.next();
-      },
-      error: (error: HttpErrorResponse) => {
-        console.error('Error during sign up:', error.message);
-      }
-    });
+    this.authService
+      .register(registrationDetails)
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this.alertService.displaySuccess('Registration successful! You can now log in.');
+          this.next();
+        },
+        error: (errorResponse: HttpErrorResponse) => {
+          this.alertService.displayError(errorResponse.error.message);
+        },
+      });
   }
 
   receiveLoginRequest(loginDetails: RegistrationDetails) {
-    this.authService.login(loginDetails).pipe(take(1)).subscribe({
-      next: () => {
-        this.navigateToDashboard();
-      },
-      error: (error: HttpErrorResponse) => {
-        console.error('Error during login:', error.message);
-      }
-    });
+    this.authService
+      .login(loginDetails)
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this.navigateToDashboard();
+        },
+        error: (errorResponse: HttpErrorResponse) => {
+          this.alertService.displayError(errorResponse.error.message);
+        },
+      });
   }
 
   next() {

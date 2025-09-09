@@ -27,6 +27,7 @@ import { MatInputModule } from '@angular/material/input';
 export class OtpVerifyStepComponent {
   @Input() emailAddress!: Signal<string>;
   @Output() otpVerified = new EventEmitter<string>();
+  @Output() otpRequest = new EventEmitter<string>();
   submissionAttempted = false;
   otpRequestForm = new FormGroup({
     otp: new FormControl('', [
@@ -40,5 +41,11 @@ export class OtpVerifyStepComponent {
     if (this.otpRequestForm.valid) {
       this.otpVerified.emit(String(this.otpRequestForm.get('otp')?.value));
     }
+  }
+
+  resendOtpRequest() {
+    this.submissionAttempted = false;
+    this.otpRequestForm.reset();
+    this.otpRequest.emit(this.emailAddress());
   }
 }
