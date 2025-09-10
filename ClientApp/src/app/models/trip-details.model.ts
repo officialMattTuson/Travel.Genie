@@ -1,3 +1,5 @@
+import { Booking } from './booking.model';
+
 export interface TransportType {
   id: number;
   name: string;
@@ -19,4 +21,9 @@ export interface TripDetails {
   itinerary: number;
   tripType: number;
   transportTypes: TransportType[];
+}
+
+export interface TripDetailsWithBookings {
+  trip: TripDetails;
+  bookings: Booking[];
 }

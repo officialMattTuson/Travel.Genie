@@ -9,6 +9,6 @@ export class BookingService {
   constructor() {}
 
   getBookings() {
-    return of([mockBookings]);
+    return of(mockBookings);
   }
 }
