@@ -1,0 +1,52 @@
+.header {
+  &__container {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+  }
+
+  &__headings {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+
+    &-title {
+      font-size: 2rem;
+      font-weight: bold;
+      background: linear-gradient(135deg, #3db5c5 0%, #e0b471 50%, #3db5c5 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+    }
+    &-subtitle {
+      font-size: 1rem;
+    }
+  }
+
+  &__actions {
+
+    &-button {
+      background: none;
+      color: #3db5c5;
+      padding: 0.5rem;
+      border-radius: 0.25rem;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+}
+
+mat-icon {
+  font-size: 2rem;
+  height: 2rem;
+  width: 2rem;
+}
+
+mat-icon, mat-icon.mat-primary {
+  color: #3db5c5;
+}

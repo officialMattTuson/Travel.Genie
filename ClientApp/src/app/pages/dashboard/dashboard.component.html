@@ -1,1 +1,6 @@
-<p>dashboard works!</p>
+<app-header
+  [pageTitle]="'Travel Dashboard'"
+  [pageSubtitle]="'Your journey overview and insights'"
+  [pageActions]="pageHeaderActions"
+  (actionClicked)="onHeaderActionClick($event)"
+></app-header>

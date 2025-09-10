@@ -14,3 +14,8 @@
   --mdc-outlined-button-label-text-color: #d32f2f;
   --mdc-outlined-button-outline-color: #d32f2f;
 }
+
+.mat-mdc-outlined-button.mat-primary {
+  --mdc-outlined-button-label-text-color: #3db5c5;
+  --mdc-outlined-button-outline-color: #3db5c5;
+}

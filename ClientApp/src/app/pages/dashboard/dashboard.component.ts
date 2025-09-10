@@ -6,12 +6,18 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { BookingService } from '../../services/booking.service';
 import { TripDetailsWithBookings, TripDetails } from '../../models/trip-details.model';
 import { Booking } from '../../models/booking.model';
+import { HeaderComponent } from '../../shared/components/header/header.component';
 
+export enum DashboardHeaderActions {
+  PlanNewTrip = 'Plan New Trip',
+  SavedPlaces = 'Saved Places',
+  ProFeatures = 'Pro Features',
+}
 @Component({
   selector: 'app-dashboard',
-  imports: [],
+  imports: [HeaderComponent],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss',
+  styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
   private readonly tripService = inject(TripService);
@@ -19,6 +25,11 @@ export class DashboardComponent implements OnInit {
   private readonly bookingService = inject(BookingService);
 
   trips: TripDetailsWithBookings[] = [];
+  pageHeaderActions: Array<{ label: string; icon: string }> = [
+    { label: DashboardHeaderActions.PlanNewTrip, icon: 'add_circle' },
+    { label: DashboardHeaderActions.SavedPlaces, icon: 'bookmarks' },
+    { label: DashboardHeaderActions.ProFeatures, icon: 'star' },
+  ];
 
   ngOnInit(): void {
     this.getTripsAndBookings();
@@ -48,5 +59,19 @@ export class DashboardComponent implements OnInit {
       tripsWithBookings.push({ trip: trip, bookings: tripBookings });
     });
     return tripsWithBookings;
+  }
+
+  onHeaderActionClick(actionLabel: string): void {
+    switch (actionLabel) {
+      case DashboardHeaderActions.PlanNewTrip:
+        // Handle Plan New Trip action
+        break;
+      case DashboardHeaderActions.SavedPlaces:
+        // Handle Saved Places action
+        break;
+      case DashboardHeaderActions.ProFeatures:
+        // Handle Pro Features action
+        break;
+    }
   }
 }
