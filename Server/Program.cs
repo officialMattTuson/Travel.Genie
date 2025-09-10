@@ -1,5 +1,7 @@
 using Travel.Genie.Services;
 using Travel.Genie.Services.Interfaces;
+using Travel.Genie.Repositories.Interfaces;
+using Travel.Genie.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -14,6 +16,8 @@ builder.Services.AddSingleton<IEmailService, EmailService>();
 builder.Services.AddSingleton<IOtpService, OtpService>();
 builder.Services.AddSingleton<IUserService, UserService>();
 builder.Services.AddSingleton<IJwtService, JwtService>();
+builder.Services.AddScoped<ITripRepository, TripRepository>();
+builder.Services.AddScoped<ITripService, TripService>();
 
 var jwtConfig = builder.Configuration.GetSection("Jwt");
 var secret = jwtConfig["Secret"];
