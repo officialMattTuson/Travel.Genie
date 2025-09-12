@@ -15,3 +15,6 @@ obj/
 # Secrets
 appsettings.Development.json
 appsettings.json
+
+# Rider / JetBrains
+.idea/

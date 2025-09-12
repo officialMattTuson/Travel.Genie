@@ -9,11 +9,11 @@ describe('PasswordErrorMessagePipe', () => {
   });
 
   it('should return empty array if errors is null', () => {
-    expect(pipe.transform(null as any)).toEqual([]);
+    expect(pipe.transform(null)).toEqual([]);
   });
 
   it('should return empty array if errors is undefined', () => {
-    expect(pipe.transform(undefined as any)).toEqual([]);
+    expect(pipe.transform(undefined)).toEqual([]);
   });
 
   it('should return "Password is required." for required error', () => {

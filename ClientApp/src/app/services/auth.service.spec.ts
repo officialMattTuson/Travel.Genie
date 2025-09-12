@@ -29,7 +29,7 @@ describe('AuthService', () => {
     const registrationDetails: RegistrationDetails = {
       email: 'test@test.com',
       password: '123456',
-    } as any;
+    };
     const mockResponse = { token: 'abc123' };
 
     service.login(registrationDetails).subscribe((res) => {
@@ -59,7 +59,7 @@ describe('AuthService', () => {
     const registrationDetails: RegistrationDetails = {
       email: 'new@test.com',
       password: 'abcdef',
-    } as any;
+    };
     const mockResponse = { token: 'def456' };
 
     service.register(registrationDetails).subscribe((res) => {

@@ -7,7 +7,7 @@ import {
   minLength8,
 } from './password-rules';
 
-function mockControl(value: any): AbstractControl {
+function mockControl(value: string | null | undefined): AbstractControl {
   return { value } as AbstractControl;
 }
 
