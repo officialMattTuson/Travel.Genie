@@ -1,0 +1,66 @@
+name: Full Stack CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # ----- Backend (.NET) -----
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore .NET dependencies
+        run: dotnet restore
+
+      - name: Build .NET backend
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Test .NET backend
+        run: dotnet test --no-build --verbosity normal
+
+      # ----- Frontend (Angular) -----
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install Angular dependencies
+        working-directory: ClientApp
+        run: npm ci
+
+      - name: Build Angular frontend
+        working-directory: ClientApp
+        run: npm run build --if-present
+              
+      - name: Audit Angular frontend
+        working-directory: ClientApp
+        run: npm audit --audit-level=moderate      
+          
+      - name: Lint Angular frontend
+        working-directory: ClientApp
+        run: npm run lint
+        
+      - name: Run Angular tests
+        working-directory: ClientApp
+        run: npm test --if-present
+
+      # ----- Publish backend -----
+      - name: Publish .NET app
+        run: dotnet publish -c Release -o ./publish
+
+      - name: Upload publish artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: travel-genie-app
+          path: ./publish
