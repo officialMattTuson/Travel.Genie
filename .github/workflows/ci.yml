@@ -60,7 +60,8 @@ jobs:
         run: dotnet publish -c Release -o ./publish
 
       - name: Upload publish artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4 
         with:
           name: travel-genie-app
           path: ./publish
+
