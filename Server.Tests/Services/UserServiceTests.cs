@@ -12,10 +12,9 @@ namespace Server.Tests.Services
     {
       var service = new UserService();
       var email = "user@example.com";
-      var username = "user";
       var password = "securePass123";
 
-      var registered = service.Register(email, username, password);
+      var registered = service.Register(email, password);
       registered.Should().BeTrue();
 
       var valid = service.ValidateCredentials(email, password);
@@ -41,14 +40,12 @@ namespace Server.Tests.Services
       var service = new UserService();
       var email = "user@example.com";
       var username = "user";
-      var password = "securePass123";
 
-      service.Register(email, username, password);
+      service.Register(email, username);
       var user = service.GetUser(email);
 
       user.Should().NotBeNull();
       user!.Email.Should().Be(email);
-      user.Username.Should().Be(username);
     }
   }
 }

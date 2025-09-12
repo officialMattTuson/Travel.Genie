@@ -21,7 +21,7 @@ namespace Server.Tests.Services
       otp.Should().NotBeNullOrEmpty();
 
       var result = otpService.VerifyOtp(email, otp);
-      result.Should().BeTrue();
+      result.Should().Be(OtpVerificationResult.Success);
     }
 
     private class FakeEmailService : IEmailService
