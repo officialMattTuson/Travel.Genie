@@ -6,6 +6,12 @@ on:
   pull_request:
     branches: [ "main" ]
 
+permissions:
+  contents: read   
+  actions: read    
+  checks: write 
+  security-events: write 
+  
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -42,15 +48,15 @@ jobs:
       - name: Build Angular frontend
         working-directory: ClientApp
         run: npm run build --if-present
-              
+
       - name: Audit Angular frontend
         working-directory: ClientApp
-        run: npm audit --audit-level=moderate      
-          
+        run: npm audit --audit-level=moderate
+
       - name: Lint Angular frontend
         working-directory: ClientApp
         run: npm run lint
-        
+
       - name: Run Angular tests
         working-directory: ClientApp
         run: npm test --if-present
@@ -60,7 +66,7 @@ jobs:
         run: dotnet publish -c Release -o ./publish
 
       - name: Upload publish artifact
-        uses: actions/upload-artifact@v4 
+        uses: actions/upload-artifact@v4
         with:
           name: travel-genie-app
           path: ./publish
