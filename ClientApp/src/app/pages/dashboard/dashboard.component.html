@@ -4,3 +4,42 @@
   [pageActions]="pageHeaderActions"
   (actionClicked)="onHeaderActionClick($event)"
 ></app-header>
+
+<div class="dashboard">
+  <div class="dashboard__column dashboard__column--left">
+    <mat-card appearance="outlined" class="dashboard__card dashboard__card--trips">
+      <mat-card-header class="dashboard__card-header">
+        <span class="dashboard__card-title title">Active Trips</span>
+        <span class="dashboard__card-subtitle subtitle">Your ongoing and upcoming travel adventures</span>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="dashboard__card-content-trips">
+
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card appearance="outlined" class="dashboard__card dashboard__card--memories">
+      <mat-card-header class="dashboard__card-header">
+        <span class="dashboard__card-title title">Trip Memories</span>
+        <span class="dashboard__card-subtitle subtitle">Your completed adventures and experiences</span>
+      </mat-card-header>
+    </mat-card>
+  </div>
+
+  <div class="dashboard__column dashboard__column--right">
+    <mat-card appearance="outlined" class="dashboard__card dashboard__card--stats">
+      <mat-card-header class="dashboard__card-header">
+
+        <span class="dashboard__card-title title">Travel Statistics</span>
+        <span class="dashboard__card-subtitle subtitle">Your travel journey insights</span>
+      </mat-card-header>
+    </mat-card>
+
+    <mat-card appearance="outlined" class="dashboard__card dashboard__card--actions">
+      <mat-card-header class="dashboard__card-header">
+        <span class="dashboard__card-title title">Quick Actions</span>
+      </mat-card-header>
+    </mat-card>
+  </div>
+</div>
