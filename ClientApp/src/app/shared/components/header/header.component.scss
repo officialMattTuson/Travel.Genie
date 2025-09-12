@@ -12,16 +12,12 @@
     gap: 0.25rem;
 
     &-title {
-      font-size: 2rem;
-      font-weight: bold;
       background: linear-gradient(135deg, #3db5c5 0%, #e0b471 50%, #3db5c5 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      font-size: 1.75rem;
       color: transparent;
-    }
-    &-subtitle {
-      font-size: 1rem;
     }
   }
 

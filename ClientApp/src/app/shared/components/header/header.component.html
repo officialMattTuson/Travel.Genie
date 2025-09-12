@@ -1,13 +1,13 @@
 <div class="header__container">
   <div class="header__headings">
-    <span class="header__headings-title">{{ pageTitle }}</span>
-    <span class="header__headings-subtitle">{{ pageSubtitle }}</span>
+    <span class="header__headings-title title">{{ pageTitle }}</span>
+    <span class="header__headings-subtitle subtitle">{{ pageSubtitle }}</span>
   </div>
   <div class="header__actions">
     @for (action of pageActions; track action.label) {
-      <button 
-        class="header__action-button" 
-        mat-stroked-button 
+      <button
+        class="header__action-button"
+        mat-stroked-button
         color="primary"
         (click)="onActionClick(action.label)"
       >

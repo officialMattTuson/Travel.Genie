@@ -7,6 +7,8 @@ import { BookingService } from '../../services/booking.service';
 import { TripDetailsWithBookings, TripDetails } from '../../models/trip-details.model';
 import { Booking } from '../../models/booking.model';
 import { HeaderComponent } from '../../shared/components/header/header.component';
+import {MatCardModule} from '@angular/material/card';
+import {MatIconModule} from '@angular/material/icon';
 
 export enum DashboardHeaderActions {
   PlanNewTrip = 'Plan New Trip',
@@ -15,7 +17,7 @@ export enum DashboardHeaderActions {
 }
 @Component({
   selector: 'app-dashboard',
-  imports: [HeaderComponent],
+  imports: [HeaderComponent, MatCardModule, MatIconModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
