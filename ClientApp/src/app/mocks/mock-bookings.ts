@@ -1,4 +1,4 @@
-import { Booking, BookingType } from '../models/booking.model';
+import {Booking, BookingType} from '../models/booking.model';
 
 export const mockBookings: Booking[] = [
   {

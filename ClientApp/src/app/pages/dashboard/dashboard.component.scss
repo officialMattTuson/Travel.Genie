@@ -1,4 +1,9 @@
 .dashboard {
+
+  &__container {
+  padding-inline: 15%;
+  }
+
   display: flex;
   gap: 1rem;
 

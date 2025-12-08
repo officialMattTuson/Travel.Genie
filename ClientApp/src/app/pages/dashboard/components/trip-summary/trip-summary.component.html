@@ -1,1 +1,75 @@
-<p>trip-summary works!</p>
+@if (isActive()) {
+  <div class="trip">
+    <div class="trip__header">
+      <h3 class="trip__destination">{{ tripDetails().trip.destination }}</h3>
+      <span class="trip__status">Active</span>
+    </div>
+
+    <div class="trip__stats">
+      <div class="trip__stat">
+        <span class="trip__stat-label">Days Left</span>
+        <span class="trip__stat-value">{{ numberOfDaysLeft() }}</span>
+      </div>
+      <div class="trip__stat">
+        <span class="trip__stat-label">Bookings</span>
+        <span class="trip__stat-value">{{ tripDetails().bookings.length }}</span>
+      </div>
+      <div class="trip__stat">
+        <span class="trip__stat-label">Budget</span>
+        <span class="trip__stat-value">${{ tripDetails().trip.budgetedPrice }}</span>
+      </div>
+    </div>
+
+    <div class="trip__progress">
+      <h4>Trip Progress</h4>
+      <mat-progress-bar
+        mode="determinate"
+        [value]="tripProgress()">
+      </mat-progress-bar>
+    </div>
+  </div>
+} @else if (!isPast()) {
+  <div class="trip">
+    <div class="trip__header">
+      <h3 class="trip__destination">{{ tripDetails().trip.destination }}</h3>
+      <span class="trip__status">Upcoming</span>
+    </div>
+
+    <div class="trip__stats">
+      <div class="trip__stat">
+        <span class="trip__stat-label">Days Until</span>
+        <span class="trip__stat-value">{{ numberOfDaysUntil() }}</span>
+      </div>
+      <div class="trip__stat">
+        <span class="trip__stat-label">Bookings</span>
+        <span class="trip__stat-value">{{ tripDetails().bookings.length }}</span>
+      </div>
+      <div class="trip__stat">
+        <span class="trip__stat-label">Budget</span>
+        <span class="trip__stat-value">${{ tripDetails().trip.budgetedPrice }}</span>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="trip trip--completed">
+    <div class="trip__header">
+      <h3 class="trip__destination">{{ tripDetails().trip.destination }}</h3>
+      <span class="trip__status trip__status--completed">Completed</span>
+    </div>
+
+    <div class="trip__stats">
+      <div class="trip__stat">
+        <span class="trip__stat-label">Bookings</span>
+        <span class="trip__stat-value">{{ tripDetails().bookings.length }}</span>
+      </div>
+      <div class="trip__stat">
+        <span class="trip__stat-label">Budget</span>
+        <span class="trip__stat-value">${{ tripDetails().trip.budgetedPrice }}</span>
+      </div>
+      <div class="trip__stat">
+        <span class="trip__stat-label">Actual Cost</span>
+        <span class="trip__stat-value">${{ tripDetails().trip.actualPrice }}</span>
+      </div>
+    </div>
+  </div>
+}

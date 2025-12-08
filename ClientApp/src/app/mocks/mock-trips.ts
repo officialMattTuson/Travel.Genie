@@ -4,7 +4,7 @@ export const mockTrips: TripDetails[] = [
   {
     id: 1,
     destination: 'Paris',
-    startDate: '2025-10-01T09:00:00Z',
+    startDate: '2025-09-01T09:00:00Z',
     endDate: '2025-10-10T18:00:00Z',
     createdAt: '2025-09-10T12:00:00Z',
     updatedAt: '2025-09-10T12:00:00Z',
@@ -25,7 +25,7 @@ export const mockTrips: TripDetails[] = [
     id: 2,
     destination: 'Tokyo',
     startDate: '2025-11-05T09:00:00Z',
-    endDate: '2025-11-15T18:00:00Z',
+    endDate: '2025-12-15T18:00:00Z',
     createdAt: '2025-09-11T12:00:00Z',
     updatedAt: '2025-09-11T12:00:00Z',
     userId: 2,
