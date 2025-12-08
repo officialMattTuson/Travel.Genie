@@ -45,7 +45,7 @@ export class TripSummaryComponent {
     const endDate = new Date(this.tripDetails().trip.endDate);
     const numberOfDaysLeft = Math.ceil((endDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
     const totalTripDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-    return (numberOfDaysLeft / totalTripDays) * 100;
+    return ((totalTripDays - numberOfDaysLeft) / totalTripDays) * 100;
   });
 
   startDate = computed(() => new Date(this.tripDetails().trip.startDate));
