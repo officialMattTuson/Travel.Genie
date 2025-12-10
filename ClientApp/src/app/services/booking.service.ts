@@ -12,7 +12,7 @@ export class BookingService {
   private readonly apiUrl = '/api/bookings';
   private useMockData = true;
 
-  constructor(private readonly httpClient: HttpClient) {}
+  constructor(private readonly httpClient: HttpClient) { }
 
   getBookings(pageNumber: number = 1, pageSize: number = 10): Observable<PagedResultDto<Booking>> {
     if (this.useMockData) {
@@ -21,12 +21,7 @@ export class BookingService {
 
     return this.httpClient.get<PagedResultDto<Booking>>(
       `${this.apiUrl}?pageNumber=${pageNumber}&pageSize=${pageSize}`
-    ).pipe(
-      catchError((error) => {
-        console.warn('API request failed, falling back to mock bookings', error);
-        return this.getMockBookingsAsPaged();
-      })
-    );
+    )
   }
 
   getTripBookings(tripId: string): Observable<Booking[]> {
@@ -34,20 +29,14 @@ export class BookingService {
       const bookings = mockBookings.filter(b => b.tripId === tripId);
       return of(bookings);
     }
-
-    return this.httpClient.get<Booking[]>(`${this.apiUrl}/trip/${tripId}`).pipe(
-      catchError(() => {
-        const bookings = mockBookings.filter(b => b.tripId === tripId);
-        return of(bookings);
-      })
-    );
+    return this.httpClient.get<Booking[]>(`${this.apiUrl}/trip/${tripId}`)
   }
 
   createBooking(booking: Partial<Booking>): Observable<Booking> {
     if (this.useMockData) {
       return of({
         ...booking,
-        id: Math.random().toString(36).substr(2, 9)
+        id: Math.random().toString(36).substring(2, 11)
       } as Booking);
     }
 

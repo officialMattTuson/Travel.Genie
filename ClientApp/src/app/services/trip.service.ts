@@ -48,7 +48,7 @@ export class TripService {
     if (this.useMockData) {
       return of({
         ...trip,
-        id: Math.random().toString(36).substr(2, 9)
+        id: Math.random().toString(36).substring(2, 11)
       } as TripDetailDto);
     }
 
@@ -74,7 +74,7 @@ export class TripService {
   generateAiPlan(request: AiPlanRequestDto): Observable<AiPlanResponseDto> {
     if (this.useMockData) {
       return of({
-        proposalId: Math.random().toString(36).substr(2, 9),
+        proposalId: Math.random().toString(36).substring(2, 11),
         suggestedTripName: request.tripName || 'AI Generated Trip',
         suggestedBudget: {
           currencyCode: 'USD',

@@ -25,11 +25,15 @@ namespace Travel.Genie.Data.Configurations
             builder.Property(t => t.EndDate)
                 .IsRequired();
 
+            // One-to-many: Trip.PrimaryDestination -> Destination
+            // PrimaryDestination is a required single destination for a trip
             builder.HasOne(t => t.PrimaryDestination)
-                .WithMany(d => d.Trips)
+                .WithMany()
                 .HasForeignKey(t => t.PrimaryDestinationId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // Many-to-many: Trip.Destinations <-> Destination
+            // Trips can have multiple destinations, destinations can be part of multiple trips
             builder.HasMany(t => t.Destinations)
                 .WithMany(d => d.Trips)
                 .UsingEntity(j => j.ToTable("TripDestinations"));

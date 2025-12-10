@@ -16,8 +16,8 @@ public class BookingsController : ControllerBase
         _db = db;
     }
 
-    public record BookingCreateRequest(double TripId, double UserId, BookingType BookingType);
-    public record BookingUpdateRequest(double TripId, double UserId, BookingType BookingType);
+    public record BookingCreateRequest(Guid TripId, Guid UserId, BookingType BookingType);
+    public record BookingUpdateRequest(Guid TripId, Guid UserId, BookingType BookingType);
 
     // GET: /api/bookings
     [HttpGet]
