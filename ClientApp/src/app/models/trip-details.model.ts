@@ -1,29 +1,18 @@
-import { Booking } from './booking.model';
+import { TripDetailDto, TripSummaryDto } from './dtos/trip.dtos';
 
-export interface TransportType {
-  id: number;
-  name: string;
-}
+export type TripDetails = TripDetailDto;
+export type TripSummary = TripSummaryDto;
 
-export interface TripDetails {
-  id: number;
-  destination: string;
-  startDate: string;
-  endDate: string;
+export interface Booking {
+  id: string;
+  tripId: string;
+  userId: string;
   createdAt: string;
   updatedAt: string;
-  userId: number;
-  status: string;
-  currencyCode: string;
-  budgetedPrice: number;
-  keepToBudget: boolean;
-  actualPrice: number;
-  itinerary: number;
-  tripType: number;
-  transportTypes: TransportType[];
+  bookingType: string;
 }
 
 export interface TripDetailsWithBookings {
-  trip: TripDetails;
+  trip: TripDetailDto;
   bookings: Booking[];
 }

@@ -1,16 +1,22 @@
+import { ItineraryItemType } from './dtos/itinerary.dtos';
+
+// Legacy enum - kept for backward compatibility
 export enum BookingType {
-  Flight,
-  Accommodation,
-  CarRental,
-  Activity,
-  Food
+  Flight = 'Flight',
+  Accommodation = 'Accommodation',
+  CarRental = 'CarRental',
+  Activity = 'Activity',
+  Food = 'Food'
 }
 
+// Modern interfaces - use specific DTOs instead
 export interface Booking {
   id: string;
-  tripId: number;
-  userId: number;
+  tripId: string;
+  userId: string;
   createdAt: string;
   updatedAt: string;
-  bookingType: BookingType;
+  bookingType: BookingType | ItineraryItemType;
 }
+
+export { ItineraryItemType };

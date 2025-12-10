@@ -1,9 +1,9 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {TripSummaryComponent} from './trip-summary.component';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
-import {TripDetailsWithBookings} from '../../../../models/trip-details.model';
-import {mockTrips} from "../../../../mocks/mock-trips";
-import {mockBookings} from "../../../../mocks/mock-bookings";
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TripSummaryComponent } from './trip-summary.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { TripDetailsWithBookings } from '../../../../models/trip-details.model';
+import { mockTrips } from "../../../../mocks/mock-trips";
+import { mockBookings } from "../../../../mocks/mock-bookings";
 
 describe('TripSummaryComponent', () => {
   let component: TripSummaryComponent;
@@ -29,8 +29,14 @@ describe('TripSummaryComponent', () => {
   });
 
   it('should show upcoming trip info if start date is in the future', () => {
-    const trip = {...mockTrips[0]};
-    trip.destination = 'Tokyo';
+    const trip = { ...mockTrips[0] };
+    trip.destinations = [
+      {
+        id: 'dest-1',
+        name: 'Paris',
+        countryCode: 'FR',
+      }
+    ];
     trip.startDate = new Date(futureDate.getTime() + 86400000).toISOString(); // 1 day after futureDate
     trip.endDate = new Date(futureDate.getTime() + 432000000).toISOString(); // 5 days after futureDate
     const tripDetails: TripDetailsWithBookings = {
@@ -50,8 +56,14 @@ describe('TripSummaryComponent', () => {
   });
 
   it('should show active trip info if today is within start and end date', () => {
-    const trip = {...mockTrips[0]};
-    trip.destination = 'Paris';
+    const trip = { ...mockTrips[0] };
+    trip.destinations = [
+      {
+        id: 'dest-1',
+        name: 'Paris',
+        countryCode: 'FR',
+      }
+    ];
     trip.startDate = pastDate.toISOString();
     trip.endDate = futureDate.toISOString();
     const tripDetails: TripDetailsWithBookings = {
@@ -75,11 +87,17 @@ describe('TripSummaryComponent', () => {
   });
 
   it('should show completed trip info if end date is in the past', () => {
-    const trip = {...mockTrips[0]};
-    trip.destination = 'Barcelona';
+    const trip = { ...mockTrips[0] };
+    trip.destinations = [
+      {
+        id: 'dest-1',
+        name: 'Paris',
+        countryCode: 'FR',
+      }
+    ];
     trip.startDate = farPastDate.toISOString();
     trip.endDate = pastDate.toISOString();
-    trip.actualPrice = 1200;
+    trip.budget = { currencyCode: 'EUR', totalBudget: 1200 };
     const tripDetails: TripDetailsWithBookings = {
       trip: trip,
       bookings: mockBookings
@@ -100,11 +118,11 @@ describe('TripSummaryComponent', () => {
 
     const stats = fixture.nativeElement.querySelectorAll('.trip__stat-label');
     const labels = Array.from(stats as HTMLElement[]).map((el: HTMLElement) => el.textContent);
-    expect(labels).toContain('Actual Cost');
+    expect(labels).toContain('Days Completed');
   });
 
   it('should display correct number of days until for upcoming trip', () => {
-    const trip = {...mockTrips[0]};
+    const trip = { ...mockTrips[0] };
     const daysUntilTrip = 10;
     const startDate = new Date(today);
     startDate.setDate(today.getDate() + daysUntilTrip);
@@ -125,7 +143,7 @@ describe('TripSummaryComponent', () => {
   });
 
   it('should display correct number of days left for active trip', () => {
-    const trip = {...mockTrips[0]};
+    const trip = { ...mockTrips[0] };
     const daysLeft = 3;
     trip.startDate = new Date(today.getTime() - 86400000 * 2).toISOString();
     trip.endDate = new Date(today.getTime() + 86400000 * daysLeft).toISOString();
@@ -144,7 +162,7 @@ describe('TripSummaryComponent', () => {
   });
 
   it('should render correct number of bookings', () => {
-    const trip = {...mockTrips[0]};
+    const trip = { ...mockTrips[0] };
     trip.startDate = futureDate.toISOString();
     trip.endDate = new Date(futureDate.getTime() + 432000000).toISOString();
 
@@ -162,7 +180,7 @@ describe('TripSummaryComponent', () => {
   });
 
   it('should return null for numberOfDaysLeft when trip is not active', () => {
-    const trip = {...mockTrips[0]};
+    const trip = { ...mockTrips[0] };
     trip.startDate = futureDate.toISOString();
     trip.endDate = new Date(futureDate.getTime() + 432000000).toISOString();
 
@@ -178,7 +196,7 @@ describe('TripSummaryComponent', () => {
   });
 
   it('should return null for tripProgress when trip is not active', () => {
-    const trip = {...mockTrips[0]};
+    const trip = { ...mockTrips[0] };
     trip.startDate = farPastDate.toISOString();
     trip.endDate = pastDate.toISOString();
 
@@ -194,7 +212,7 @@ describe('TripSummaryComponent', () => {
   });
 
   it('should compute correct trip progress percentage for active trip', () => {
-    const trip = {...mockTrips[0]};
+    const trip = { ...mockTrips[0] };
     const startDate = new Date(today.getTime() - 86400000 * 10);
     const endDate = new Date(today.getTime() + 86400000 * 5);
     trip.startDate = startDate.toISOString();
@@ -214,7 +232,7 @@ describe('TripSummaryComponent', () => {
   });
 
   it('should compute correct startDate and endDate', () => {
-    const trip = {...mockTrips[0]};
+    const trip = { ...mockTrips[0] };
     const startDate = new Date(today.getTime() - 86400000 * 2);
     const endDate = new Date(today.getTime() + 86400000 * 5);
     trip.startDate = startDate.toISOString();

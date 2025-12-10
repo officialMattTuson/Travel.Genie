@@ -1,15 +1,16 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {TripService} from '../../services/trip.service';
-import {map, switchMap, take} from 'rxjs';
-import {AlertService} from '../../services/alert.service';
-import {HttpErrorResponse} from '@angular/common/http';
-import {BookingService} from '../../services/booking.service';
-import {TripDetailsWithBookings, TripDetails} from '../../models/trip-details.model';
-import {Booking} from '../../models/booking.model';
-import {HeaderComponent} from '../../shared/components/header/header.component';
-import {MatCardModule} from '@angular/material/card';
-import {MatIconModule} from '@angular/material/icon';
-import {TripSummaryComponent} from './components/trip-summary/trip-summary.component';
+import { Component, inject, OnInit } from '@angular/core';
+import { TripService } from '../../services/trip.service';
+import { map, switchMap, take } from 'rxjs';
+import { AlertService } from '../../services/alert.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { BookingService } from '../../services/booking.service';
+import { TripDetailsWithBookings } from '../../models/trip-details.model';
+import { TripDetailDto } from '../../models/dtos/trip.dtos';
+import { Booking } from '../../models/booking.model';
+import { HeaderComponent } from '../../shared/components/header/header.component';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { TripSummaryComponent } from './components/trip-summary/trip-summary.component';
 
 export enum DashboardHeaderActions {
   PlanNewTrip = 'Plan New Trip',
@@ -30,9 +31,9 @@ export class DashboardComponent implements OnInit {
 
   trips: TripDetailsWithBookings[] = [];
   pageHeaderActions: Array<{ label: string; icon: string }> = [
-    {label: DashboardHeaderActions.PlanNewTrip, icon: 'add_circle'},
-    {label: DashboardHeaderActions.SavedPlaces, icon: 'bookmarks'},
-    {label: DashboardHeaderActions.ProFeatures, icon: 'star'},
+    { label: DashboardHeaderActions.PlanNewTrip, icon: 'add_circle' },
+    { label: DashboardHeaderActions.SavedPlaces, icon: 'bookmarks' },
+    { label: DashboardHeaderActions.ProFeatures, icon: 'star' },
   ];
 
   ngOnInit(): void {
@@ -44,7 +45,15 @@ export class DashboardComponent implements OnInit {
       .getTrips()
       .pipe(
         take(1),
-        switchMap((trips) => this.bookingService.getBookings().pipe(map((bookings) => this.processTripsWithBookings(trips, bookings))))
+        switchMap((pagedTrips) => {
+          const trips = pagedTrips.items;
+          return this.bookingService.getBookings().pipe(
+            map((pagedBookings) => {
+              const bookings = pagedBookings.items || [];
+              return this.processTripsWithBookings(trips, bookings);
+            })
+          );
+        })
       )
       .subscribe({
         next: (trips) => {
@@ -56,11 +65,11 @@ export class DashboardComponent implements OnInit {
       });
   }
 
-  private processTripsWithBookings(trips: TripDetails[], bookings: Booking[]): TripDetailsWithBookings[] {
+  private processTripsWithBookings(trips: TripDetailDto[], bookings: Booking[]): TripDetailsWithBookings[] {
     const tripsWithBookings: TripDetailsWithBookings[] = [];
     trips.forEach((trip) => {
       const tripBookings = bookings.filter((booking) => booking.tripId === trip.id);
-      tripsWithBookings.push({trip: trip, bookings: tripBookings});
+      tripsWithBookings.push({ trip: trip, bookings: tripBookings });
     });
     return tripsWithBookings;
   }

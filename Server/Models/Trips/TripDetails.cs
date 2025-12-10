@@ -8,7 +8,7 @@ namespace Travel.Genie.Models.Trips
     public DateTimeOffset EndDate { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset UpdatedAt { get; set; }
-    public required double UserId { get; set; }
+    public required Guid UserId { get; set; }
     public required string Status { get; set; }
     public required string CurrencyCode { get; set; }
     public required double BudgetedPrice { get; set; }
