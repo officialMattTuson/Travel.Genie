@@ -1,3 +1,5 @@
+using Travel.Genie.Models.Trips;
+
 namespace Travel.Genie.Models.AI
 {
     public class AiChatMessage
