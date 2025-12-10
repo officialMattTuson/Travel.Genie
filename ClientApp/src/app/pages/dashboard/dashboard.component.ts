@@ -4,7 +4,8 @@ import {map, switchMap, take} from 'rxjs';
 import {AlertService} from '../../services/alert.service';
 import {HttpErrorResponse} from '@angular/common/http';
 import {BookingService} from '../../services/booking.service';
-import {TripDetailsWithBookings, TripDetails} from '../../models/trip-details.model';
+import {TripDetailsWithBookings} from '../../models/trip-details.model';
+import {TripDetailDto} from '../../models/dtos/trip.dtos';
 import {Booking} from '../../models/booking.model';
 import {HeaderComponent} from '../../shared/components/header/header.component';
 import {MatCardModule} from '@angular/material/card';
@@ -44,19 +45,30 @@ export class DashboardComponent implements OnInit {
       .getTrips()
       .pipe(
         take(1),
-        switchMap((trips) => this.bookingService.getBookings().pipe(map((bookings) => this.processTripsWithBookings(trips, bookings))))
+        switchMap((pagedTrips) => {
+          const tripIds = pagedTrips.items.map(t => t.id);
+          const trips = pagedTrips.items as any as TripDetailDto[];
+          return this.bookingService.getBookings().pipe(
+            map((pagedBookings) => {
+              const bookings = pagedBookings.items || [];
+              return this.processTripsWithBookings(trips, bookings);
+            })
+          );
+        })
       )
       .subscribe({
         next: (trips) => {
+          console.log(trips)
           this.trips = trips;
         },
         error: (error: HttpErrorResponse) => {
+          console.error('Error fetching trips and bookings:', error);
           this.alertService.displayError(`Failed to fetch trips: ${error.error.message}`);
         },
       });
   }
 
-  private processTripsWithBookings(trips: TripDetails[], bookings: Booking[]): TripDetailsWithBookings[] {
+  private processTripsWithBookings(trips: TripDetailDto[], bookings: Booking[]): TripDetailsWithBookings[] {
     const tripsWithBookings: TripDetailsWithBookings[] = [];
     trips.forEach((trip) => {
       const tripBookings = bookings.filter((booking) => booking.tripId === trip.id);

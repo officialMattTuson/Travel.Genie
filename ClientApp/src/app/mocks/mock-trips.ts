@@ -1,44 +1,74 @@
-import { TripDetails } from '../models/trip-details.model';
+import { TripDetailDto, TripStatus } from '../models/dtos/trip.dtos';
 
-export const mockTrips: TripDetails[] = [
+export const mockTrips: TripDetailDto[] = [
   {
-    id: 1,
-    destination: 'Paris',
-    startDate: '2025-09-01T09:00:00Z',
-    endDate: '2025-10-10T18:00:00Z',
-    createdAt: '2025-09-10T12:00:00Z',
-    updatedAt: '2025-09-10T12:00:00Z',
-    userId: 1,
-    status: 'Planned',
-    currencyCode: 'EUR',
-    budgetedPrice: 1500.0,
-    keepToBudget: true,
-    actualPrice: 0.0,
-    itinerary: 1,
-    tripType: 0,
-    transportTypes: [
-      { id: 3, name: 'Plane' },
-      { id: 0, name: 'Car' }
-    ]
+    id: '1',
+    name: 'Paris Adventure',
+    description: 'A wonderful trip to the City of Light',
+    startDate: '2025-09-01',
+    endDate: '2025-09-10',
+    status: TripStatus.Planned,
+    primaryDestination: {
+      id: 'dest-1',
+      name: 'Paris',
+      countryCode: 'FR',
+      latitude: 48.8566,
+      longitude: 2.3522,
+      timeZoneId: 'Europe/Paris'
+    },
+    destinations: [
+      {
+        id: 'dest-1',
+        name: 'Paris',
+        countryCode: 'FR',
+        latitude: 48.8566,
+        longitude: 2.3522,
+        timeZoneId: 'Europe/Paris'
+      }
+    ],
+    budget: {
+      currencyCode: 'EUR',
+      totalBudget: 1500,
+      dailyTarget: 150
+    },
+    companions: [],
+    itineraryDays: [],
+    hasAiGeneratedPlan: false,
+    lastAiPlanUpdatedAt: null
   },
   {
-    id: 2,
-    destination: 'Tokyo',
-    startDate: '2025-11-05T09:00:00Z',
-    endDate: '2025-12-15T18:00:00Z',
-    createdAt: '2025-09-11T12:00:00Z',
-    updatedAt: '2025-09-11T12:00:00Z',
-    userId: 2,
-    status: 'Confirmed',
-    currencyCode: 'JPY',
-    budgetedPrice: 2000.0,
-    keepToBudget: false,
-    actualPrice: 2100.0,
-    itinerary: 2,
-    tripType: 2,
-    transportTypes: [
-      { id: 1, name: 'Bus' },
-      { id: 4, name: 'RideShare' }
-    ]
+    id: '2',
+    name: 'Tokyo Expedition',
+    description: 'Explore the vibrant streets of Tokyo',
+    startDate: '2025-11-05',
+    endDate: '2025-12-15',
+    status: TripStatus.Planned,
+    primaryDestination: {
+      id: 'dest-2',
+      name: 'Tokyo',
+      countryCode: 'JP',
+      latitude: 35.6762,
+      longitude: 139.6503,
+      timeZoneId: 'Asia/Tokyo'
+    },
+    destinations: [
+      {
+        id: 'dest-2',
+        name: 'Tokyo',
+        countryCode: 'JP',
+        latitude: 35.6762,
+        longitude: 139.6503,
+        timeZoneId: 'Asia/Tokyo'
+      }
+    ],
+    budget: {
+      currencyCode: 'JPY',
+      totalBudget: 200000,
+      dailyTarget: 20000
+    },
+    companions: [],
+    itineraryDays: [],
+    hasAiGeneratedPlan: false,
+    lastAiPlanUpdatedAt: null
   }
 ];
