@@ -54,37 +54,36 @@
     flex-direction: column;
     align-items: center;
     padding: 1rem;
+    gap: 1.5rem;
 
-    &__register {
+    &__buttons {
       display: flex;
-      gap: 1rem;
+      gap: 1.5rem;
       align-items: center;
+      justify-content: center;
+      
       button {
         font-size: 1.25rem;
-        font-weight: 600;
-        border-radius: 0.5rem;
-        letter-spacing: 0.1rem;
+        font-weight: 500;
+        letter-spacing: 0.05rem;
         color: #000;
-      }
+        background: rgba(255, 255, 255, 0.15) !important;
+        border: 1px solid rgba(255, 255, 255, 0.25) !important;
+        backdrop-filter: blur(10px);
+        padding: 0.75rem 1.5rem !important;
+        transition: all 0.3s ease;
 
-      &-text {
-        font-size: 0.75rem;
-        font-weight: 600;
+        &:hover {
+          background: rgba(255, 255, 255, 0.25) !important;
+          border-color: rgba(255, 255, 255, 0.35) !important;
+          box-shadow: 0 8px 32px rgba(255, 255, 255, 0.1);
+        }
       }
     }
 
-    &__login {
-      button {
-        font-weight: 600;
-        border-radius: 0.5rem;
-        letter-spacing: 0.1rem;
-        color: #000;
-      }
-
-      &-text {
-        font-size: 0.75rem;
-        font-weight: 600;
-      }
+    &__text {
+      font-size: 0.75rem;
+      font-weight: 600;
     }
   }
 }
