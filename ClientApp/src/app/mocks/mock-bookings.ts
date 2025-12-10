@@ -1,4 +1,5 @@
-import {Booking, BookingType} from '../models/booking.model';
+import { Booking, BookingType } from '../models/booking.model';
+import { PagedResultDto } from '../models/dtos/common.dtos';
 
 export const mockBookings: Booking[] = [
   {
@@ -18,3 +19,10 @@ export const mockBookings: Booking[] = [
     bookingType: BookingType.Accommodation,
   },
 ];
+
+export const mockPagedBookingResults: PagedResultDto<Booking> = {
+  items: mockBookings,
+  totalCount: mockBookings.length,
+  pageNumber: 1,
+  pageSize: 10
+};

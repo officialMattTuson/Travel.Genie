@@ -5,8 +5,8 @@ import { BookingService } from '../../services/booking.service';
 import { AlertService } from '../../services/alert.service';
 import { of, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
-import { mockTrips } from '../../mocks/mock-trips';
-import { mockBookings } from '../../mocks/mock-bookings';
+import { mockPagedTripResults, mockTrips } from '../../mocks/mock-trips';
+import { mockPagedBookingResults } from '../../mocks/mock-bookings';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -31,8 +31,8 @@ describe('DashboardComponent', () => {
 
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
-    tripServiceSpy.getTrips.and.returnValue(of(mockTrips));
-    bookingServiceSpy.getBookings.and.returnValue(of(mockBookings));
+    tripServiceSpy.getTrips.and.returnValue(of(mockPagedTripResults));
+    bookingServiceSpy.getBookings.and.returnValue(of(mockPagedBookingResults));
     fixture.detectChanges();
   });
 

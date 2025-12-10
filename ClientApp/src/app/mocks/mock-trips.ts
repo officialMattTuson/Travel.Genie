@@ -1,3 +1,4 @@
+import { PagedResultDto } from '../models/dtos/common.dtos';
 import { TripDetailDto, TripStatus } from '../models/dtos/trip.dtos';
 
 export const mockTrips: TripDetailDto[] = [
@@ -72,3 +73,10 @@ export const mockTrips: TripDetailDto[] = [
     lastAiPlanUpdatedAt: null
   }
 ];
+
+export const mockPagedTripResults: PagedResultDto<TripDetailDto> = {
+  items: mockTrips,
+  totalCount: mockTrips.length,
+  pageNumber: 1,
+  pageSize: 10
+};
