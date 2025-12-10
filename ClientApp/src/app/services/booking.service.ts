@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, catchError } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Booking } from '../models/booking.model';
 import { PagedResultDto } from '../models/dtos/common.dtos';
 import { mockBookings } from '../mocks/mock-bookings';
@@ -11,8 +11,7 @@ import { mockBookings } from '../mocks/mock-bookings';
 export class BookingService {
   private readonly apiUrl = '/api/bookings';
   private useMockData = true;
-
-  constructor(private readonly httpClient: HttpClient) { }
+  private readonly httpClient = inject(HttpClient);
 
   getBookings(pageNumber: number = 1, pageSize: number = 10): Observable<PagedResultDto<Booking>> {
     if (this.useMockData) {

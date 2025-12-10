@@ -46,8 +46,7 @@ export class DashboardComponent implements OnInit {
       .pipe(
         take(1),
         switchMap((pagedTrips) => {
-          const tripIds = pagedTrips.items.map(t => t.id);
-          const trips = pagedTrips.items as any as TripDetailDto[];
+          const trips = pagedTrips.items;
           return this.bookingService.getBookings().pipe(
             map((pagedBookings) => {
               const bookings = pagedBookings.items || [];

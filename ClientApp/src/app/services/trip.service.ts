@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, catchError } from 'rxjs';
 import { TripDetailDto } from '../models/dtos/trip.dtos';
@@ -12,8 +12,7 @@ import { mockTrips } from '../mocks/mock-trips';
 export class TripService {
   private readonly apiUrl = '/api/trips';
   private useMockData = true;
-
-  constructor(private readonly httpClient: HttpClient) { }
+  private readonly httpClient = inject(HttpClient);
 
   getTrips(pageNumber: number = 1, pageSize: number = 10): Observable<PagedResultDto<TripDetailDto>> {
     if (this.useMockData) {
