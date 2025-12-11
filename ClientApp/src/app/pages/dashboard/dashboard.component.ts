@@ -12,6 +12,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { TripSummaryComponent } from './components/trip-summary/trip-summary.component';
+import { Router } from '@angular/router';
 
 export enum DashboardHeaderActions {
   PlanNewTrip = 'Plan New Trip',
@@ -29,6 +30,7 @@ export class DashboardComponent implements OnInit {
   private readonly tripService = inject(TripService);
   private readonly alertService = inject(AlertService);
   private readonly bookingService = inject(BookingService);
+  private readonly router = inject(Router);
 
   activeTrips: TripDetailsWithBookings[] = [];
   plannedTrips: TripDetailsWithBookings[] = [];
@@ -134,7 +136,7 @@ export class DashboardComponent implements OnInit {
   onHeaderActionClick(actionLabel: string): void {
     switch (actionLabel) {
       case DashboardHeaderActions.PlanNewTrip:
-        this.handlePlanNewTrip();
+        this.navigateToCreateTripPage();
         break;
       case DashboardHeaderActions.SavedPlaces:
         this.handleSavedPlaces();
@@ -148,7 +150,7 @@ export class DashboardComponent implements OnInit {
   onQuickActionClick(action: string): void {
     switch (action) {
       case 'plan-trip':
-        this.handlePlanNewTrip();
+        this.navigateToCreateTripPage();
         break;
       case 'add-booking':
         this.handleAddBooking();
@@ -162,8 +164,8 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  private handlePlanNewTrip(): void {
-    this.alertService.displaySuccess('Plan New Trip feature coming soon!');
+  private navigateToCreateTripPage(): void {
+    this.router.navigate(['/create-trip']);
   }
 
   private handleAddBooking(): void {

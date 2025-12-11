@@ -12,9 +12,15 @@ export class HeaderComponent {
   @Input({ required: true }) pageTitle!: string;
   @Input() pageSubtitle!: string;
   @Input() pageActions!: Array<{ label: string; icon: string }>;
+  @Input() showBackButton = false;
   @Output() actionClicked = new EventEmitter<string>();
+  @Output() backClicked = new EventEmitter<void>();
 
   onActionClick(actionLabel: string): void {
     this.actionClicked.emit(actionLabel);
+  }
+
+  onBackClick(): void {
+    this.backClicked.emit();
   }
 }
