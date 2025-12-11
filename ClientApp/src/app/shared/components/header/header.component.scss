@@ -2,7 +2,33 @@
   &__container {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 1rem;
+  }
+
+  &__content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+  }
+
+  &__back-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    flex-shrink: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+      background: rgba(61, 181, 197, 0.1);
+    }
+
+    mat-icon {
+      color: #3db5c5;
+    }
   }
 
   &__headings {
@@ -22,6 +48,8 @@
   }
 
   &__actions {
+    display: flex;
+    gap: 0.5rem;
 
     &-button {
       background: none;

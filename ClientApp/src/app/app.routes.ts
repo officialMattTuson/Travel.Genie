@@ -23,6 +23,14 @@ export const routes: Routes = [
     // canActivate: [AuthenticationGuard],
   },
   {
+    path: 'create-trip',
+    loadComponent: () =>
+      import('./pages/create-trip/create-trip').then(
+        (m) => m.CreateTrip
+      ),
+    // canActivate: [AuthenticationGuard],
+  },
+  {
     path: '',
     redirectTo: 'home',
     pathMatch: 'full',

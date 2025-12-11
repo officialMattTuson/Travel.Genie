@@ -1,7 +1,18 @@
 <div class="header__container">
-  <div class="header__headings">
-    <span class="header__headings-title title">{{ pageTitle }}</span>
-    <span class="header__headings-subtitle subtitle">{{ pageSubtitle }}</span>
+  <div class="header__content">
+    @if (showBackButton) {
+      <button 
+        class="header__back-button"
+        mat-icon-button
+        (click)="onBackClick()"
+        aria-label="Go back">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+    }
+    <div class="header__headings">
+      <span class="header__headings-title title">{{ pageTitle }}</span>
+      <span class="header__headings-subtitle subtitle">{{ pageSubtitle }}</span>
+    </div>
   </div>
   <div class="header__actions">
     @for (action of pageActions; track action.label) {
