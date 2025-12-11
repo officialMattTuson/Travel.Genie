@@ -12,24 +12,51 @@
       <span class="trip__stat-label">Days Left</span>
       <span class="trip__stat-value">{{ numberOfDaysLeft() }}</span>
     </div>
-    } @else if (!isPast()) {
     <div class="trip__stat">
-      <span class="trip__stat-label">Days Until</span>
-      <span class="trip__stat-value">{{ numberOfDaysUntil() }}</span>
-    </div>
-    }
-    <div class="trip__stat">
-      <span class="trip__stat-label">Bookings</span>
-      <span class="trip__stat-value">{{ tripDetails().bookings.length }}</span>
+      <span class="trip__stat-label">Duration</span>
+      <span class="trip__stat-value">{{ tripDuration() }} days</span>
     </div>
     <div class="trip__stat">
       <span class="trip__stat-label">Budget</span>
       <span class="trip__stat-value">${{ tripDetails().trip.budget?.totalBudget || 0 }}</span>
     </div>
-    @if (isPast()) {
     <div class="trip__stat">
-      <span class="trip__stat-label">Days Completed</span>
-      <span class="trip__stat-value">{{ tripDetails().trip.itineraryDays.length }}</span>
+      <span class="trip__stat-label">Bookings</span>
+      <span class="trip__stat-value">{{ tripDetails().bookings.length }}</span>
+    </div>
+    } @else if (!isPast()) {
+    <div class="trip__stat">
+      <span class="trip__stat-label">Days Until</span>
+      <span class="trip__stat-value">{{ numberOfDaysUntil() }}</span>
+    </div>
+    <div class="trip__stat">
+      <span class="trip__stat-label">Duration</span>
+      <span class="trip__stat-value">{{ tripDuration() }} days</span>
+    </div>
+    <div class="trip__stat">
+      <span class="trip__stat-label">Budget</span>
+      <span class="trip__stat-value">${{ tripDetails().trip.budget?.totalBudget || 0 }}</span>
+    </div>
+    <div class="trip__stat">
+      <span class="trip__stat-label">Bookings</span>
+      <span class="trip__stat-value">{{ tripDetails().bookings.length }}</span>
+    </div>
+    } @else {
+    <div class="trip__stat">
+      <span class="trip__stat-label">Duration</span>
+      <span class="trip__stat-value">{{ tripDuration() }} days</span>
+    </div>
+    <div class="trip__stat">
+      <span class="trip__stat-label">Destinations</span>
+      <span class="trip__stat-value">{{ destinationCount() }}</span>
+    </div>
+    <div class="trip__stat">
+      <span class="trip__stat-label">Budget</span>
+      <span class="trip__stat-value">${{ tripDetails().trip.budget?.totalBudget || 0 }}</span>
+    </div>
+    <div class="trip__stat">
+      <span class="trip__stat-label">Bookings</span>
+      <span class="trip__stat-value">{{ tripDetails().bookings.length }}</span>
     </div>
     }
   </div>
