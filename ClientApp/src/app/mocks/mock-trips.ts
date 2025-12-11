@@ -8,7 +8,7 @@ export const mockTrips: TripDetailDto[] = [
     description: 'A wonderful trip to the City of Light',
     startDate: '2025-09-01',
     endDate: '2025-09-10',
-    status: TripStatus.Planned,
+    status: TripStatus.Completed,
     primaryDestination: {
       id: 'dest-1',
       name: 'Paris',
@@ -64,8 +64,43 @@ export const mockTrips: TripDetailDto[] = [
     ],
     budget: {
       currencyCode: 'JPY',
-      totalBudget: 200000,
-      dailyTarget: 20000
+      totalBudget: 20000,
+      dailyTarget: 2000
+    },
+    companions: [],
+    itineraryDays: [],
+    hasAiGeneratedPlan: false,
+    lastAiPlanUpdatedAt: null
+  },
+  {
+    id: '3',
+    name: 'Barcelona Memory',
+    description: 'A magical trip exploring Barcelona\'s culture and beaches',
+    startDate: '2024-06-01',
+    endDate: '2024-06-15',
+    status: TripStatus.Completed,
+    primaryDestination: {
+      id: 'dest-3',
+      name: 'Barcelona',
+      countryCode: 'ES',
+      latitude: 41.3851,
+      longitude: 2.1734,
+      timeZoneId: 'Europe/Madrid'
+    },
+    destinations: [
+      {
+        id: 'dest-3',
+        name: 'Barcelona',
+        countryCode: 'ES',
+        latitude: 41.3851,
+        longitude: 2.1734,
+        timeZoneId: 'Europe/Madrid'
+      }
+    ],
+    budget: {
+      currencyCode: 'EUR',
+      totalBudget: 2000,
+      dailyTarget: 150
     },
     companions: [],
     itineraryDays: [],

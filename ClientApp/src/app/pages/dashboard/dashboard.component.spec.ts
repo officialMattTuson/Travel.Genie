@@ -40,13 +40,14 @@ describe('DashboardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should fetch trips and bookings and set trips property', () => {
+  it('should fetch trips and bookings and separate by status', () => {
     component.getTripsAndBookings();
 
-    expect(component.trips.length).toBe(2);
-    expect(component.trips[0].trip).toEqual(mockTrips[0]);
-    expect(component.trips[0].bookings.length).toBe(1);
-    expect(component.trips[1].bookings.length).toBe(1);
+    expect(component.activeTrips.length).toBe(0);
+    expect(component.plannedTrips.length).toBe(1);
+    expect(component.completedTrips.length).toBe(2);
+    expect(component.plannedTrips[0].trip).toEqual(mockTrips[1]);
+    expect(component.completedTrips[0].trip).toEqual(mockTrips[0]);
   });
 
   it('should call alertService.displayError on error', () => {

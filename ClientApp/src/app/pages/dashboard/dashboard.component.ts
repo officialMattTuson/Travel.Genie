@@ -1,15 +1,16 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, computed } from '@angular/core';
 import { TripService } from '../../services/trip.service';
 import { map, switchMap, take } from 'rxjs';
 import { AlertService } from '../../services/alert.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { BookingService } from '../../services/booking.service';
 import { TripDetailsWithBookings } from '../../models/trip-details.model';
-import { TripDetailDto } from '../../models/dtos/trip.dtos';
+import { TripDetailDto, TripStatus } from '../../models/dtos/trip.dtos';
 import { Booking } from '../../models/booking.model';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { TripSummaryComponent } from './components/trip-summary/trip-summary.component';
 
 export enum DashboardHeaderActions {
@@ -20,7 +21,7 @@ export enum DashboardHeaderActions {
 
 @Component({
   selector: 'app-dashboard',
-  imports: [HeaderComponent, MatCardModule, MatIconModule, TripSummaryComponent],
+  imports: [HeaderComponent, MatCardModule, MatIconModule, MatButtonModule, TripSummaryComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
@@ -29,7 +30,9 @@ export class DashboardComponent implements OnInit {
   private readonly alertService = inject(AlertService);
   private readonly bookingService = inject(BookingService);
 
-  trips: TripDetailsWithBookings[] = [];
+  activeTrips: TripDetailsWithBookings[] = [];
+  plannedTrips: TripDetailsWithBookings[] = [];
+  completedTrips: TripDetailsWithBookings[] = [];
   pageHeaderActions: Array<{ label: string; icon: string }> = [
     { label: DashboardHeaderActions.PlanNewTrip, icon: 'add_circle' },
     { label: DashboardHeaderActions.SavedPlaces, icon: 'bookmarks' },
@@ -56,8 +59,8 @@ export class DashboardComponent implements OnInit {
         })
       )
       .subscribe({
-        next: (trips) => {
-          this.trips = trips;
+        next: (tripsWithBookings) => {
+          this.separateTripsByStatus(tripsWithBookings);
         },
         error: (error: HttpErrorResponse) => {
           this.alertService.displayError(`Failed to fetch trips: ${error.error.message}`);
@@ -74,17 +77,112 @@ export class DashboardComponent implements OnInit {
     return tripsWithBookings;
   }
 
+  private separateTripsByStatus(tripsWithBookings: TripDetailsWithBookings[]): void {
+    this.activeTrips = tripsWithBookings.filter((t) => t.trip.status === TripStatus.InProgress);
+    this.plannedTrips = tripsWithBookings.filter((t) => t.trip.status === TripStatus.Planned);
+    this.completedTrips = tripsWithBookings.filter((t) => t.trip.status === TripStatus.Completed);
+  }
+
+  // Travel Statistics - Computed Properties
+  totalTripsCompleted = computed(() => this.completedTrips.length);
+
+  totalDestinationsVisited = computed(() => {
+    const uniqueDestinations = new Set<string>();
+    this.completedTrips.forEach((tripWithBookings) => {
+      tripWithBookings.trip.destinations.forEach((dest) => {
+        uniqueDestinations.add(dest.id);
+      });
+    });
+    return uniqueDestinations.size;
+  });
+
+  totalSpentOnTrips = computed(() => {
+    return this.completedTrips.reduce((sum, tripWithBookings) => {
+      return sum + (tripWithBookings.trip.budget?.totalBudget || 0);
+    }, 0);
+  });
+
+  averageTripDuration = computed(() => {
+    if (this.completedTrips.length === 0) return 0;
+    const totalDays = this.completedTrips.reduce((sum, tripWithBookings) => {
+      const startDate = new Date(tripWithBookings.trip.startDate);
+      const endDate = new Date(tripWithBookings.trip.endDate);
+      const durationDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+      return sum + durationDays;
+    }, 0);
+    return Math.round(totalDays / this.completedTrips.length);
+  });
+
+  totalBookings = computed(() => {
+    return this.completedTrips.reduce((sum, tripWithBookings) => {
+      return sum + tripWithBookings.bookings.length;
+    }, 0);
+  });
+
+  upcomingTrips = computed(() => {
+    return this.plannedTrips.length;
+  });
+
+  activeTripDays = computed(() => {
+    const activeTrip = this.activeTrips.find((t) => t.trip.status === TripStatus.InProgress);
+    if (!activeTrip) return 0;
+    const today = new Date();
+    const endDate = new Date(activeTrip.trip.endDate);
+    return Math.max(0, Math.ceil((endDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)));
+  });
+
   onHeaderActionClick(actionLabel: string): void {
     switch (actionLabel) {
       case DashboardHeaderActions.PlanNewTrip:
-        // Handle Plan New Trip action
+        this.handlePlanNewTrip();
         break;
       case DashboardHeaderActions.SavedPlaces:
-        // Handle Saved Places action
+        this.handleSavedPlaces();
         break;
       case DashboardHeaderActions.ProFeatures:
-        // Handle Pro Features action
+        this.handleProFeatures();
         break;
     }
+  }
+
+  onQuickActionClick(action: string): void {
+    switch (action) {
+      case 'plan-trip':
+        this.handlePlanNewTrip();
+        break;
+      case 'add-booking':
+        this.handleAddBooking();
+        break;
+      case 'generate-itinerary':
+        this.handleGenerateItinerary();
+        break;
+      case 'check-flights':
+        this.handleCheckFlights();
+        break;
+    }
+  }
+
+  private handlePlanNewTrip(): void {
+    this.alertService.displaySuccess('Plan New Trip feature coming soon!');
+  }
+
+  private handleAddBooking(): void {
+    this.alertService.displaySuccess('Add Booking feature coming soon!');
+  }
+
+  private handleGenerateItinerary(): void {
+    this.alertService.displaySuccess('AI Itinerary generation coming soon!');
+  }
+
+  private handleCheckFlights(): void {
+    this.alertService.displaySuccess('Check Flights feature coming soon!');
+  }
+
+  private handleSavedPlaces(): void {
+    this.alertService.displaySuccess('Saved Places feature coming soon!');
+  }
+
+  private handleProFeatures(): void {
+    this.alertService.displaySuccess('Pro Features coming soon!');
   }
 }

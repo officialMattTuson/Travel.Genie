@@ -48,6 +48,16 @@ export class TripSummaryComponent {
     return ((totalTripDays - numberOfDaysLeft) / totalTripDays) * 100;
   });
 
+  tripDuration = computed(() => {
+    const startDate = new Date(this.tripDetails().trip.startDate);
+    const endDate = new Date(this.tripDetails().trip.endDate);
+    return Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+  });
+
+  destinationCount = computed(() => {
+    return this.tripDetails().trip.destinations.length;
+  });
+
   startDate = computed(() => new Date(this.tripDetails().trip.startDate));
   endDate = computed(() => new Date(this.tripDetails().trip.endDate));
 }

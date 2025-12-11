@@ -118,7 +118,7 @@ describe('TripSummaryComponent', () => {
 
     const stats = fixture.nativeElement.querySelectorAll('.trip__stat-label');
     const labels = Array.from(stats as HTMLElement[]).map((el: HTMLElement) => el.textContent);
-    expect(labels).toContain('Days Completed');
+    expect(labels).toEqual([ 'Duration', 'Destinations', 'Budget', 'Bookings' ]);
   });
 
   it('should display correct number of days until for upcoming trip', () => {
@@ -161,7 +161,7 @@ describe('TripSummaryComponent', () => {
     expect(daysLeftValue).toBeGreaterThanOrEqual(daysLeft - 1);
   });
 
-  it('should render correct number of bookings', () => {
+  it('should render correct number of bookings in active trip', () => {
     const trip = { ...mockTrips[0] };
     trip.startDate = futureDate.toISOString();
     trip.endDate = new Date(futureDate.getTime() + 432000000).toISOString();
@@ -174,9 +174,12 @@ describe('TripSummaryComponent', () => {
     fixture.componentRef.setInput('tripDetails', tripDetails);
     fixture.detectChanges();
 
-    const bookingStats = fixture.nativeElement.querySelectorAll('.trip__stat-value');
-    const bookingValue = bookingStats[1].textContent;
-    expect(bookingValue).toContain('1');
+    const tripStatLabels = Array.from(fixture.nativeElement.querySelectorAll('.trip__stat-label')) as Element[];
+    const bookingLabelIndex = tripStatLabels.findIndex((el: Element) => el.textContent?.includes('Bookings'));
+    expect(bookingLabelIndex).toBeGreaterThanOrEqual(0);
+    
+    const tripStatValues = Array.from(fixture.nativeElement.querySelectorAll('.trip__stat-value'));
+    expect((tripStatValues[bookingLabelIndex] as HTMLElement)?.textContent).toContain('1');
   });
 
   it('should return null for numberOfDaysLeft when trip is not active', () => {
