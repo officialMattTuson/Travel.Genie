@@ -31,6 +31,14 @@ export const routes: Routes = [
     // canActivate: [AuthenticationGuard],
   },
   {
+    path: 'trips/plan/preview',
+    loadComponent: () =>
+      import('./pages/trip-plan-review/trip-plan-review.component').then(
+        (m) => m.TripPlanReviewComponent
+      ),
+    // canActivate: [AuthenticationGuard],
+  },
+  {
     path: '',
     redirectTo: 'home',
     pathMatch: 'full',

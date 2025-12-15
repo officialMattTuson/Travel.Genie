@@ -117,10 +117,15 @@
             <button 
               type="button"
               (click)="generateDreamTrip()"
-              [disabled]="tripForm.invalid"
+              [disabled]="tripForm.invalid || isGenerating"
               class="create-trip__generate-btn">
-              <mat-icon>auto_awesome</mat-icon>
-              <span>Generate My Dream Trip</span>
+              @if (isGenerating) {
+                <mat-icon class="create-trip__generate-spinner">hourglass_empty</mat-icon>
+                <span>Generating your dream trip...</span>
+              } @else {
+                <mat-icon>auto_awesome</mat-icon>
+                <span>Generate My Dream Trip</span>
+              }
             </button>
           </div>
 

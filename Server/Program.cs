@@ -18,34 +18,43 @@ builder.Services.AddSingleton<IUserService, UserService>();
 builder.Services.AddSingleton<IJwtService, JwtService>();
 builder.Services.AddScoped<ITripRepository, TripRepository>();
 builder.Services.AddScoped<ITripService, TripService>();
+builder.Services.AddScoped<IAiTripPlannerService, AiTripPlannerService>();
 
 var jwtConfig = builder.Configuration.GetSection("Jwt");
 var secret = jwtConfig["Secret"];
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.Events = new JwtBearerEvents
+
+if (!string.IsNullOrEmpty(secret))
+{
+    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
         {
-            OnMessageReceived = context =>
+            options.Events = new JwtBearerEvents
             {
-                if (context.Request.Cookies.ContainsKey("auth_token"))
+                OnMessageReceived = context =>
                 {
-                    context.Token = context.Request.Cookies["auth_token"];
+                    if (context.Request.Cookies.ContainsKey("auth_token"))
+                    {
+                        context.Token = context.Request.Cookies["auth_token"];
+                    }
+                    return Task.CompletedTask;
                 }
-                return Task.CompletedTask;
-            }
-        };
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = jwtConfig["Issuer"],
-            ValidAudience = jwtConfig["Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret!))
-        };
-    });
+            };
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = jwtConfig["Issuer"],
+                ValidAudience = jwtConfig["Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))
+            };
+        });
+}
+else
+{
+    Console.WriteLine("⚠️  JWT Secret not configured. Authentication disabled for development.");
+}
 
 builder.Services.AddCors(options =>
 {

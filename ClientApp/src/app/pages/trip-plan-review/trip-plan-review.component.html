@@ -1,0 +1,145 @@
+  <app-header 
+    [pageTitle]="'Itenerary Review'"
+    [pageSubtitle]="'Review and finalize your AI-generated trip plan'"
+  ></app-header>
+
+<div class="trip-review-container">
+  <div class="review-header">
+    <div class="header-content">
+      <h1>{{ generatedPlan.trip.name || 'Trip Plan' }}</h1>
+      <p class="trip-dates">
+        {{ generatedPlan.trip.startDate | date: 'MMM d, yyyy' }} -
+        {{ generatedPlan.trip.endDate | date: 'MMM d, yyyy' }}
+      </p>
+      <p class="trip-destination">{{ generatedPlan.trip.destination }}</p>
+    </div>
+    <div class="header-actions">
+      <button mat-raised-button color="primary" (click)="acceptAndSaveTrip()">
+        <mat-icon>check_circle</mat-icon>
+        Save Trip
+      </button>
+      <button mat-stroked-button (click)="editTrip()">
+        <mat-icon>edit</mat-icon>
+        Edit
+      </button>
+    </div>
+  </div>
+
+  <div class="review-content">
+    <!-- AI Notes Section -->
+    <mat-card class="ai-notes-card" *ngIf="generatedPlan?.aiNotes && generatedPlan.aiNotes.length > 0">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>lightbulb</mat-icon>
+          AI Insights
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="notes-list">
+          <div class="note-item" *ngFor="let note of generatedPlan.aiNotes">
+            <mat-icon>check_circle_outline</mat-icon>
+            <span>{{ note }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Budget Breakdown Section -->
+    <mat-card class="budget-card" *ngIf="generatedPlan?.budget">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>attach_money</mat-icon>
+          Budget Breakdown
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="budget-breakdown">
+          <div class="budget-item">
+            <span class="label">Total Budget:</span>
+            <span class="value total">{{ formatCurrency(generatedPlan.budget.total) }}</span>
+          </div>
+          <div class="budget-item">
+            <span class="label">Accommodation (35%):</span>
+            <span class="value">{{ formatCurrency(generatedPlan.budget.accommodation) }}</span>
+          </div>
+          <div class="budget-item">
+            <span class="label">Food (25%):</span>
+            <span class="value">{{ formatCurrency(generatedPlan.budget.food) }}</span>
+          </div>
+          <div class="budget-item">
+            <span class="label">Activities (25%):</span>
+            <span class="value">{{ formatCurrency(generatedPlan.budget.activities) }}</span>
+          </div>
+          <div class="budget-item">
+            <span class="label">Transport (10%):</span>
+            <span class="value">{{ formatCurrency(generatedPlan.budget.transport) }}</span>
+          </div>
+          <div class="budget-item">
+            <span class="label">Other (5%):</span>
+            <span class="value">{{ formatCurrency(generatedPlan.budget.other) }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Must-See Attractions Section -->
+    <mat-card class="attractions-card" *ngIf="generatedPlan?.attractions && generatedPlan.attractions.length > 0">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>place</mat-icon>
+          Must-See Attractions
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="attractions-list">
+          <div class="attraction-item" *ngFor="let attraction of generatedPlan.attractions">
+            <div class="attraction-header">
+              <h4>{{ attraction.name }}</h4>
+              <span class="attraction-category" *ngIf="attraction.category">
+                {{ attraction.category }}
+              </span>
+            </div>
+            <p class="attraction-description">{{ attraction.description }}</p>
+            <div class="attraction-cost" *ngIf="attraction.estimatedCost">
+              Est. Cost: {{ formatCurrency(attraction.estimatedCost) }}
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Signature Restaurants Section -->
+    <mat-card class="restaurants-card" *ngIf="generatedPlan?.restaurants && generatedPlan.restaurants.length > 0">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>restaurant</mat-icon>
+          Signature Restaurants
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="restaurants-list">
+          <div class="restaurant-item" *ngFor="let restaurant of generatedPlan.restaurants">
+            <div class="restaurant-header">
+              <h4>{{ restaurant.name }}</h4>
+              <span class="restaurant-cuisine">{{ restaurant.cuisine }}</span>
+            </div>
+            <p class="restaurant-description">{{ restaurant.description }}</p>
+            <div class="restaurant-specialty" *ngIf="restaurant.specialty">
+              <strong>Specialty:</strong> {{ restaurant.specialty }}
+            </div>
+            <div class="restaurant-cost" *ngIf="restaurant.estimatedCost">
+              Est. Cost: {{ formatCurrency(restaurant.estimatedCost) }}
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="review-footer">
+    <button mat-button (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+      Back to Create
+    </button>
+  </div>
+</div>

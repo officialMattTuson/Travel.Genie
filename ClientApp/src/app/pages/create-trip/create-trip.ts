@@ -12,6 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSliderModule } from '@angular/material/slider';
 import { CommonModule } from '@angular/common';
 import { AlertService } from '../../services/alert.service';
+import { GenerateTripPlanRequest, TripPlannerService } from '../../services/trip-planner.service';
 
 export interface PreferenceTag {
   id: string;
@@ -43,11 +44,13 @@ export class CreateTrip implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly alertService = inject(AlertService);
   private readonly router = inject(Router);
+  private readonly tripPlannerService = inject(TripPlannerService);
 
   tripForm!: FormGroup;
   selectedPreferences: Set<string> = new Set();
   budgetRange = { min: 1000, max: 50000 };
   currentBudget = 1000;
+  isGenerating = false;
 
   preferencesTags: PreferenceTag[] = [
     { id: 'photography', label: 'Photography', icon: 'photo_camera' },
@@ -104,10 +107,41 @@ export class CreateTrip implements OnInit {
       return;
     }
 
-    // placeholder for eventual trip creation
-    this.alertService.displaySuccess(
-      `Generating dream trip to ${destination} for ${duration} days...`
-    );
+    this.isGenerating = true;
+
+    const request: GenerateTripPlanRequest = {
+      destination,
+      startDate: this.formatDateForApi(startDate),
+      endDate: this.formatDateForApi(endDate),
+      budget: this.currentBudget,
+      currency: this.tripForm.get('currency')?.value || 'USD',
+      preferenceTags: Array.from(this.selectedPreferences),
+      userId: 'current-user-id', // TODO: Get from auth service
+    };
+
+    this.generatePlan(request, destination, duration);
+  }
+
+  private generatePlan(request: GenerateTripPlanRequest, destination: string, duration: number): void {
+    this.tripPlannerService.generatePlan(request).subscribe({
+      next: (generatedPlan) => {
+        this.isGenerating = false;
+        this.alertService.displaySuccess(`Generated ${duration}-day trip to ${destination}!`);
+        // Navigate to review page with generated plan
+        this.router.navigate(['/trips/plan/preview'], {
+          state: { generatedPlan },
+        });
+      },
+      error: (error) => {
+        this.isGenerating = false;
+        console.error('Error generating trip plan:', error);
+        this.alertService.displayError('Failed to generate trip plan. Please try again.');
+      },
+    });
+  }
+
+  private formatDateForApi(date: Date): string {
+    return date.toISOString().split('T')[0];
   }
 
   goBackToDashboard(): void {
