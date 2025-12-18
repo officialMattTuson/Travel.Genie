@@ -38,8 +38,8 @@ export interface PreferenceTag {
     FormsModule,
     CommonModule,
   ],
-  templateUrl: './create-trip.html',
-  styleUrl: './create-trip.scss',
+  templateUrl: './create-trip.component.html',
+  styleUrls: ['./create-trip.component.scss'],
 })
 export class CreateTripComponent implements OnInit {
   private readonly fb = inject(FormBuilder);

@@ -1,9 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { of } from 'rxjs';
 import { CreateTripComponent } from './create-trip.component';
 import { TripService } from '../../services/trip.service';
 import { AlertService } from '../../services/alert.service';
+import { TripPlannerService, GeneratedTripPlanResponse } from '../../services/trip-planner.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -20,18 +23,36 @@ describe('CreateTripComponent Component', () => {
   let fixture: ComponentFixture<CreateTripComponent>;
   let mockTripService: jasmine.SpyObj<TripService>;
   let mockAlertService: jasmine.SpyObj<AlertService>;
+  let mockTripPlannerService: jasmine.SpyObj<TripPlannerService>;
   let mockRouter: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
     mockTripService = jasmine.createSpyObj('TripService', ['CreateTripComponent', 'generateAiPlan', 'getTrips']);
     mockAlertService = jasmine.createSpyObj('AlertService', ['displaySuccess', 'displayError']);
+    mockTripPlannerService = jasmine.createSpyObj('TripPlannerService', ['generatePlan']);
     mockRouter = jasmine.createSpyObj('Router', ['navigate']);
+
+    // Mock generatePlan to return a sample GeneratedTripPlanResponse
+    const mockResponse: GeneratedTripPlanResponse = {
+      trip: {
+        name: 'Paris Trip',
+        description: 'A trip to Paris',
+        startDate: '2025-06-01',
+        endDate: '2025-06-10',
+        destination: 'Paris, France',
+      },
+      attractions: [],
+      restaurants: [],
+      budget: { total: 5000, accommodation: 1750, food: 1250, activities: 1250, transport: 500, other: 250 },
+      aiNotes: [],
+    };
+    mockTripPlannerService.generatePlan.and.returnValue(of(mockResponse));
 
     await TestBed.configureTestingModule({
       imports: [
         CreateTripComponent,
         ReactiveFormsModule,
-        FormsModule,
+        HttpClientTestingModule,
         MatCardModule,
         MatFormFieldModule,
         MatInputModule,
@@ -46,6 +67,7 @@ describe('CreateTripComponent Component', () => {
       providers: [
         { provide: TripService, useValue: mockTripService },
         { provide: AlertService, useValue: mockAlertService },
+        { provide: TripPlannerService, useValue: mockTripPlannerService },
         { provide: Router, useValue: mockRouter },
       ],
     }).compileComponents();
@@ -242,17 +264,10 @@ describe('CreateTripComponent Component', () => {
 
     it('should show success message when generating dream trip', () => {
       component.generateDreamTrip();
+      expect(mockTripPlannerService.generatePlan).toHaveBeenCalled();
       expect(mockAlertService.displaySuccess).toHaveBeenCalled();
       const callArgs = mockAlertService.displaySuccess.calls.mostRecent().args[0];
-      expect(callArgs).toContain('Generating dream trip to Paris');
-      expect(callArgs).toContain('9 days');
-    });
-
-    it('should include current budget in dream trip generation', () => {
-      component.currentBudget = 15000;
-      component.generateDreamTrip();
-      // Verify the method executed without errors
-      expect(mockAlertService.displaySuccess).toHaveBeenCalled();
+      expect(callArgs).toContain('Generated 9-day trip to Paris');
     });
   });
 
