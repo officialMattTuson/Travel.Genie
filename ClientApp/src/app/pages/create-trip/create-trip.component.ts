@@ -13,6 +13,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { CommonModule } from '@angular/common';
 import { AlertService } from '../../services/alert.service';
 import { GenerateTripPlanRequest, TripPlannerService } from '../../services/trip-planner.service';
+import { TripPlanReviewService } from '../trip-plan-review/trip-plan-review.service';
 
 export interface PreferenceTag {
   id: string;
@@ -40,11 +41,12 @@ export interface PreferenceTag {
   templateUrl: './create-trip.html',
   styleUrl: './create-trip.scss',
 })
-export class CreateTrip implements OnInit {
+export class CreateTripComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly alertService = inject(AlertService);
   private readonly router = inject(Router);
   private readonly tripPlannerService = inject(TripPlannerService);
+  private readonly tripPlanReviewService = inject(TripPlanReviewService);
 
   tripForm!: FormGroup;
   selectedPreferences: Set<string> = new Set();
@@ -116,7 +118,6 @@ export class CreateTrip implements OnInit {
       budget: this.currentBudget,
       currency: this.tripForm.get('currency')?.value || 'USD',
       preferenceTags: Array.from(this.selectedPreferences),
-      userId: 'current-user-id', // TODO: Get from auth service
     };
 
     this.generatePlan(request, destination, duration);
@@ -127,10 +128,8 @@ export class CreateTrip implements OnInit {
       next: (generatedPlan) => {
         this.isGenerating = false;
         this.alertService.displaySuccess(`Generated ${duration}-day trip to ${destination}!`);
-        // Navigate to review page with generated plan
-        this.router.navigate(['/trips/plan/preview'], {
-          state: { generatedPlan },
-        });
+        this.tripPlanReviewService.setTripPlan(generatedPlan);
+        this.router.navigate(['/trips/plan/preview']);
       },
       error: (error) => {
         this.isGenerating = false;

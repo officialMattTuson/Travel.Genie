@@ -9,7 +9,6 @@ export interface GenerateTripPlanRequest {
   budget: number;
   currency: string;
   preferenceTags: string[];
-  userId: string;
 }
 
 export interface AttractionDto {

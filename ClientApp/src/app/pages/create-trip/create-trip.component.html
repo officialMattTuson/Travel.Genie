@@ -70,7 +70,7 @@
                 [max]="budgetRange.max"
                 step="500"
                 [value]="currentBudget"
-                (input)="currentBudget = +$event.target.value">
+                (input)="currentBudget = +($event.target as HTMLInputElement).value">
               <div class="create-trip__budget-range">
                 <span>${{ budgetRange.min.toLocaleString() }}</span>
                 <span>${{ budgetRange.max.toLocaleString() }}</span>

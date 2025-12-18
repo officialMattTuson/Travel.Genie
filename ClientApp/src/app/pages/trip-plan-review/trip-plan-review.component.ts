@@ -8,6 +8,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { GeneratedTripPlanResponse } from '../../services/trip-planner.service';
 import { AlertService } from '../../services/alert.service';
+import { TripPlanReviewService } from './trip-plan-review.service';
 
 @Component({
   selector: 'app-trip-plan-review',
@@ -26,18 +27,15 @@ import { AlertService } from '../../services/alert.service';
 export class TripPlanReviewComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly alertService = inject(AlertService);
+  private readonly tripPlanReviewService = inject(TripPlanReviewService);
 
-  generatedPlan!: GeneratedTripPlanResponse;
+  generatedPlan!: GeneratedTripPlanResponse | null;
   isSaving = false;
 
   ngOnInit(): void {
-    // Get the generated plan from router state
-    const state = this.router.getCurrentNavigation()?.extras?.state || history.state;
-    if (state && state.generatedPlan) {
-      this.generatedPlan = state.generatedPlan;
-    } else {
-      // If no plan is available, redirect back to create trip
-      this.alertService.displayError('No trip plan found. Please generate a plan first.');
+    this.generatedPlan = this.tripPlanReviewService.getTripPlan();
+    if (!this.generatedPlan) {
+      this.alertService.displayError('No trip plan found. Please create a trip first.');
       this.router.navigate(['/create-trip']);
     }
   }

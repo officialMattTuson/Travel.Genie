@@ -43,7 +43,7 @@ export class TripService {
     );
   }
 
-  createTrip(trip: Partial<TripDetailDto>): Observable<TripDetailDto> {
+  CreateTrip(trip: Partial<TripDetailDto>): Observable<TripDetailDto> {
     if (this.useMockData) {
       return of({
         ...trip,

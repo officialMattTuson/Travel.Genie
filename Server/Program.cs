@@ -32,9 +32,9 @@ if (!string.IsNullOrEmpty(secret))
             {
                 OnMessageReceived = context =>
                 {
-                    if (context.Request.Cookies.ContainsKey("auth_token"))
+                    if (context.Request.Cookies.TryGetValue("auth_token", out var authToken))
                     {
-                        context.Token = context.Request.Cookies["auth_token"];
+                        context.Token = authToken;
                     }
                     return Task.CompletedTask;
                 }
@@ -53,7 +53,16 @@ if (!string.IsNullOrEmpty(secret))
 }
 else
 {
-    Console.WriteLine("⚠️  JWT Secret not configured. Authentication disabled for development.");
+    if (builder.Environment.IsDevelopment())
+    {
+        builder.Logging.AddConsole();
+        Console.WriteLine("JWT Secret not configured. Authentication disabled for development.");
+    }
+    else
+    {
+        Console.WriteLine("JWT Secret not configured. This is not allowed outside Development. Shutting down.");
+        throw new InvalidOperationException("JWT Secret not configured. Application cannot start in non-development environments without a JWT secret.");
+    }
 }
 
 builder.Services.AddCors(options =>
