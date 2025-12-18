@@ -43,7 +43,8 @@ public class TripPlannerController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error generating trip plan for destination {Destination}", request.Destination);
+            _logger.LogError(ex, "Error generating trip plan for destination {Destination}",
+               request.Destination?.Replace("\r", "").Replace("\n", ""));
             return StatusCode(
                 StatusCodes.Status500InternalServerError,
                 new { message = "Failed to generate trip plan. Please try again." });

@@ -20,14 +20,6 @@ public class AiTripPlannerService : IAiTripPlannerService
         GenerateTripPlanRequest request,
         CancellationToken ct = default)
     {
-        _logger.LogInformation(
-            "Generating trip plan for {Destination} ({StartDate} - {EndDate}) with budget {Budget} {Currency}",
-            request.Destination,
-            request.StartDate.ToString("yyyy-MM-dd"),
-            request.EndDate.ToString("yyyy-MM-dd"),
-            request.Budget,
-            request.Currency);
-
         try
         {
             var plan = await GenerateMockPlanAsync(request, ct);
@@ -36,7 +28,7 @@ public class AiTripPlannerService : IAiTripPlannerService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error generating trip plan for {Destination}", request.Destination);
+            _logger.LogError(ex, "Error generating trip plan for {Destination}", request.Destination?.Replace("\r", "").Replace("\n", ""));
             throw;
         }
     }
