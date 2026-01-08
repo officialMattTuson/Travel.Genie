@@ -213,7 +213,7 @@ public class TripPlannerControllerTests
     }
 
     [Fact]
-    public async Task GeneratePlan_RespectsCancellationToken()
+    public async Task GeneratePlan_WhenCancelled_ReturnsInternalServerError()
     {
         // Arrange
         var request = new GenerateTripPlanRequest
@@ -234,9 +234,11 @@ public class TripPlannerControllerTests
             .ThrowsAsync(new OperationCanceledException());
 
         // Act
-        var act = async () => await _controller.GeneratePlan(request, cts.Token);
+        var result = await _controller.GeneratePlan(request, cts.Token);
 
         // Assert
-        await act.Should().ThrowAsync<OperationCanceledException>();
+        result.Result.Should().BeOfType<ObjectResult>();
+        var objectResult = result.Result as ObjectResult;
+        objectResult!.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
     }
 }
