@@ -11,4 +11,3 @@ public sealed class GenerateTripPlanRequest
     public List<string> PreferenceTags { get; set; } = [];
     public required string UserId { get; set; }
 }
-       

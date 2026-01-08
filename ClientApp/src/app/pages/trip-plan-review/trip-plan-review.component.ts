@@ -29,7 +29,7 @@ export class TripPlanReviewComponent implements OnInit {
   private readonly alertService = inject(AlertService);
   private readonly tripPlanReviewService = inject(TripPlanReviewService);
 
-  generatedPlan!: GeneratedTripPlanResponse | null;
+  generatedPlan: GeneratedTripPlanResponse | null = null;
   isSaving = false;
 
   ngOnInit(): void {

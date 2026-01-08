@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of } from 'rxjs';
@@ -279,7 +279,7 @@ describe('CreateTripComponent Component', () => {
   });
 
   describe('Edge Cases', () => {
-    it('should handle same start and end date correctly', () => {
+    it('should handle same start and end date as valid', () => {
       const sameDate = new Date('2025-06-01');
       component.tripForm.patchValue({
         destination: 'Paris',
@@ -289,7 +289,7 @@ describe('CreateTripComponent Component', () => {
       });
 
       component.generateDreamTrip();
-      expect(mockAlertService.displayError).toHaveBeenCalledWith('End date must be after start date');
+      expect(mockAlertService.displayError).not.toHaveBeenCalled();
     });
 
     it('should handle minimum budget value', () => {

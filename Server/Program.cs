@@ -22,6 +22,8 @@ builder.Services.AddScoped<IAiTripPlannerService, AiTripPlannerService>();
 
 var jwtConfig = builder.Configuration.GetSection("Jwt");
 var secret = jwtConfig["Secret"];
+var loggerFactory = LoggerFactory.Create(logging => logging.AddConsole());
+var logger = loggerFactory.CreateLogger("Program");
 
 if (!string.IsNullOrEmpty(secret))
 {
@@ -56,11 +58,11 @@ else
     if (builder.Environment.IsDevelopment())
     {
         builder.Logging.AddConsole();
-        Console.WriteLine("JWT Secret not configured. Authentication disabled for development.");
+        logger.LogWarning("JWT Secret not configured. Authentication disabled for development.");
     }
     else
     {
-        Console.WriteLine("JWT Secret not configured. This is not allowed outside Development. Shutting down.");
+        logger.LogError("JWT Secret not configured. This is not allowed outside Development. Shutting down.");
         throw new InvalidOperationException("JWT Secret not configured. Application cannot start in non-development environments without a JWT secret.");
     }
 }

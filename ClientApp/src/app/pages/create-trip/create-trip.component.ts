@@ -104,7 +104,7 @@ export class CreateTripComponent implements OnInit {
     const end = new Date(endDate);
     const duration = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
 
-    if (duration <= 0) {
+    if (duration < 0) {
       this.alertService.displayError('End date must be after start date');
       return;
     }

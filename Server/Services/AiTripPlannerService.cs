@@ -22,7 +22,7 @@ public class AiTripPlannerService : IAiTripPlannerService
     {
         try
         {
-            var plan = await GenerateMockPlanAsync(request, ct);
+            var plan = GenerateMockPlanAsync(request, ct);
             _logger.LogInformation("Successfully generated trip plan with {AttractionCount} attractions and {RestaurantCount} restaurants", plan.Attractions.Count, plan.Restaurants.Count);
             return plan;
         }
@@ -33,7 +33,7 @@ public class AiTripPlannerService : IAiTripPlannerService
         }
     }
 
-    private static Task<GeneratedTripPlanResponse> GenerateMockPlanAsync(
+    private static GeneratedTripPlanResponse GenerateMockPlanAsync(
         GenerateTripPlanRequest request,
         CancellationToken ct)
     {
@@ -71,7 +71,7 @@ public class AiTripPlannerService : IAiTripPlannerService
             AiNotes = GenerateAiNotes(request.Destination, request.PreferenceTags),
         };
 
-        return Task.FromResult(response);
+        return response;
     }
 
     private static List<AttractionDto> GenerateMockAttractions(

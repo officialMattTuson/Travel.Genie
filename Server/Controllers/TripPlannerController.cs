@@ -32,7 +32,9 @@ public class TripPlannerController : ControllerBase
     {
         if (!ModelState.IsValid)
         {
-            _logger.LogWarning("Invalid trip plan request: {Errors}", ModelState.Values.SelectMany(v => v.Errors));
+            _logger.LogWarning(
+               "Invalid trip plan request: {Errors}",
+               string.Join(", ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)));
             return BadRequest(ModelState);
         }
 
