@@ -1,0 +1,152 @@
+<div class="create-trip__container">
+  <app-header 
+    [pageTitle]="'AI Trip Advisory'"
+    [pageSubtitle]="'Powered by advanced AI planning'"
+    [showBackButton]="true"
+    (backClicked)="goBackToDashboard()">
+  </app-header>
+
+  <div class="create-trip__content">
+    <mat-card appearance="outlined" class="create-trip__card">
+      <mat-card-header class="create-trip__card-header">
+        <mat-icon class="create-trip__header-icon">public</mat-icon>
+        <div class="create-trip__header-content">
+          <h2 class="create-trip__title">Start Your Journey</h2>
+          <p class="create-trip__subtitle">Our AI will analyze your preferences and create a personalized travel experience</p>
+        </div>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form [formGroup]="tripForm" class="create-trip__form">
+          
+          <!-- Destination Field -->
+          <div class="create-trip__form-section">
+            <label class="create-trip__label">Where would you like to explore?</label>
+            <mat-form-field appearance="outline" class="create-trip__form-field full-width">
+              <mat-label>Destination</mat-label>
+              <input matInput formControlName="destination" placeholder="Tokyo, Japan • Santorini, Greece • Anywhere with mountains...">
+              <mat-error *ngIf="tripForm.get('destination')?.hasError('required')">
+                Destination is required
+              </mat-error>
+              <mat-error *ngIf="tripForm.get('destination')?.hasError('minlength')">
+                Destination must be at least 2 characters
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <!-- Travel Dates and Budget -->
+          <div class="create-trip__form-row">
+            <div class="create-trip__form-section">
+              <label class="create-trip__label">Travel Dates</label>
+              <mat-form-field appearance="outline" class="create-trip__form-field full-width">
+                <mat-label>dd/mm/yyyy</mat-label>
+                <input matInput [matDatepicker]="startPicker" formControlName="startDate">
+                <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+                <mat-datepicker #startPicker></mat-datepicker>
+                <mat-error *ngIf="tripForm.get('startDate')?.hasError('required')">
+                  Start date is required
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="create-trip__form-field full-width" style="margin-top: 0.75rem;">
+                <mat-label>dd/mm/yyyy</mat-label>
+                <input matInput [matDatepicker]="endPicker" formControlName="endDate">
+                <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+                <mat-datepicker #endPicker></mat-datepicker>
+                <mat-error *ngIf="tripForm.get('endDate')?.hasError('required')">
+                  End date is required
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="create-trip__form-section">
+              <label class="create-trip__label">Budget Range</label>
+              <div class="create-trip__budget-display">
+                <span class="create-trip__budget-amount">${{ currentBudget.toLocaleString() }}</span>
+              </div>
+              <input 
+                type="range"
+                class="create-trip__slider"
+                [min]="budgetRange.min"
+                [max]="budgetRange.max"
+                step="500"
+                [value]="currentBudget"
+                (input)="currentBudget = +$event.target.value">
+              <div class="create-trip__budget-range">
+                <span>${{ budgetRange.min.toLocaleString() }}</span>
+                <span>${{ budgetRange.max.toLocaleString() }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preferences Text -->
+          <div class="create-trip__form-section">
+            <label class="create-trip__label">Tell us about your ideal trip</label>
+            <mat-form-field appearance="outline" class="create-trip__form-field full-width">
+              <mat-label>Describe your dream vacation...</mat-label>
+              <textarea 
+                matInput 
+                formControlName="tripPreferences"
+                rows="4"
+                placeholder="I love exploring local cuisine, visiting historical sites, and capturing amazing photos. I prefer boutique hotels and enjoy both adventure activities and relaxing moments...">
+              </textarea>
+              <mat-error *ngIf="tripForm.get('tripPreferences')?.hasError('required')">
+                Please tell us about your ideal trip
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <!-- Quick Preferences -->
+          <div class="create-trip__form-section">
+            <label class="create-trip__label">Quick Preferences</label>
+            <div class="create-trip__preferences-grid">
+              @for (pref of preferencesTags; track pref.id) {
+                <button 
+                  type="button"
+                  (click)="togglePreference(pref.id)"
+                  [class.selected]="isPreferenceSelected(pref.id)"
+                  class="create-trip__preference-btn">
+                  <mat-icon>{{ pref.icon }}</mat-icon>
+                  <span>{{ pref.label }}</span>
+                </button>
+              }
+            </div>
+          </div>
+
+          <!-- Generate Button -->
+          <div class="create-trip__form-section">
+            <button 
+              type="button"
+              (click)="generateDreamTrip()"
+              [disabled]="tripForm.invalid"
+              class="create-trip__generate-btn">
+              <mat-icon>auto_awesome</mat-icon>
+              <span>Generate My Dream Trip</span>
+            </button>
+          </div>
+
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Benefits Section -->
+    <div class="create-trip__benefits">
+      <div class="create-trip__benefit-card">
+        <mat-icon class="create-trip__benefit-icon">auto_awesome</mat-icon>
+        <h3 class="create-trip__benefit-title">AI-Powered</h3>
+        <p class="create-trip__benefit-text">Advanced algorithms analyze millions of data points</p>
+      </div>
+
+      <div class="create-trip__benefit-card">
+        <mat-icon class="create-trip__benefit-icon">location_on</mat-icon>
+        <h3 class="create-trip__benefit-title">Personalized</h3>
+        <p class="create-trip__benefit-text">Every itinerary is crafted specifically for you</p>
+      </div>
+
+      <div class="create-trip__benefit-card">
+        <mat-icon class="create-trip__benefit-icon">speed</mat-icon>
+        <h3 class="create-trip__benefit-title">Instant Results</h3>
+        <p class="create-trip__benefit-text">Get your complete trip plan in seconds</p>
+      </div>
+    </div>
+  </div>
+</div>
