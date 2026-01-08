@@ -279,40 +279,42 @@
   font-weight: 500;
 }
 
-.trip-review-container {
-  padding: 1rem;
-}
-
-.review-header {
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.header-actions {
-  width: 100%;
-  flex-direction: column;
-
-  button {
-    width: 100%;
+@media (max-width: 768px) {
+  .trip-review-container {
+    padding: 1rem;
   }
-}
 
-.review-content {
-  grid-template-columns: 1fr;
-}
+  .review-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
 
-.budget-breakdown {
-  grid-template-columns: 1fr;
-}
+  .header-actions {
+    width: 100%;
+    flex-direction: column;
 
-.day-selector {
-  flex-wrap: wrap;
-}
+    button {
+      width: 100%;
+    }
+  }
 
-.activity-item {
-  flex-direction: column;
-}
+  .review-content {
+    grid-template-columns: 1fr;
+  }
 
-.activity-time {
-  min-width: auto;
+  .budget-breakdown {
+    grid-template-columns: 1fr;
+  }
+
+  .day-selector {
+    flex-wrap: wrap;
+  }
+
+  .activity-item {
+    flex-direction: column;
+  }
+
+  .activity-time {
+    min-width: auto;
+  }
 }

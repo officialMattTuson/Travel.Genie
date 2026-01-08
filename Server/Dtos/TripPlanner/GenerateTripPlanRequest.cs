@@ -7,7 +7,7 @@ public sealed class GenerateTripPlanRequest
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public decimal Budget { get; set; }
-    public required string Currency { get; set; } = "USD";
+    public required string Currency { get; set; }
     public List<string> PreferenceTags { get; set; } = [];
     public required string UserId { get; set; }
 }
