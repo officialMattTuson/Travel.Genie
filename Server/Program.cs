@@ -18,34 +18,54 @@ builder.Services.AddSingleton<IUserService, UserService>();
 builder.Services.AddSingleton<IJwtService, JwtService>();
 builder.Services.AddScoped<ITripRepository, TripRepository>();
 builder.Services.AddScoped<ITripService, TripService>();
+builder.Services.AddScoped<IAiTripPlannerService, AiTripPlannerService>();
 
 var jwtConfig = builder.Configuration.GetSection("Jwt");
 var secret = jwtConfig["Secret"];
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.Events = new JwtBearerEvents
+var loggerFactory = LoggerFactory.Create(logging => logging.AddConsole());
+var logger = loggerFactory.CreateLogger("Program");
+
+if (!string.IsNullOrEmpty(secret))
+{
+    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
         {
-            OnMessageReceived = context =>
+            options.Events = new JwtBearerEvents
             {
-                if (context.Request.Cookies.ContainsKey("auth_token"))
+                OnMessageReceived = context =>
                 {
-                    context.Token = context.Request.Cookies["auth_token"];
+                    if (context.Request.Cookies.TryGetValue("auth_token", out var authToken))
+                    {
+                        context.Token = authToken;
+                    }
+                    return Task.CompletedTask;
                 }
-                return Task.CompletedTask;
-            }
-        };
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = jwtConfig["Issuer"],
-            ValidAudience = jwtConfig["Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret!))
-        };
-    });
+            };
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = jwtConfig["Issuer"],
+                ValidAudience = jwtConfig["Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))
+            };
+        });
+}
+else
+{
+    if (builder.Environment.IsDevelopment())
+    {
+        builder.Logging.AddConsole();
+        logger.LogWarning("JWT Secret not configured. Authentication disabled for development.");
+    }
+    else
+    {
+        logger.LogError("JWT Secret not configured. This is not allowed outside Development. Shutting down.");
+        throw new InvalidOperationException("JWT Secret not configured. Application cannot start in non-development environments without a JWT secret.");
+    }
+}
 
 builder.Services.AddCors(options =>
 {

@@ -25,8 +25,16 @@ export const routes: Routes = [
   {
     path: 'create-trip',
     loadComponent: () =>
-      import('./pages/create-trip/create-trip').then(
-        (m) => m.CreateTrip
+      import('./pages/create-trip/create-trip.component').then(
+        (m) => m.CreateTripComponent
+      ),
+    // canActivate: [AuthenticationGuard],
+  },
+  {
+    path: 'trips/plan/preview',
+    loadComponent: () =>
+      import('./pages/trip-plan-review/trip-plan-review.component').then(
+        (m) => m.TripPlanReviewComponent
       ),
     // canActivate: [AuthenticationGuard],
   },
