@@ -10,7 +10,8 @@ permissions:
   contents: read   
   actions: read    
   checks: write 
-  security-events: write 
+  security-events: write
+  pull-requests: write 
   
 jobs:
   build:
@@ -32,8 +33,28 @@ jobs:
       - name: Build .NET backend
         run: dotnet build --configuration Release --no-restore
 
-      - name: Test .NET backend
-        run: dotnet test --configuration Release --verbosity normal
+      - name: Test .NET backend with code coverage
+        run: dotnet test --configuration Release --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./coverage
+
+      - name: Code Coverage Report (.NET)
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        with:
+          filename: coverage/**/coverage.cobertura.xml
+          badge: true
+          fail_below_min: true
+          format: markdown
+          hide_branch_rate: false
+          hide_complexity: true
+          indicators: true
+          output: both
+          thresholds: '90 90'
+
+      - name: Add Coverage PR Comment (.NET)
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: github.event_name == 'pull_request'
+        with:
+          recreate: true
+          path: code-coverage-results.md
 
       # ----- Frontend (Angular) -----
       - name: Setup Node.js
@@ -57,9 +78,29 @@ jobs:
         working-directory: ClientApp
         run: npm run lint
 
-      - name: Run Angular tests
+      - name: Run Angular tests with coverage
         working-directory: ClientApp
-        run: npm test --if-present
+        run: npm test --if-present -- --code-coverage --karma-config=karma.conf.js
+
+      - name: Code Coverage Report (Angular)
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        with:
+          filename: ClientApp/coverage/client-app/cobertura-coverage.xml
+          badge: true
+          fail_below_min: true
+          format: markdown
+          hide_branch_rate: false
+          hide_complexity: true
+          indicators: true
+          output: both
+          thresholds: '90 90'
+
+      - name: Add Angular Coverage PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: github.event_name == 'pull_request'
+        with:
+          recreate: true
+          path: code-coverage-results.md
 
       # ----- Publish backend -----
       - name: Publish .NET app
