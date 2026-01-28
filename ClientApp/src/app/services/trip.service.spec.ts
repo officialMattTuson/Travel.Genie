@@ -38,7 +38,7 @@ describe('TripService', () => {
     });
 
     it('should make HTTP request when useMockData is false', (done) => {
-      (service as any).useMockData = false;
+      service.useMockData = false;
       const mockResponse = { items: mockTrips, pageNumber: 1, pageSize: 10, totalCount: mockTrips.length };
 
       service.getTrips(1, 10).subscribe(result => {
@@ -52,7 +52,7 @@ describe('TripService', () => {
     });
 
     it('should fallback to mock data on HTTP error', (done) => {
-      (service as any).useMockData = false;
+      service.useMockData = false;
       spyOn(console, 'warn');
 
       service.getTrips().subscribe(result => {
@@ -83,7 +83,7 @@ describe('TripService', () => {
     });
 
     it('should make HTTP request when useMockData is false', (done) => {
-      (service as any).useMockData = false;
+      service.useMockData = false;
       const tripId = 'test-id';
 
       service.getTripDetail(tripId).subscribe(result => {
@@ -109,7 +109,7 @@ describe('TripService', () => {
     });
 
     it('should make POST request when useMockData is false', (done) => {
-      (service as any).useMockData = false;
+      service.useMockData = false;
       const newTrip: Partial<TripDetailDto> = { name: 'Test Trip' };
 
       service.createTrip(newTrip).subscribe(result => {
@@ -137,7 +137,7 @@ describe('TripService', () => {
     });
 
     it('should make PUT request when useMockData is false', (done) => {
-      (service as any).useMockData = false;
+      service.useMockData = false;
       const tripId = 'test-id';
       const updates: Partial<TripDetailDto> = { name: 'Updated Trip' };
 
@@ -162,7 +162,7 @@ describe('TripService', () => {
     });
 
     it('should make DELETE request when useMockData is false', (done) => {
-      (service as any).useMockData = false;
+      service.useMockData = false;
       const tripId = 'test-id';
 
       service.deleteTrip(tripId).subscribe(() => {
@@ -212,7 +212,7 @@ describe('TripService', () => {
     });
 
     it('should make POST request when useMockData is false', (done) => {
-      (service as any).useMockData = false;
+      service.useMockData = false;
       const request: AiPlanRequestDto =
       {
         tripName: 'Paris Vacation',

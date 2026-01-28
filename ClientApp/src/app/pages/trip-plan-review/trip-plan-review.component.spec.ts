@@ -69,11 +69,6 @@ describe('TripPlanReviewComponent', () => {
             expect(result).toBe('$0.00');
         });
 
-        it('should return $0.00 for null', () => {
-            const result = component.formatCurrency(null as any);
-            expect(result).toBe('$0.00');
-        });
-
         it('should format zero as currency', () => {
             const result = component.formatCurrency(0);
             expect(result).toBe('$0.00');

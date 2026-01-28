@@ -11,7 +11,7 @@ import { mockTrips } from '../mocks/mock-trips';
 })
 export class TripService {
   private readonly apiUrl = '/api/trips';
-  private useMockData = true;
+  useMockData = true;
   private readonly httpClient = inject(HttpClient);
 
   getTrips(pageNumber: number = 1, pageSize: number = 10): Observable<PagedResultDto<TripDetailDto>> {
