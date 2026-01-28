@@ -8,7 +8,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { mockPagedTripResults, mockTrips } from '../../mocks/mock-trips';
 import { mockPagedBookingResults } from '../../mocks/mock-bookings';
 import { Router } from '@angular/router';
-import { TripDetailsWithBookings } from '../../models/trip-details.model';
 import { TripDetailDto } from '../../models/dtos/trip.dtos';
 import { PagedResultDto } from '../../models/dtos/common.dtos';
 
