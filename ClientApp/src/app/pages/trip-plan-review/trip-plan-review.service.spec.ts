@@ -57,11 +57,13 @@ describe('TripPlanReviewService', () => {
     });
 
     it('should update the trip plan when called multiple times', () => {
+      // Arrange
       const secondMockPlan: GeneratedTripPlanResponse = {
         ...mockTripPlan,
         trip: { ...mockTripPlan.trip, name: 'Tokyo Adventure' },
       };
 
+      // Act & Assert
       service.setTripPlan(mockTripPlan);
       expect(service.getTripPlan()?.trip.name).toBe('Paris Getaway');
 
@@ -70,6 +72,7 @@ describe('TripPlanReviewService', () => {
     });
 
     it('should emit the trip plan through the observable', (done) => {
+      // Act & Assert
       service.generatedTripPlan$.subscribe((plan) => {
         if (plan) {
           expect(plan).toEqual(mockTripPlan);
@@ -83,8 +86,13 @@ describe('TripPlanReviewService', () => {
 
   describe('getTripPlan', () => {
     it('should return the set trip plan', () => {
+      // Arrange
       service.setTripPlan(mockTripPlan);
+      
+      // Act
       const result = service.getTripPlan();
+      
+      // Assert
       expect(result).toEqual(mockTripPlan);
     });
 
@@ -94,21 +102,26 @@ describe('TripPlanReviewService', () => {
     });
 
     it('should return the most recently set trip plan', () => {
+      // Arrange
       const secondMockPlan = {
         ...mockTripPlan,
         trip: { ...mockTripPlan.trip, destination: 'Tokyo, Japan' },
       };
 
+      // Act
       service.setTripPlan(mockTripPlan);
       service.setTripPlan(secondMockPlan);
 
       const result = service.getTripPlan();
+
+      // Assert
       expect(result?.trip.destination).toBe('Tokyo, Japan');
     });
   });
 
   describe('generatedTripPlan$ observable', () => {
     it('should emit null initially', (done) => {
+      // Act & Assert
       service.generatedTripPlan$.subscribe((plan) => {
         expect(plan).toBeNull();
         done();
@@ -116,6 +129,7 @@ describe('TripPlanReviewService', () => {
     });
 
     it('should emit the trip plan when setTripPlan is called', (done) => {
+      // Act & Assert
       let emissionCount = 0;
 
       service.generatedTripPlan$.subscribe((plan) => {
@@ -130,6 +144,7 @@ describe('TripPlanReviewService', () => {
     });
 
     it('should emit multiple times when setTripPlan is called multiple times', (done) => {
+      // Act & Assert
       const emittedValues: (GeneratedTripPlanResponse | null)[] = [];
 
       service.generatedTripPlan$.subscribe((plan) => {

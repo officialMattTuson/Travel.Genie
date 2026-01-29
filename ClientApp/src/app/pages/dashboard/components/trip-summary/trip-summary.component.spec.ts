@@ -29,6 +29,7 @@ describe('TripSummaryComponent', () => {
   });
 
   it('should show upcoming trip info if start date is in the future', () => {
+    // Arrange
     const trip = { ...mockTrips[0] };
     trip.destinations = [
       {
@@ -44,9 +45,11 @@ describe('TripSummaryComponent', () => {
       bookings: mockBookings
     };
 
+    // Act
     fixture.componentRef.setInput('tripDetails', tripDetails);
     fixture.detectChanges();
 
+    // Assert
     expect(component.isActive()).toBeFalse();
     expect(component.isPast()).toBeFalse();
     expect(component.numberOfDaysUntil()).toBeGreaterThan(0);
@@ -56,6 +59,7 @@ describe('TripSummaryComponent', () => {
   });
 
   it('should show active trip info if today is within start and end date', () => {
+    // Arrange
     const trip = { ...mockTrips[0] };
     trip.destinations = [
       {
@@ -71,9 +75,11 @@ describe('TripSummaryComponent', () => {
       bookings: mockBookings
     };
 
+    // Act
     fixture.componentRef.setInput('tripDetails', tripDetails);
     fixture.detectChanges();
 
+    // Assert
     expect(component.isActive()).toBeTrue();
     expect(component.isPast()).toBeFalse();
     expect(component.numberOfDaysLeft()).toBeGreaterThan(0);
@@ -87,6 +93,7 @@ describe('TripSummaryComponent', () => {
   });
 
   it('should show completed trip info if end date is in the past', () => {
+    // Arrange
     const trip = { ...mockTrips[0] };
     trip.destinations = [
       {
@@ -103,9 +110,11 @@ describe('TripSummaryComponent', () => {
       bookings: mockBookings
     };
 
+    // Act
     fixture.componentRef.setInput('tripDetails', tripDetails);
     fixture.detectChanges();
 
+    // Assert
     expect(component.isActive()).toBeFalse();
     expect(component.isPast()).toBeTrue();
     expect(component.numberOfDaysUntil()).toBeNull();
@@ -122,6 +131,7 @@ describe('TripSummaryComponent', () => {
   });
 
   it('should display correct number of days until for upcoming trip', () => {
+    // Arrange
     const trip = { ...mockTrips[0] };
     const daysUntilTrip = 10;
     const startDate = new Date(today);
@@ -134,15 +144,18 @@ describe('TripSummaryComponent', () => {
       bookings: mockBookings
     };
 
+    // Act
     fixture.componentRef.setInput('tripDetails', tripDetails);
     fixture.detectChanges();
 
+    // Assert
     const daysValue = component.numberOfDaysUntil();
     expect(daysValue).toBeLessThanOrEqual(daysUntilTrip + 1);
     expect(daysValue).toBeGreaterThanOrEqual(daysUntilTrip - 1);
   });
 
   it('should display correct number of days left for active trip', () => {
+    // Arrange
     const trip = { ...mockTrips[0] };
     const daysLeft = 3;
     trip.startDate = new Date(today.getTime() - 86400000 * 2).toISOString();
@@ -153,15 +166,18 @@ describe('TripSummaryComponent', () => {
       bookings: mockBookings
     };
 
+    // Act
     fixture.componentRef.setInput('tripDetails', tripDetails);
     fixture.detectChanges();
 
+    // Assert
     const daysLeftValue = component.numberOfDaysLeft();
     expect(daysLeftValue).toBeLessThanOrEqual(daysLeft + 1);
     expect(daysLeftValue).toBeGreaterThanOrEqual(daysLeft - 1);
   });
 
   it('should render correct number of bookings in active trip', () => {
+    // Arrange
     const trip = { ...mockTrips[0] };
     trip.startDate = futureDate.toISOString();
     trip.endDate = new Date(futureDate.getTime() + 432000000).toISOString();
@@ -171,11 +187,14 @@ describe('TripSummaryComponent', () => {
       bookings: [mockBookings[0]]
     };
 
+    // Act
     fixture.componentRef.setInput('tripDetails', tripDetails);
     fixture.detectChanges();
 
     const tripStatLabels = Array.from(fixture.nativeElement.querySelectorAll('.trip__stat-label')) as Element[];
     const bookingLabelIndex = tripStatLabels.findIndex((el: Element) => el.textContent?.includes('Bookings'));
+
+    // Assert
     expect(bookingLabelIndex).toBeGreaterThanOrEqual(0);
     
     const tripStatValues = Array.from(fixture.nativeElement.querySelectorAll('.trip__stat-value'));
@@ -183,6 +202,7 @@ describe('TripSummaryComponent', () => {
   });
 
   it('should return null for numberOfDaysLeft when trip is not active', () => {
+    // Arrange
     const trip = { ...mockTrips[0] };
     trip.startDate = futureDate.toISOString();
     trip.endDate = new Date(futureDate.getTime() + 432000000).toISOString();
@@ -192,13 +212,16 @@ describe('TripSummaryComponent', () => {
       bookings: mockBookings
     };
 
+    // Act
     fixture.componentRef.setInput('tripDetails', tripDetails);
     fixture.detectChanges();
 
+    // Assert
     expect(component.numberOfDaysLeft()).toBeNull();
   });
 
   it('should return null for tripProgress when trip is not active', () => {
+    // Arrange
     const trip = { ...mockTrips[0] };
     trip.startDate = farPastDate.toISOString();
     trip.endDate = pastDate.toISOString();
@@ -208,13 +231,16 @@ describe('TripSummaryComponent', () => {
       bookings: mockBookings
     };
 
+    // Act
     fixture.componentRef.setInput('tripDetails', tripDetails);
     fixture.detectChanges();
 
+    // Assert
     expect(component.tripProgress()).toBeNull();
   });
 
   it('should compute correct trip progress percentage for active trip', () => {
+    // Arrange
     const trip = { ...mockTrips[0] };
     const startDate = new Date(today.getTime() - 86400000 * 10);
     const endDate = new Date(today.getTime() + 86400000 * 5);
@@ -226,15 +252,18 @@ describe('TripSummaryComponent', () => {
       bookings: mockBookings
     };
 
+    // Act
     fixture.componentRef.setInput('tripDetails', tripDetails);
     fixture.detectChanges();
 
+    // Assert
     const progress = component.tripProgress();
     expect(progress).toBeLessThanOrEqual(100);
     expect(progress).toBeGreaterThan(0);
   });
 
   it('should compute correct startDate and endDate', () => {
+    // Arrange
     const trip = { ...mockTrips[0] };
     const startDate = new Date(today.getTime() - 86400000 * 2);
     const endDate = new Date(today.getTime() + 86400000 * 5);
@@ -246,12 +275,14 @@ describe('TripSummaryComponent', () => {
       bookings: mockBookings
     };
 
+    // Act
     fixture.componentRef.setInput('tripDetails', tripDetails);
     fixture.detectChanges();
 
     const computedStartDate = component.startDate();
     const computedEndDate = component.endDate();
 
+    // Assert
     expect(computedStartDate.getTime()).toBeCloseTo(startDate.getTime(), -3);
     expect(computedEndDate.getTime()).toBeCloseTo(endDate.getTime(), -3);
   });

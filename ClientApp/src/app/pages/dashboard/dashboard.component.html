@@ -16,8 +16,8 @@
         </mat-card-header>
         <mat-card-content>
           <div class="dashboard__card-content-trips">
-            @if (activeTrips.length > 0) {
-              @for (trip of activeTrips; track trip.trip.id) {
+            @if (activeTrips().length > 0) {
+              @for (trip of activeTrips(); track trip.trip.id) {
                 <app-trip-summary [tripDetails]="trip"></app-trip-summary>
               }
             } @else {
@@ -38,8 +38,8 @@
         </mat-card-header>
         <mat-card-content>
           <div class="dashboard__card-content-trips">
-            @if (plannedTrips.length > 0) {
-              @for (trip of plannedTrips; track trip.trip.id) {
+            @if (plannedTrips().length > 0) {
+              @for (trip of plannedTrips(); track trip.trip.id) {
                 <app-trip-summary [tripDetails]="trip"></app-trip-summary>
               }
             } @else {
@@ -60,8 +60,8 @@
         </mat-card-header>
         <mat-card-content>
           <div class="dashboard__card-content-memories">
-            @if (completedTrips.length > 0) {
-              @for (trip of completedTrips; track trip.trip.id) {
+            @if (completedTrips().length > 0) {
+              @for (trip of completedTrips(); track trip.trip.id) {
                 <app-trip-summary [tripDetails]="trip"></app-trip-summary>
               }
             } @else {
@@ -83,7 +83,7 @@
           <span class="dashboard__card-subtitle subtitle">Your travel journey insights</span>
         </mat-card-header>
         <mat-card-content>
-          @if (completedTrips.length > 0 || activeTrips.length > 0) {
+          @if (completedTrips().length > 0 || activeTrips().length > 0) {
           <div class="dashboard__stats-grid">
             <div class="dashboard__stat-card">
               <div class="dashboard__stat-card-icon" style="background: linear-gradient(135deg, #e0f7fa, #b3e5fc)">
@@ -110,7 +110,7 @@
                 <mat-icon>attach_money</mat-icon>
               </div>
               <div class="dashboard__stat-card-content">
-                <span class="dashboard__stat-card-value">${{ totalSpentOnTrips() }}</span>
+                <span class="dashboard__stat-card-value">${{ totalBudgetSpentOnTrips() }}</span>
                 <span class="dashboard__stat-card-label">Total Spent</span>
               </div>
             </div>

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, computed } from '@angular/core';
+import { Component, inject, OnInit, computed, signal } from '@angular/core';
 import { TripService } from '../../services/trip.service';
 import { map, switchMap, take } from 'rxjs';
 import { AlertService } from '../../services/alert.service';
@@ -32,9 +32,9 @@ export class DashboardComponent implements OnInit {
   private readonly bookingService = inject(BookingService);
   private readonly router = inject(Router);
 
-  activeTrips: TripDetailsWithBookings[] = [];
-  plannedTrips: TripDetailsWithBookings[] = [];
-  completedTrips: TripDetailsWithBookings[] = [];
+  activeTrips = signal<TripDetailsWithBookings[]>([]);
+  plannedTrips = signal<TripDetailsWithBookings[]>([]);
+  completedTrips = signal<TripDetailsWithBookings[]>([]);
   pageHeaderActions: Array<{ label: string; icon: string }> = [
     { label: DashboardHeaderActions.PlanNewTrip, icon: 'add_circle' },
     { label: DashboardHeaderActions.SavedPlaces, icon: 'bookmarks' },
@@ -80,17 +80,17 @@ export class DashboardComponent implements OnInit {
   }
 
   private separateTripsByStatus(tripsWithBookings: TripDetailsWithBookings[]): void {
-    this.activeTrips = tripsWithBookings.filter((t) => t.trip.status === TripStatus.InProgress);
-    this.plannedTrips = tripsWithBookings.filter((t) => t.trip.status === TripStatus.Planned);
-    this.completedTrips = tripsWithBookings.filter((t) => t.trip.status === TripStatus.Completed);
+    this.activeTrips.set(tripsWithBookings.filter((t) => t.trip.status === TripStatus.InProgress));
+    this.plannedTrips.set(tripsWithBookings.filter((t) => t.trip.status === TripStatus.Planned));
+    this.completedTrips.set(tripsWithBookings.filter((t) => t.trip.status === TripStatus.Completed));
   }
 
   // Travel Statistics - Computed Properties
-  totalTripsCompleted = computed(() => this.completedTrips.length);
+  totalTripsCompleted = computed(() => this.completedTrips().length);
 
   totalDestinationsVisited = computed(() => {
     const uniqueDestinations = new Set<string>();
-    this.completedTrips.forEach((tripWithBookings) => {
+    this.completedTrips().forEach((tripWithBookings) => {
       tripWithBookings.trip.destinations.forEach((dest) => {
         uniqueDestinations.add(dest.id);
       });
@@ -98,35 +98,35 @@ export class DashboardComponent implements OnInit {
     return uniqueDestinations.size;
   });
 
-  totalSpentOnTrips = computed(() => {
-    return this.completedTrips.reduce((sum, tripWithBookings) => {
+  totalBudgetSpentOnTrips = computed(() => {
+    return this.completedTrips().reduce((sum, tripWithBookings) => {
       return sum + (tripWithBookings.trip.budget?.totalBudget || 0);
     }, 0);
   });
 
   averageTripDuration = computed(() => {
-    if (this.completedTrips.length === 0) return 0;
-    const totalDays = this.completedTrips.reduce((sum, tripWithBookings) => {
+    if (this.completedTrips().length === 0) return 0;
+    const totalDays = this.completedTrips().reduce((sum, tripWithBookings) => {
       const startDate = new Date(tripWithBookings.trip.startDate);
       const endDate = new Date(tripWithBookings.trip.endDate);
       const durationDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
       return sum + durationDays;
     }, 0);
-    return Math.round(totalDays / this.completedTrips.length);
+    return Math.round(totalDays / this.completedTrips().length);
   });
 
   totalBookings = computed(() => {
-    return this.completedTrips.reduce((sum, tripWithBookings) => {
+    return this.completedTrips().reduce((sum, tripWithBookings) => {
       return sum + tripWithBookings.bookings.length;
     }, 0);
   });
 
   upcomingTrips = computed(() => {
-    return this.plannedTrips.length;
+    return this.plannedTrips().length;
   });
 
   activeTripDays = computed(() => {
-    const activeTrip = this.activeTrips.find((t) => t.trip.status === TripStatus.InProgress);
+    const activeTrip = this.activeTrips().find((t) => t.trip.status === TripStatus.InProgress);
     if (!activeTrip) return 0;
     const today = new Date();
     const endDate = new Date(activeTrip.trip.endDate);
