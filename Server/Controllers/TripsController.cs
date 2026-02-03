@@ -8,24 +8,24 @@ namespace Travel.Genie.Controllers
     [Route("api/trips")]
     public class TripsController : ControllerBase
     {
-        private readonly ITripService _service;
+        private readonly ITripService _tripService;
 
-        public TripsController(ITripService service)
+        public TripsController(ITripService tripService)
         {
-            _service = service;
+            _tripService = tripService;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TripDetails>>> GetTrips()
         {
-            var trips = await _service.GetTripsAsync();
+            var trips = await _tripService.GetTripsAsync();
             return Ok(trips);
         }
 
         [HttpGet("{id:double}")]
         public async Task<ActionResult<TripDetails>> GetTrip(double id)
         {
-            var trip = await _service.GetTripByIdAsync(id);
+            var trip = await _tripService.GetTripByIdAsync(id);
             if (trip == null) return NotFound();
             return Ok(trip);
         }
@@ -33,14 +33,14 @@ namespace Travel.Genie.Controllers
         [HttpPost]
         public async Task<ActionResult<TripDetails>> CreateTrip([FromBody] TripDetails trip)
         {
-            var created = await _service.CreateTripAsync(trip);
+            var created = await _tripService.CreateTripAsync(trip);
             return CreatedAtAction(nameof(GetTrip), new { id = created.Id }, created);
         }
 
         [HttpPut("{id:double}")]
         public async Task<IActionResult> UpdateTrip(double id, [FromBody] TripDetails update)
         {
-            var success = await _service.UpdateTripAsync(id, update);
+            var success = await _tripService.UpdateTripAsync(id, update);
             if (!success) return NotFound();
             return NoContent();
         }
@@ -48,7 +48,7 @@ namespace Travel.Genie.Controllers
         [HttpDelete("{id:double}")]
         public async Task<IActionResult> DeleteTrip(double id)
         {
-            var success = await _service.DeleteTripAsync(id);
+            var success = await _tripService.DeleteTripAsync(id);
             if (!success) return NotFound();
             return NoContent();
         }

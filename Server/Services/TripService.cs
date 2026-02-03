@@ -21,8 +21,9 @@ namespace Travel.Genie.Services
 
         public async Task<TripDetails> CreateTripAsync(TripDetails trip)
         {
-            trip.CreatedAt = DateTimeOffset.UtcNow;
-            trip.UpdatedAt = DateTimeOffset.UtcNow;
+            var now = DateTimeOffset.UtcNow;
+            trip.CreatedAt = now;
+            trip.UpdatedAt = now;
             return await _repo.AddAsync(trip);
         }
 
