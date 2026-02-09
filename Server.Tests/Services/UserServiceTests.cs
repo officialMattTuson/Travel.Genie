@@ -1,16 +1,33 @@
 using Travel.Genie.Services;
 using Travel.Genie.Models.Authentication;
+using Travel.Genie.Data;
 using Xunit;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
+using Moq;
 
 namespace Server.Tests.Services
 {
   public class UserServiceTests
   {
+    private static IDbContextFactory<AppDbContext> CreateInMemoryContextFactory()
+    {
+      var options = new DbContextOptionsBuilder<AppDbContext>()
+        .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+        .Options;
+
+      var mockFactory = new Mock<IDbContextFactory<AppDbContext>>();
+      mockFactory.Setup(f => f.CreateDbContext()).Returns(() => new AppDbContext(options));
+      mockFactory.Setup(f => f.CreateDbContextAsync(default)).ReturnsAsync(() => new AppDbContext(options));
+
+      return mockFactory.Object;
+    }
+
     [Fact]
     public void Register_And_ValidateCredentials_ShouldWork()
     {
-      var service = new UserService();
+      var contextFactory = CreateInMemoryContextFactory();
+      var service = new UserService(contextFactory);
       var email = "user@example.com";
       var password = "securePass123";
 
@@ -27,7 +44,8 @@ namespace Server.Tests.Services
     [Fact]
     public void MarkEmailVerified_ShouldSetVerified()
     {
-      var service = new UserService();
+      var contextFactory = CreateInMemoryContextFactory();
+      var service = new UserService(contextFactory);
       var email = "user@example.com";
 
       service.MarkEmailVerified(email);
@@ -37,11 +55,12 @@ namespace Server.Tests.Services
     [Fact]
     public void GetUser_ShouldReturnUser()
     {
-      var service = new UserService();
+      var contextFactory = CreateInMemoryContextFactory();
+      var service = new UserService(contextFactory);
       var email = "user@example.com";
-      var username = "user";
+      var password = "securePass123";
 
-      service.Register(email, username);
+      service.Register(email, password);
       var user = service.GetUser(email);
 
       user.Should().NotBeNull();
