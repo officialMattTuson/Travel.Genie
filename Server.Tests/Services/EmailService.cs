@@ -9,7 +9,7 @@ namespace Server.Tests.Services
   public class EmailServiceTests
   {
     [Fact]
-    public void SendOtpAsync_ShouldThrowIfApiKeyMissing()
+    public void Constructor_ShouldNotThrowWhenApiKeyMissing_DevelopmentMode()
     {
       var config = new ConfigurationBuilder()
           .AddInMemoryCollection(new Dictionary<string, string?>
@@ -18,10 +18,9 @@ namespace Server.Tests.Services
           })
           .Build();
 
-      Assert.Throws<ArgumentNullException>(() =>
-      {
-        new EmailService(config);
-      });
+      // Should not throw - development mode allows missing API key
+      var service = new EmailService(config);
+      Assert.NotNull(service);
     }
 
     [Fact]

@@ -9,45 +9,50 @@ namespace Travel.Genie.Repositories
 {
     public class TripRepository : ITripRepository
     {
-        private readonly AppDbContext _db;
+        private readonly IDbContextFactory<AppDbContext> _contextFactory;
 
-        public TripRepository(AppDbContext db)
+        public TripRepository(IDbContextFactory<AppDbContext> contextFactory)
         {
-            _db = db;
+            _contextFactory = contextFactory;
         }
 
         public async Task<IEnumerable<TripDetails>> GetAllAsync(CancellationToken cancellationToken)
         {
-            return await _db.TripDetails.AsNoTracking().ToListAsync(cancellationToken);
+            using var db = await _contextFactory.CreateDbContextAsync();
+            return await db.TripDetails.AsNoTracking().ToListAsync(cancellationToken);
         }
 
         public async Task<IReadOnlyList<TripDetailDto>> GetTripDtosByUserIdAsync(Guid userId, CancellationToken cancellationToken)
         {
-            var trips = await _db.TripDetails
+            using var db = await _contextFactory.CreateDbContextAsync();
+            var trips = await db.TripDetails
                 .AsNoTracking()
                 .Where(t => t.UserId == userId)
                 .ToListAsync(cancellationToken);
             
             return trips.Select(t => t.ToDto()).ToList();
         }
-
+    
         public async Task<TripDetails?> GetByIdAsync(Guid userId, Guid tripId, CancellationToken cancellationToken) 
         {
-            return await _db.TripDetails
+            using var db = await _contextFactory.CreateDbContextAsync();
+            return await db.TripDetails
                 .AsNoTracking()
                 .FirstOrDefaultAsync(t => t.Id == tripId && t.UserId == userId, cancellationToken);
         }
 
         public async Task<TripDetails> AddAsync(TripDetails trip, CancellationToken cancellationToken)
         {
-            _db.TripDetails.Add(trip);
-            await _db.SaveChangesAsync(cancellationToken);
+            using var db = await _contextFactory.CreateDbContextAsync();
+            db.TripDetails.Add(trip);
+            await db.SaveChangesAsync(cancellationToken);
             return trip;
         }
 
         public async Task<bool> UpdateAsync(Guid userId, Guid tripId, TripDetails update, CancellationToken cancellationToken)
         {
-            var existing = await _db.TripDetails
+            using var db = await _contextFactory.CreateDbContextAsync();
+            var existing = await db.TripDetails
                 .FirstOrDefaultAsync(t => t.Id == tripId && t.UserId == userId, cancellationToken);
             
             if (existing == null) return false;
@@ -65,23 +70,27 @@ namespace Travel.Genie.Repositories
             existing.TransportTypes = update.TransportTypes;
             existing.UpdatedAt = DateTimeOffset.UtcNow;
 
-            await _db.SaveChangesAsync(cancellationToken);
+            await db.SaveChangesAsync(cancellationToken);
             return true;
         }
 
         public async Task<bool> DeleteAsync(Guid userId, Guid tripId, CancellationToken cancellationToken)
         {
-            var trip = await _db.TripDetails
+            using var db = await _contextFactory.CreateDbContextAsync();
+            var trip = await db.TripDetails
                 .FirstOrDefaultAsync(t => t.Id == tripId && t.UserId == userId, cancellationToken);
             
             if (trip == null) return false;
 
-            _db.TripDetails.Remove(trip);
-            await _db.SaveChangesAsync(cancellationToken);
+            db.TripDetails.Remove(trip);
+            await db.SaveChangesAsync(cancellationToken);
             return true;
         }
 
-        public async Task<bool> ExistsAsync(Guid userId, Guid tripId, CancellationToken cancellationToken) =>
-            await _db.TripDetails.AnyAsync(t => t.Id == tripId && t.UserId == userId, cancellationToken);
+        public async Task<bool> ExistsAsync(Guid userId, Guid tripId, CancellationToken cancellationToken)
+        {
+            using var db = await _contextFactory.CreateDbContextAsync();
+            return await db.TripDetails.AnyAsync(t => t.Id == tripId && t.UserId == userId, cancellationToken);
+        }
     }
 }

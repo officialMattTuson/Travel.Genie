@@ -26,12 +26,12 @@ namespace Travel.Genie.Data.Configurations
             builder.HasOne(t => t.FromPlace)
                 .WithMany()
                 .HasForeignKey(t => t.FromPlaceId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(t => t.ToPlace)
                 .WithMany()
                 .HasForeignKey(t => t.ToPlaceId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasIndex(t => t.ItineraryItemId)
                 .IsUnique();
