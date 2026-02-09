@@ -77,8 +77,13 @@ builder.Services.AddCors(options =>
               .AllowCredentials();
     });
 });
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+// Use pooled DbContextFactory for both singleton and scoped services
+builder.Services.AddPooledDbContextFactory<AppDbContext>(options =>
+    options.UseSqlServer(connectionString));
+
 var app = builder.Build();
 
 app.UseCors();

@@ -32,7 +32,7 @@ namespace Travel.Genie.Data.Configurations
             builder.HasOne(a => a.Location)
                 .WithMany()
                 .HasForeignKey(a => a.LocationId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasIndex(a => a.ItineraryItemId)
                 .IsUnique();
