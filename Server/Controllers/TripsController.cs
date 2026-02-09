@@ -84,7 +84,7 @@ public sealed class TripsController : ControllerBase
         return NoContent();
     }
 
-    private ActionResult<Guid>? ValidateUserClaims() 
+    private ActionResult<Guid> ValidateUserClaims() 
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (string.IsNullOrEmpty(userId))
