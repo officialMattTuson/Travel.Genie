@@ -2,7 +2,7 @@ namespace Travel.Genie.Models.Trips
 {
   public class TripDetails
   {
-    public double Id { get; set; }
+    public int Id { get; set; }
     public required string Destination { get; set; }
     public DateTimeOffset StartDate { get; set; }
     public DateTimeOffset EndDate { get; set; }
