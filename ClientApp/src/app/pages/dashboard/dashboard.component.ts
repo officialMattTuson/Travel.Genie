@@ -38,8 +38,28 @@ export class DashboardComponent {
     { label: DashboardHeaderActions.ProFeatures, icon: 'star' },
   ];
 
-  // Using Resource API
-  // Return using Promises over observables as data is fetched once and we remove the need for complex RxJS pipes
+  // Using Resource API with observables converted to promise
+  // tripsAndBookingsResource = resource({
+  //   loader: () => {
+  //     return firstValueFrom(
+  //       combineLatest([
+  //         this.tripService.getTrips(),
+  //         this.bookingService.getBookings()
+  //       ]).pipe(
+  //         map(([pagedTrips, pagedBookings]) => 
+  //           this.processTripsWithBookings(pagedTrips.items, pagedBookings.items || [])
+  //         ),
+  //         catchError((error) => {
+  //           const message = error instanceof Error ? error.message : 'Unknown error occurred';
+  //           this.alertService.displayError(`Failed to fetch trips: ${message}`);
+  //           throw error;
+  //         })
+  //       )
+  //     );
+  //   }
+  // });
+
+  // Using Resource API using promises
   tripsAndBookingsResource = resource({
     loader: async () => {
       try {
