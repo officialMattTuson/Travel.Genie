@@ -33,19 +33,19 @@ namespace Travel.Genie.Services
             return await _tripsRepository.GetTripDtosByUserIdAsync(userId, cancellationToken);
         }
 
-        public async Task<TripDetails?> GetTripByIdAsync(Guid userId, Guid tripId, CancellationToken cancellationToken) 
+        public async Task<Trip?> GetTripByIdAsync(Guid userId, Guid tripId, CancellationToken cancellationToken) 
         {
             return await _tripsRepository.GetByIdAsync(userId, tripId, cancellationToken); 
         }
 
-        public async Task<TripDetails> CreateTripAsync(TripDetails trip, CancellationToken cancellationToken)
+        public async Task<Trip> CreateTripAsync(Trip trip, CancellationToken cancellationToken)
         {
             trip.CreatedAt = DateTimeOffset.UtcNow;
             trip.UpdatedAt = DateTimeOffset.UtcNow;
             return await _tripsRepository.AddAsync(trip, cancellationToken);
         }
 
-        public async Task<bool> UpdateTripAsync(Guid userId, Guid tripId, TripDetails update, CancellationToken cancellationToken)
+        public async Task<bool> UpdateTripAsync(Guid userId, Guid tripId, Trip update, CancellationToken cancellationToken)
         {
             return await _tripsRepository.UpdateAsync(userId, tripId, update, cancellationToken);
         }

@@ -56,177 +56,261 @@ Content-Type: application/json
 
 ## Creating Trips
 
-### ⚠️ UserId Required (Hardcoded for now)
+### ✅ New Simple Trip Creation (Updated Feb 2026)
 
-For now, you need to **manually provide the userId** in the request body. 
-
-**To get your userId:**
-1. After registering, **check the server console** - it will print your UserId like:
-   ```
-   [USER REGISTERED]
-   Email: testuser@example.com
-   UserId: a1b2c3d4-e5f6-7890-abcd-1234567890ab
-   ```
-2. Copy that exact Guid and use it in your requests
-
-**Important:** The userId must be a valid Guid format without quotes around the individual parts.
+Trips now use a simplified structure with string-based destinations. The backend automatically creates Destination entities.
 
 ---
 
 ## Trip 1: Tokyo Adventure Trip
 
-```
+```http
 POST {{baseUrl}}/api/trips
+Authorization: Bearer YOUR_JWT_TOKEN
 Content-Type: application/json
 
 {
-  "id": 0,
-  "destination": "Tokyo, Japan",
-  "startDate": "2026-06-15T00:00:00Z",
-  "endDate": "2026-06-25T00:00:00Z",
-  "createdAt": "2026-02-09T00:00:00Z",
-  "updatedAt": "2026-02-09T00:00:00Z",
-  "userId": "a1b2c3d4-e5f6-7890-abcd-1234567890ab",
+  "name": "Tokyo Adventure",
+  "description": "Exploring Tokyo's culture, technology, and cuisine",
+  "primaryDestination": "Tokyo, Japan",
+  "otherDestinations": ["Kyoto, Japan", "Osaka, Japan"],
+  "startDate": "2026-06-15",
+  "endDate": "2026-06-25",
   "status": "Planned",
-  "currencyCode": "JPY",
-  "budgetedPrice": 350000,
-  "keepToBudget": true,
-  "actualPrice": 0,
-  "itinerary": 1,
-  "tripType": 0,
-  "transportTypes": []
+  "budget": {
+    "currencyCode": "JPY",
+    "totalBudget": 350000,
+    "dailyTarget": 35000
+  },
+  "companions": [
+    {
+      "name": "Sarah Chen",
+      "age": 28,
+      "isChild": false,
+      "sharesCosts": true
+    }
+  ]
 }
 ```
 
-**Note:** Replace `a1b2c3d4-e5f6-7890-abcd-1234567890ab` with the actual UserId from your console output!
-
 ### Field Explanations:
-- **id**: Set to 0 (will be auto-generated)
-- **destination**: Trip destination
-- **startDate/endDate**: ISO 8601 format dates
-- **userId**: Your Guid from user account
-- **status**: "Planned", "InProgress", "Completed", "Cancelled"
-- **currencyCode**: ISO 4217 currency code (JPY for Japanese Yen)
-- **budgetedPrice**: Budget in the currency specified
-- **keepToBudget**: true/false - whether to strictly keep to budget
-- **actualPrice**: Actual spent amount (0 for new trips)
-- **itinerary**: 0=Chill, 1=Balanced, 2=Packed
-- **tripType**: 0=Adventure, 1=Relaxation, 2=Cultural, 3=Luxury, 4=Balanced
+- **name**: Trip name (required)
+- **description**: Trip description (optional)
+- **primaryDestination**: Main destination as string "City, Country" (required)
+- **otherDestinations**: Array of other destinations as strings (optional)
+- **startDate/endDate**: ISO 8601 date format YYYY-MM-DD (required)
+- **status**: "Draft", "Planned", "InProgress", "Completed", "Cancelled" (defaults to "Draft")
+- **budget**: Optional budget object
+  - **currencyCode**: ISO 4217 currency code (JPY, USD, EUR, etc.)
+  - **totalBudget**: Total budget amount
+  - **dailyTarget**: Optional daily spending target
+- **companions**: Optional array of travel companions
+  - **name**: Companion name
+  - **age**: Optional age
+  - **isChild**: Whether companion is a child
+  - **sharesCosts**: Whether they share trip costs
 
 ---
 
 ## Trip 2: Paris Cultural Experience
 
-```
+```http
 POST {{baseUrl}}/api/trips
+Authorization: Bearer YOUR_JWT_TOKEN
 Content-Type: application/json
 
 {
-  "id": 0,
-  "destination": "Paris, France",
-  "startDate": "2026-09-01T00:00:00Z",
-  "endDate": "2026-09-10T00:00:00Z",
-  "createdAt": "2026-02-09T00:00:00Z",
-  "updatedAt": "2026-02-09T00:00:00Z",
-  "userId": "a1b2c3d4-e5f6-7890-abcd-1234567890ab",
+  "name": "Paris Cultural Experience",
+  "description": "Museums, art, and French cuisine",
+  "primaryDestination": "Paris, France",
+  "otherDestinations": ["Lyon, France", "Nice, France"],
+  "startDate": "2026-09-01",
+  "endDate": "2026-09-10",
   "status": "Planned",
-  "currencyCode": "EUR",
-  "budgetedPrice": 2500,
-  "keepToBudget": false,
-  "actualPrice": 0,
-  "itinerary": 2,
-  "tripType": 2,
-  "transportTypes": []
+  "budget": {
+    "currencyCode": "EUR",
+    "totalBudget": 2500,
+    "dailyTarget": 250
+  },
+  "companions": []
 }
 ```
 
-### Field Explanations for Paris Trip:
-- **destination**: "Paris, France"
-- **currencyCode**: "EUR" (Euro)
-- **budgetedPrice**: 2500 EUR
-- **keepToBudget**: false (flexible budget)
-- **itinerary**: 2 (Packed - lots of activities)
-- **tripType**: 2 (Cultural trip)
+---
+
+## Minimal Trip Example
+
+```http
+POST {{baseUrl}}/api/trips
+Authorization: Bearer YOUR_JWT_TOKEN
+Content-Type: application/json
+
+{
+  "name": "Weekend Getaway",
+  "primaryDestination": "Sydney, Australia",
+  "startDate": "2026-03-15",
+  "endDate": "2026-03-17"
+}
+```
+
+**Note:** Only `name`, `primaryDestination`, and dates are required. Everything else is optional!
 
 ---
 
 ## Verify Trips Were Created
 
-### Get All Trips
+### Get All Trips (Paginated)
+```http
+GET {{baseUrl}}/api/trips?pageNumber=1&pageSize=10
+Authorization: Bearer YOUR_JWT_TOKEN
 ```
-GET {{baseUrl}}/api/trips
-Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+**Response Example:**
+```json
+{
+  "items": [
+    {
+      "id": "a1b2c3d4-...",
+      "name": "Tokyo Adventure",
+      "description": "Exploring Tokyo...",
+      "startDate": "2026-06-15",
+      "endDate": "2026-06-25",
+      "status": "Planned",
+      "primaryDestination": {
+        "id": "...",
+        "name": "Tokyo, Japan",
+        "countryCode": "JP"
+      },
+      "destinations": [...],
+      "budget": {...},
+      "companions": [...],
+      "itineraryDays": [],
+      "hasAiGeneratedPlan": false,
+      "lastAiPlanUpdatedAt": null
+    }
+  ],
+  "pageNumber": 1,
+  "pageSize": 10,
+  "totalCount": 2
+}
 ```
 
 ### Get Specific Trip by ID
-```
+```http
 GET {{baseUrl}}/api/trips/{tripId}
-Authorization: Bearer YOUR_JWT_TOKEN_HERE
+Authorization: Bearer YOUR_JWT_TOKEN
 ```
 
-Replace `{tripId}` with the ID returned from the POST request.
+### Delete a Trip
+```http
+DELETE {{baseUrl}}/api/trips/{tripId}
+Authorization: Bearer YOUR_JWT_TOKEN
+```
+
+Replace `{tripId}` with the Guid from GET response (e.g., `a1b2c3d4-e5f6-7890-abcd-1234567890ab`).
 
 ---
 
-## Enum Reference
+## How to Get Trip IDs for Deletion
 
-### TripType Enum (int values):
-- `0` = Adventure
-- `1` = Relaxation
-- `2` = Cultural
-- `3` = Luxury
-- `4` = Balanced
+1. **Login and get your JWT token**
+2. **GET all trips**: `GET {{baseUrl}}/api/trips`
+3. **Copy the `id` field** from each trip in the response
+4. **DELETE using that ID**: `DELETE {{baseUrl}}/api/trips/{id}`
 
-### ItineraryType Enum (int values):
-- `0` = Chill
-- `1` = Balanced
-- `2` = Packed
+**Example:**
+```http
+# Step 1: Get all trips
+GET http://localhost:5012/api/trips
+Authorization: Bearer eyJhbGci...
+
+# Response shows:
+# { "items": [{ "id": "abc123-def456-...", "name": "Tokyo Adventure" }] }
+
+# Step 2: Delete using that ID
+DELETE http://localhost:5012/api/trips/abc123-def456-...
+Authorization: Bearer eyJhbGci...
+```
+
+---
+
+## Supported Country Codes
+
+The backend automatically maps destination countries to ISO codes:
+- **Japan** → JP
+- **France** → FR  
+- **USA** / **United States** → US
+- **UK** / **United Kingdom** → GB
+- **Australia** → AU
+- **Germany** → DE
+- **Italy** → IT
+- **Spain** → ES
+- Unknown countries → XX
+
+**Format:** Always use "City, Country" format for destinations.
 
 ---
 
 ## Common Status Values:
-- "Planned"
-- "InProgress"
-- "Completed"
-- "Cancelled"
+- **Draft** - Trip is being planned
+- **Planned** - Trip is confirmed and scheduled
+- **InProgress** - Trip is currently happening
+- **Completed** - Trip has finished
+- **Cancelled** - Trip was cancelled
 
 ---
 
 ## Testing Notes:
 
-1. **SSL Certificate**: If using HTTPS locally, you may need to disable SSL verification in Postman settings or use HTTP endpoint
-2. **Authorization**: Most endpoints require the JWT token in the Authorization header
-3. **UserId**: Make sure to replace the sample UserId with an actual Guid from your database
-4. **Dates**: Use future dates for realistic trip planning
+1. **Authentication Required**: All trip endpoints require JWT token in Authorization header
+2. **UserId Automatic**: No need to provide userId - it's extracted from your JWT token
+3. **SSL Certificate**: If using HTTPS locally, you may need to disable SSL verification in Postman settings or use HTTP endpoint
+4. **Dates Format**: Use simple date format `YYYY-MM-DD` (e.g., `2026-06-15`)
+5. **Minimal Required Fields**: Only `name`, `primaryDestination`, `startDate`, and `endDate` are required
 
 ---
 
 ## Postman Environment Variables
 
-Create these variables in Postman:
-```
-baseUrl: https://localhost:7275
-```
+Create these variables in Postman for easier testing:
 
-Then use them in requests like:
-```
+| Variable | Value |
+|----------|-------|
+| `baseUrl` | `http://localhost:5012` or `https://localhost:7275` |
+| `token` | Your JWT token from login |
+
+Then use them in requests:
+```http
 POST {{baseUrl}}/api/trips
 Authorization: Bearer {{token}}
+Content-Type: application/json
 
 {
-  "destination": "...",
+  "name": "My Trip",
+  "primaryDestination": "Tokyo, Japan",
   ...
 }
 ```
 
-**Note:** No need for a `userId` variable anymore - it's handled automatically!
-```
+---
+
+## Quick Start Guide
+
+1. **Register/Login** → Get JWT token
+2. **Create a trip** using minimal fields:
+   ```json
+   {
+     "name": "Weekend Trip",
+     "primaryDestination": "Sydney, Australia",
+     "startDate": "2026-03-15",
+     "endDate": "2026-03-17"
+   }
+   ```
+3. **View your trips** → `GET /api/trips`
+4. **Delete old trips** → `DELETE /api/trips/{tripId}`
 
 ---
 
-## Database Issue Alert ⚠️
+## Database Changes ✅
 
-**IMPORTANT**: Your SQL file `Database/TripDetails.sql` has a data type mismatch:
-- Line 9: `UserId FLOAT` should be `UserId UNIQUEIDENTIFIER` (Guid in SQL Server)
-
-Update your SQL file or ensure your migrations are correct!
+**UPDATED**: The Trip model now automatically creates Destination entities from strings. No manual Destination creation needed!

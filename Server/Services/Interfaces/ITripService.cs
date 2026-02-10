@@ -7,9 +7,9 @@ namespace Travel.Genie.Services.Interfaces
     {
         Task<IReadOnlyList<TripDetailDto>> GetTripsAsync(CancellationToken cancellationToken);
         Task<IReadOnlyList<TripDetailDto>> GetTripsByUserIdAsync(Guid userId, CancellationToken cancellationToken);
-        Task<TripDetails?> GetTripByIdAsync(Guid userId, Guid tripId, CancellationToken cancellationToken);
-        Task<TripDetails> CreateTripAsync(TripDetails trip, CancellationToken cancellationToken);
-        Task<bool> UpdateTripAsync(Guid userId, Guid tripId, TripDetails update, CancellationToken cancellationToken);
+        Task<Trip?> GetTripByIdAsync(Guid userId, Guid tripId, CancellationToken cancellationToken);
+        Task<Trip> CreateTripAsync(Trip trip, CancellationToken cancellationToken);
+        Task<bool> UpdateTripAsync(Guid userId, Guid tripId, Trip update, CancellationToken cancellationToken);
         Task<bool> DeleteTripAsync(Guid userId, Guid tripId, CancellationToken cancellationToken);
     }
 }

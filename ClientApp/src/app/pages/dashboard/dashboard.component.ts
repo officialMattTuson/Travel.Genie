@@ -95,6 +95,9 @@ export class DashboardComponent implements OnInit {
   totalDestinationsVisited = computed(() => {
     const uniqueDestinations = new Set<string>();
     this.completedTrips().forEach((tripWithBookings) => {
+      if (tripWithBookings.trip.primaryDestination) {
+        uniqueDestinations.add(tripWithBookings.trip.primaryDestination.id);
+      }
       tripWithBookings.trip.destinations.forEach((dest) => {
         uniqueDestinations.add(dest.id);
       });

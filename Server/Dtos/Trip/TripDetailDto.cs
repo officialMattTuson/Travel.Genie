@@ -1,20 +1,20 @@
-using Travel.Genie.Models.Trips;
+using Travel.Genie.Dtos.Itinerary;
 
 namespace Travel.Genie.Dtos.Trip;
 
 public sealed record TripDetailDto
 {
-    public string Destination { get; init; } = default!;
-    public DateTimeOffset StartDate { get; init; }
-    public DateTimeOffset EndDate { get; init; }
-    public DateTimeOffset CreatedAt { get; init; }
-    public DateTimeOffset UpdatedAt { get; init; }
+    public Guid Id { get; init; }
+    public string Name { get; init; } = default!;
+    public string? Description { get; init; }
+    public string StartDate { get; init; } = default!;
+    public string EndDate { get; init; } = default!;
     public string Status { get; init; } = default!;
-    public string CurrencyCode { get; init; } = default!;
-    public double BudgetedPrice { get; init; }
-    public bool KeepToBudget { get; init; }
-    public double ActualPrice { get; init; }
-    public ItineraryType Itinerary { get; init; } = default!;
-    public TripType TripType { get; init; } = default!;
-    public IReadOnlyList<TransportType> TransportTypes { get; init; } = Array.Empty<TransportType>();
+    public DestinationDto PrimaryDestination { get; init; } = default!;
+    public IReadOnlyList<DestinationDto> Destinations { get; init; } = Array.Empty<DestinationDto>();
+    public TripBudgetDto? Budget { get; init; }
+    public IReadOnlyList<TravelCompanionDto> Companions { get; init; } = Array.Empty<TravelCompanionDto>();
+    public IReadOnlyList<ItineraryDayDto> ItineraryDays { get; init; } = Array.Empty<ItineraryDayDto>();
+    public bool HasAiGeneratedPlan { get; init; }
+    public string? LastAiPlanUpdatedAt { get; init; }
 }
