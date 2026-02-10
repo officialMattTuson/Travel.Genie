@@ -1,0 +1,73 @@
+<mat-card appearance="outlined" class="card card--stats">
+  <mat-card-header class="card-header">
+    <span class="card-title title">Travel Statistics</span>
+    <span class="card-subtitle subtitle">Your travel journey insights</span>
+  </mat-card-header>
+  <mat-card-content>
+    @if (completedTrips().length > 0 || activeTrips().length > 0) {
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background: linear-gradient(135deg, #e0f7fa, #b3e5fc)">
+          <mat-icon>flight</mat-icon>
+        </div>
+        <div class="stat-card-content">
+          <span class="stat-card-value">{{ completedTrips().length }}</span>
+          <span class="stat-card-label">Trips Completed</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background: linear-gradient(135deg, #f0f4c3, #dcedc8)">
+          <mat-icon>public</mat-icon>
+        </div>
+        <div class="stat-card-content">
+          <span class="stat-card-value">{{ totalDestinationsVisited() }}</span>
+          <span class="stat-card-label">Destinations</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background: linear-gradient(135deg, #f3e5f5, #e1bee7)">
+          <mat-icon>attach_money</mat-icon>
+        </div>
+        <div class="stat-card-content">
+          <span class="stat-card-value">${{ totalBudgetSpentOnTrips() }}</span>
+          <span class="stat-card-label">Total Spent</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background: linear-gradient(135deg, #e0f2f1, #b2dfdb)">
+          <mat-icon>schedule</mat-icon>
+        </div>
+        <div class="stat-card-content">
+          <span class="stat-card-value">{{ averageTripDuration() }}d</span>
+          <span class="stat-card-label">Avg. Duration</span>
+        </div>
+      </div>
+    </div>
+    <div class="stats-divider"></div>
+    <div class="fun-facts">
+      @if (upcomingTrips().length > 0) {
+      <div class="fun-fact">
+        <mat-icon>info</mat-icon>
+        <span>{{ upcomingTrips().length }} {{ upcomingTrips().length === 1 ? 'trip' : 'trips' }} planned for the
+          future!</span>
+      </div>
+      } @if (activeTripDays() > 0) {
+      <div class="fun-fact">
+        <mat-icon>calendar_today</mat-icon>
+        <span>{{ activeTripDays() }} {{ activeTripDays() === 1 ? 'day' : 'days' }} left on your current
+          adventure!</span>
+      </div>
+      }
+    </div>
+    } @else {
+    <div class="empty-state-stats">
+      <mat-icon>trending_up</mat-icon>
+      <p>No travel statistics yet</p>
+      <span>Start planning trips to see your travel insights</span>
+    </div>
+    }
+  </mat-card-content>
+</mat-card>

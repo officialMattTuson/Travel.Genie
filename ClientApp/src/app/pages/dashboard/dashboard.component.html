@@ -77,77 +77,11 @@
     </div>
 
     <div class="dashboard__column dashboard__column--right">
-      <mat-card appearance="outlined" class="dashboard__card dashboard__card--stats">
-        <mat-card-header class="dashboard__card-header">
-          <span class="dashboard__card-title title">Travel Statistics</span>
-          <span class="dashboard__card-subtitle subtitle">Your travel journey insights</span>
-        </mat-card-header>
-        <mat-card-content>
-          @if (completedTrips().length > 0 || activeTrips().length > 0) {
-          <div class="dashboard__stats-grid">
-            <div class="dashboard__stat-card">
-              <div class="dashboard__stat-card-icon" style="background: linear-gradient(135deg, #e0f7fa, #b3e5fc)">
-                <mat-icon>flight</mat-icon>
-              </div>
-              <div class="dashboard__stat-card-content">
-                <span class="dashboard__stat-card-value">{{ totalTripsCompleted() }}</span>
-                <span class="dashboard__stat-card-label">Trips Completed</span>
-              </div>
-            </div>
-
-            <div class="dashboard__stat-card">
-              <div class="dashboard__stat-card-icon" style="background: linear-gradient(135deg, #f0f4c3, #dcedc8)">
-                <mat-icon>public</mat-icon>
-              </div>
-              <div class="dashboard__stat-card-content">
-                <span class="dashboard__stat-card-value">{{ totalDestinationsVisited() }}</span>
-                <span class="dashboard__stat-card-label">Destinations</span>
-              </div>
-            </div>
-
-            <div class="dashboard__stat-card">
-              <div class="dashboard__stat-card-icon" style="background: linear-gradient(135deg, #f3e5f5, #e1bee7)">
-                <mat-icon>attach_money</mat-icon>
-              </div>
-              <div class="dashboard__stat-card-content">
-                <span class="dashboard__stat-card-value">${{ totalBudgetSpentOnTrips() }}</span>
-                <span class="dashboard__stat-card-label">Total Spent</span>
-              </div>
-            </div>
-
-            <div class="dashboard__stat-card">
-              <div class="dashboard__stat-card-icon" style="background: linear-gradient(135deg, #e0f2f1, #b2dfdb)">
-                <mat-icon>schedule</mat-icon>
-              </div>
-              <div class="dashboard__stat-card-content">
-                <span class="dashboard__stat-card-value">{{ averageTripDuration() }}d</span>
-                <span class="dashboard__stat-card-label">Avg. Duration</span>
-              </div>
-            </div>
-          </div>
-          <div class="dashboard__stats-divider"></div>
-          <div class="dashboard__fun-facts">
-            @if (upcomingTrips() > 0) {
-            <div class="dashboard__fun-fact">
-              <mat-icon>info</mat-icon>
-              <span>{{ upcomingTrips() }} {{ upcomingTrips() === 1 ? 'trip' : 'trips' }} planned for the future!</span>
-            </div>
-            } @if (activeTripDays() > 0) {
-            <div class="dashboard__fun-fact">
-              <mat-icon>calendar_today</mat-icon>
-              <span>{{ activeTripDays() }} {{ activeTripDays() === 1 ? 'day' : 'days' }} left on your current adventure!</span>
-            </div>
-            }
-          </div>
-          } @else {
-          <div class="dashboard__empty-state-stats">
-            <mat-icon>trending_up</mat-icon>
-            <p>No travel statistics yet</p>
-            <span>Start planning trips to see your travel insights</span>
-          </div>
-          }
-        </mat-card-content>
-      </mat-card>
+      <app-trip-statistics
+        [activeTrips]="activeTrips()"
+        [completedTrips]="completedTrips()"
+        [upcomingTrips]="plannedTrips()"
+      ></app-trip-statistics>
 
       <mat-card appearance="outlined" class="dashboard__card dashboard__card--actions">
         <mat-card-header class="dashboard__card-header">
