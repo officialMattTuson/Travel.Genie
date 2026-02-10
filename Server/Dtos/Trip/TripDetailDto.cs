@@ -11,9 +11,9 @@ public sealed record TripDetailDto
     public DateTimeOffset UpdatedAt { get; init; }
     public string Status { get; init; } = default!;
     public string CurrencyCode { get; init; } = default!;
-    public decimal BudgetedPrice { get; init; }
+    public double BudgetedPrice { get; init; }
     public bool KeepToBudget { get; init; }
-    public decimal ActualPrice { get; init; }
+    public double ActualPrice { get; init; }
     public ItineraryType Itinerary { get; init; } = default!;
     public TripType TripType { get; init; } = default!;
     public IReadOnlyList<TransportType> TransportTypes { get; init; } = Array.Empty<TransportType>();

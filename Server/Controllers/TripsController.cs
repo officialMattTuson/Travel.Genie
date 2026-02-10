@@ -4,6 +4,8 @@ using Travel.Genie.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
+using Travel.Genie.Dtos.Common;
+using Travel.Genie.Dtos.Trip;
 
 // Improvements needed for Controller
 
@@ -32,13 +34,34 @@ public sealed class TripsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<TripDetails>>> GetTrips(CancellationToken cancellationToken)
+    public async Task<ActionResult<PagedResultDto<TripDetailDto>>> GetTrips(
+        [FromQuery] int pageNumber = 1, 
+        [FromQuery] int pageSize = 10, 
+        CancellationToken cancellationToken = default)
     {
         var userIdResult = ValidateUserClaims();
         if (userIdResult.Result != null) return userIdResult.Result;
         var userId = userIdResult.Value;
-        var trips = await _tripService.GetTripsByUserIdAsync(userId, cancellationToken);
-        return Ok(trips);
+        _logger.LogInformation($"User Id: {userId}");
+        var trips = await _tripService.GetTripsAsync(cancellationToken);
+        _logger.LogInformation($"Trips: {trips.Count()}");
+        var allTrips = await _tripService.GetTripsByUserIdAsync(userId, cancellationToken);
+        var totalCount = allTrips.Count;
+        
+        var items = allTrips
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+        
+        var pagedResult = new PagedResultDto<TripDetailDto>
+        {
+            Items = items,
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            TotalCount = totalCount
+        };
+        
+        return Ok(pagedResult);
     }
 
     [HttpGet("{tripId:guid}")]
@@ -56,6 +79,13 @@ public sealed class TripsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<TripDetails>> CreateTrip([FromBody] TripDetails trip, CancellationToken cancellationToken)
     {
+        var userIdResult = ValidateUserClaims();
+        if (userIdResult.Result != null) return userIdResult.Result;
+        var userId = userIdResult.Value;
+        
+        trip.Id = Guid.NewGuid();
+        trip.UserId = userId;
+        
         var created = await _tripService.CreateTripAsync(trip, cancellationToken);
         return CreatedAtAction(nameof(GetTrip), new { tripId = created.Id }, created);
     }
@@ -86,7 +116,17 @@ public sealed class TripsController : ControllerBase
 
     private ActionResult<Guid> ValidateUserClaims() 
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        _logger.LogInformation("Claims in token:");
+        foreach (var claim in User.Claims)
+        {
+            _logger.LogInformation("  {Type}: {Value}", claim.Type, claim.Value);
+        }
+        
+        var allNameIdentifiers = User.FindAll(ClaimTypes.NameIdentifier).ToList();
+        var userId = allNameIdentifiers.FirstOrDefault(c => Guid.TryParse(c.Value, out _))?.Value;
+        
+        _logger.LogInformation("Selected userId: {UserId}", userId ?? "NULL");
+        
         if (string.IsNullOrEmpty(userId))
         {
             return Unauthorized();
@@ -94,6 +134,7 @@ public sealed class TripsController : ControllerBase
         
         if (!Guid.TryParse(userId, out var userGuid))
         {
+            _logger.LogError("Failed to parse userId '{UserId}' as Guid", userId);
             return BadRequest("Invalid user identifier");
         }
         

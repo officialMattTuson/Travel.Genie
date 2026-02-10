@@ -55,7 +55,7 @@ export class TripSummaryComponent {
   });
 
   destinationCount = computed(() => {
-    return this.tripDetails().trip.destinations.length;
+    return this.tripDetails().trip?.destinations?.length;
   });
 
   startDate = computed(() => new Date(this.tripDetails().trip.startDate));

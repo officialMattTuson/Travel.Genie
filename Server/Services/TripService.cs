@@ -19,7 +19,7 @@ namespace Travel.Genie.Services
             _logger = logger;
         }
 
-        public async Task<IEnumerable<TripDetails>> GetTripsAsync(CancellationToken cancellationToken)
+        public async Task<IReadOnlyList<TripDetailDto>> GetTripsAsync(CancellationToken cancellationToken)
         {
             return await _tripsRepository.GetAllAsync(cancellationToken);
         }

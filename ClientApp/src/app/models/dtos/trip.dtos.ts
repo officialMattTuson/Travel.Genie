@@ -46,7 +46,7 @@ export interface TripSummaryDto {
 export interface TripDetailDto {
     id: string;
     name: string;
-    description?: string | null;
+    destination?: string | null;
     startDate: string;
     endDate: string;
     status: TripStatus;

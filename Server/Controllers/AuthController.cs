@@ -60,7 +60,8 @@ public class AuthController : ControllerBase
     var success = _userService.Register(req.Email, req.Password);
     if (!success) return Conflict(new { message = "User already exists" });
 
-    var token = _jwtService.GenerateToken(req.Email);
+    var user = _userService.GetUser(req.Email)!;
+    var token = _jwtService.GenerateToken(user.Email, user.Id);
     return Ok(new { message = "User registered successfully", token });
   }
 
@@ -72,7 +73,7 @@ public class AuthController : ControllerBase
     if (!valid) return BadRequest(new { message = "Invalid credentials" });
 
     var user = _userService.GetUser(req.Email)!;
-    var token = _jwtService.GenerateToken(user.Email);
+    var token = _jwtService.GenerateToken(user.Email, user.Id);
     Response.Cookies.Append("auth_token", token, new CookieOptions
     {
       HttpOnly = true,

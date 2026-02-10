@@ -29,7 +29,6 @@ public static class TripDetailsMapper
     {
         return new TripDetails
         {
-            Id = Guid.NewGuid(),
             Destination = dto.Destination,
             StartDate = dto.StartDate,
             EndDate = dto.EndDate,

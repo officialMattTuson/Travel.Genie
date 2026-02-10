@@ -16,10 +16,13 @@ namespace Travel.Genie.Repositories
             _contextFactory = contextFactory;
         }
 
-        public async Task<IEnumerable<TripDetails>> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<IReadOnlyList<TripDetailDto>> GetAllAsync(CancellationToken cancellationToken)
         {
             using var db = await _contextFactory.CreateDbContextAsync();
-            return await db.TripDetails.AsNoTracking().ToListAsync(cancellationToken);
+               var trips = await db.TripDetails
+                .AsNoTracking()
+                .ToListAsync(cancellationToken); 
+            return trips.Select(t => t.ToDto()).ToList();
         }
 
         public async Task<IReadOnlyList<TripDetailDto>> GetTripDtosByUserIdAsync(Guid userId, CancellationToken cancellationToken)

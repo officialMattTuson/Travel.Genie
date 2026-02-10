@@ -5,7 +5,7 @@ namespace Travel.Genie.Repositories.Interfaces
 {
     public interface ITripRepository
     {
-        Task<IEnumerable<TripDetails>> GetAllAsync(CancellationToken cancellationToken);
+        Task<IReadOnlyList<TripDetailDto>> GetAllAsync(CancellationToken cancellationToken);
         Task<TripDetails?> GetByIdAsync(Guid userId, Guid tripId, CancellationToken cancellationToken);
         Task<IReadOnlyList<TripDetailDto>> GetTripDtosByUserIdAsync(Guid userId, CancellationToken cancellationToken);
         Task<TripDetails> AddAsync(TripDetails trip, CancellationToken cancellationToken);

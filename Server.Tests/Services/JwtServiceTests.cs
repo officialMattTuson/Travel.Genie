@@ -20,7 +20,8 @@ namespace Server.Tests.Services
           .Build();
 
       var jwtService = new JwtService(config);  
-      var token = jwtService.GenerateToken("user@example.com");
+      var userId = Guid.NewGuid();
+      var token = jwtService.GenerateToken("user@example.com", userId);
 
       token.Should().NotBeNullOrEmpty();
       token.Split('.').Length.Should().Be(3); // JWT has 3 parts
