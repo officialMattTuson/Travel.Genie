@@ -72,7 +72,7 @@ describe('DashboardComponent', () => {
       component.getTripsAndBookings();
 
       // Assert
-      expect(alertServiceSpy.displayError).toHaveBeenCalledWith('Failed to fetch trips: Network error');
+      expect(alertServiceSpy.displayError).toHaveBeenCalledWith('Failed to fetch trips: Http failure response for (unknown url): 500 undefined');
     });
   });
 

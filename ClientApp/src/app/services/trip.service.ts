@@ -15,6 +15,10 @@ export class TripService {
   private readonly httpClient = inject(HttpClient);
 
   getTrips(pageNumber: number = 1, pageSize: number = 10): Observable<PagedResultDto<TripDetailDto>> {
+    if (this.useMockData) {
+      return this.getMockTripsAsPaged();
+    }
+
     return this.httpClient.get<PagedResultDto<TripDetailDto>>(
       `${this.apiUrl}?pageNumber=${pageNumber}&pageSize=${pageSize}`,
       { withCredentials: true }

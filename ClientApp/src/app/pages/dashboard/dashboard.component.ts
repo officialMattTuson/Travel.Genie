@@ -65,7 +65,6 @@ export class DashboardComponent implements OnInit {
       )
       .subscribe({
         next: (tripsWithBookings) => {
-          console.log(tripsWithBookings)
           this.separateTripsByStatus(tripsWithBookings);
         },
         error: (error: HttpErrorResponse) => {
