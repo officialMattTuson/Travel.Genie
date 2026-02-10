@@ -28,6 +28,7 @@ describe('TripService', () => {
 
   describe('getTrips', () => {
     it('should return mock trips when useMockData is true', (done) => {
+      service.useMockData = true;
       service.getTrips().subscribe(result => {
         expect(result.items).toEqual(mockTrips);
         expect(result.pageNumber).toBe(1);
@@ -68,6 +69,7 @@ describe('TripService', () => {
 
   describe('getTripDetail', () => {
     it('should return trip from mock data when found', (done) => {
+      service.useMockData = true;
       const tripId = mockTrips[0].id;
       service.getTripDetail(tripId).subscribe(result => {
         expect(result).toEqual(mockTrips[0]);
@@ -76,6 +78,7 @@ describe('TripService', () => {
     });
 
     it('should return first mock trip when trip not found in mock data', (done) => {
+      service.useMockData = true;
       service.getTripDetail('non-existent-id').subscribe(result => {
         expect(result).toEqual(mockTrips[0]);
         done();
@@ -99,6 +102,7 @@ describe('TripService', () => {
 
   describe('createTrip', () => {
     it('should create trip with generated id in mock mode', (done) => {
+      service.useMockData = true;
       const newTrip: Partial<TripDetailDto> = { name: 'Test Trip' };
 
       service.createTrip(newTrip).subscribe(result => {
@@ -126,6 +130,7 @@ describe('TripService', () => {
 
   describe('updateTrip', () => {
     it('should update trip in mock mode', (done) => {
+      service.useMockData = true;
       const tripId = 'test-id';
       const updates: Partial<TripDetailDto> = { name: 'Updated Trip' };
 
@@ -155,6 +160,7 @@ describe('TripService', () => {
 
   describe('deleteTrip', () => {
     it('should delete trip in mock mode', (done) => {
+      service.useMockData = true;
       service.deleteTrip('test-id').subscribe(result => {
         expect(result).toBeUndefined();
         done();
@@ -177,6 +183,7 @@ describe('TripService', () => {
 
   describe('generateAiPlan', () => {
     it('should return mock AI plan response', (done) => {
+      service.useMockData = true;
       const request: AiPlanRequestDto =
       {
         tripName: 'Paris Vacation',
@@ -203,6 +210,7 @@ describe('TripService', () => {
     });
 
     it('should use default trip name when not provided', (done) => {
+      service.useMockData = true;
       const request: AiPlanRequestDto = {} as AiPlanRequestDto;
 
       service.generateAiPlan(request).subscribe(result => {

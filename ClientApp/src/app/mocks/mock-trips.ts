@@ -5,7 +5,7 @@ export const mockTrips: TripDetailDto[] = [
   {
     id: '1',
     name: 'Paris Adventure',
-    description: 'A wonderful trip to the City of Light',
+    // description: 'A wonderful trip to the City of Light',
     startDate: '2025-09-01',
     endDate: '2025-09-10',
     status: TripStatus.Completed,
@@ -40,7 +40,7 @@ export const mockTrips: TripDetailDto[] = [
   {
     id: '2',
     name: 'Tokyo Expedition',
-    description: 'Explore the vibrant streets of Tokyo',
+    // description: 'Explore the vibrant streets of Tokyo',
     startDate: '2025-11-05',
     endDate: '2025-12-15',
     status: TripStatus.Planned,
@@ -75,7 +75,7 @@ export const mockTrips: TripDetailDto[] = [
   {
     id: '3',
     name: 'Barcelona Memory',
-    description: 'A magical trip exploring Barcelona\'s culture and beaches',
+    // description: 'A magical trip exploring Barcelona\'s culture and beaches',
     startDate: '2024-06-01',
     endDate: '2024-06-15',
     status: TripStatus.Completed,

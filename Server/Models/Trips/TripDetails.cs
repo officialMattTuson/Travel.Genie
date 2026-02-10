@@ -1,13 +1,17 @@
+using System.Text.Json.Serialization;
+
 namespace Travel.Genie.Models.Trips
 {
   public class TripDetails
   {
-    public int Id { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public Guid Id { get; set; }
     public required string Destination { get; set; }
     public DateTimeOffset StartDate { get; set; }
     public DateTimeOffset EndDate { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset UpdatedAt { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public required Guid UserId { get; set; }
     public required string Status { get; set; }
     public required string CurrencyCode { get; set; }

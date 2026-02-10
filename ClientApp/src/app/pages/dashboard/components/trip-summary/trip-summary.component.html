@@ -1,6 +1,6 @@
 <div [class.trip--completed]="isPast()" class="trip">
   <div class="trip__header">
-    <h3 class="trip__destination">{{ tripDetails().trip.primaryDestination.name }}</h3>
+    <h3 class="trip__destination">{{ tripDetails().trip.primaryDestination?.name }}</h3>
     <span [class.trip__status--completed]="isPast()" class="trip__status">
       {{ isActive() ? 'Active' : isPast() ? 'Completed' : 'Upcoming' }}
     </span>

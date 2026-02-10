@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, computed, signal } from '@angular/core';
 import { TripService } from '../../services/trip.service';
-import { map, switchMap, take } from 'rxjs';
+import { map, switchMap, take, tap } from 'rxjs';
 import { AlertService } from '../../services/alert.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { BookingService } from '../../services/booking.service';
@@ -50,6 +50,9 @@ export class DashboardComponent implements OnInit {
       .getTrips()
       .pipe(
         take(1),
+        tap((pagedTrips) => {
+          console.log('Fetched trips:', pagedTrips);
+        }),
         switchMap((pagedTrips) => {
           const trips = pagedTrips.items;
           return this.bookingService.getBookings().pipe(
@@ -65,7 +68,7 @@ export class DashboardComponent implements OnInit {
           this.separateTripsByStatus(tripsWithBookings);
         },
         error: (error: HttpErrorResponse) => {
-          this.alertService.displayError(`Failed to fetch trips: ${error.error.message}`);
+          this.alertService.displayError(`Failed to fetch trips: ${error.message}`);
         },
       });
   }
@@ -91,6 +94,9 @@ export class DashboardComponent implements OnInit {
   totalDestinationsVisited = computed(() => {
     const uniqueDestinations = new Set<string>();
     this.completedTrips().forEach((tripWithBookings) => {
+      if (tripWithBookings.trip.primaryDestination) {
+        uniqueDestinations.add(tripWithBookings.trip.primaryDestination.id);
+      }
       tripWithBookings.trip.destinations.forEach((dest) => {
         uniqueDestinations.add(dest.id);
       });

@@ -11,7 +11,7 @@ import { mockTrips } from '../mocks/mock-trips';
 })
 export class TripService {
   private readonly apiUrl = '/api/trips';
-  useMockData = true;
+  useMockData = false;
   private readonly httpClient = inject(HttpClient);
 
   getTrips(pageNumber: number = 1, pageSize: number = 10): Observable<PagedResultDto<TripDetailDto>> {
@@ -20,7 +20,8 @@ export class TripService {
     }
 
     return this.httpClient.get<PagedResultDto<TripDetailDto>>(
-      `${this.apiUrl}?pageNumber=${pageNumber}&pageSize=${pageSize}`
+      `${this.apiUrl}?pageNumber=${pageNumber}&pageSize=${pageSize}`,
+      { withCredentials: true }
     ).pipe(
       catchError((error) => {
         console.warn('API request failed, falling back to mock data', error);
@@ -35,7 +36,7 @@ export class TripService {
       return trip ? of(trip) : of(mockTrips[0]);
     }
 
-    return this.httpClient.get<TripDetailDto>(`${this.apiUrl}/${tripId}`).pipe(
+    return this.httpClient.get<TripDetailDto>(`${this.apiUrl}/${tripId}`, { withCredentials: true }).pipe(
       catchError(() => {
         const trip = mockTrips.find(t => t.id === tripId);
         return of(trip || mockTrips[0]);
@@ -51,7 +52,7 @@ export class TripService {
       } as TripDetailDto);
     }
 
-    return this.httpClient.post<TripDetailDto>(this.apiUrl, trip);
+    return this.httpClient.post<TripDetailDto>(this.apiUrl, trip, { withCredentials: true });
   }
 
   updateTrip(tripId: string, trip: Partial<TripDetailDto>): Observable<TripDetailDto> {
@@ -59,7 +60,7 @@ export class TripService {
       return of({ ...trip, id: tripId } as TripDetailDto);
     }
 
-    return this.httpClient.put<TripDetailDto>(`${this.apiUrl}/${tripId}`, trip);
+    return this.httpClient.put<TripDetailDto>(`${this.apiUrl}/${tripId}`, trip, { withCredentials: true });
   }
 
   deleteTrip(tripId: string): Observable<void> {
@@ -67,7 +68,7 @@ export class TripService {
       return of(void 0);
     }
 
-    return this.httpClient.delete<void>(`${this.apiUrl}/${tripId}`);
+    return this.httpClient.delete<void>(`${this.apiUrl}/${tripId}`, { withCredentials: true });
   }
 
   generateAiPlan(request: AiPlanRequestDto): Observable<AiPlanResponseDto> {
@@ -91,7 +92,7 @@ export class TripService {
       } as AiPlanResponseDto);
     }
 
-    return this.httpClient.post<AiPlanResponseDto>(`${this.apiUrl}/ai/plan`, request);
+    return this.httpClient.post<AiPlanResponseDto>(`${this.apiUrl}/ai/plan`, request, { withCredentials: true });
   }
 
   private getMockTripsAsPaged(): Observable<PagedResultDto<TripDetailDto>> {

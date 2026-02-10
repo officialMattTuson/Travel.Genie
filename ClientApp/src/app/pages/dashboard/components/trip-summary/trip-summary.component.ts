@@ -55,7 +55,9 @@ export class TripSummaryComponent {
   });
 
   destinationCount = computed(() => {
-    return this.tripDetails().trip.destinations.length;
+    const otherDestinationsLength = this.tripDetails().trip.destinations?.length ?? 0;
+    const primaryDestinationCount = this.tripDetails().trip.primaryDestination ? 1 : 0;
+    return primaryDestinationCount + otherDestinationsLength;
   });
 
   startDate = computed(() => new Date(this.tripDetails().trip.startDate));
