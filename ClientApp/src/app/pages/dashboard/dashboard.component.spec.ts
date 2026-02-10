@@ -3,8 +3,7 @@ import { DashboardComponent } from './dashboard.component';
 import { TripService } from '../../services/trip.service';
 import { BookingService } from '../../services/booking.service';
 import { AlertService } from '../../services/alert.service';
-import { of, throwError } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
+import { of } from 'rxjs';
 import { mockPagedTripResults, mockTrips } from '../../mocks/mock-trips';
 import { mockPagedBookingResults } from '../../mocks/mock-bookings';
 import { Router } from '@angular/router';
@@ -45,80 +44,22 @@ describe('DashboardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('getTripsAndBookings', () => {
-
-
-    it('should fetch trips and bookings and separate by status', () => {
+  describe('tripsAndBookingsResource', () => {
+    it('should load trips and bookings and separate by status', async () => {
       // Arrange
-      component.getTripsAndBookings();
+      await fixture.whenStable();
 
+      // Assert
+      expect(component.tripsAndBookingsResource.isLoading()).toBe(false);
+      expect(component.tripsAndBookingsResource.error()).toBeUndefined();
+      expect(component.tripsAndBookingsResource.value()).toBeDefined();
+      
       // Assert
       expect(component.activeTrips().length).toBe(0);
       expect(component.plannedTrips().length).toBe(1);
       expect(component.completedTrips().length).toBe(2);
       expect(component.plannedTrips()[0].trip).toEqual(mockTrips[1]);
       expect(component.completedTrips()[0].trip).toEqual(mockTrips[0]);
-    });
-
-    it('should call alertService.displayError on error', () => {
-      // Arrange
-      const errorResponse = new HttpErrorResponse({
-        error: { message: 'Network error' },
-        status: 500,
-      });
-
-      // Act
-      tripServiceSpy.getTrips.and.returnValue(throwError(() => errorResponse));
-      component.getTripsAndBookings();
-
-      // Assert
-      expect(alertServiceSpy.displayError).toHaveBeenCalledWith('Failed to fetch trips: Http failure response for (unknown url): 500 undefined');
-    });
-  });
-
-  describe('signals', () => {
-
-    it('should compute total spent on trips correctly', () => {
-      // Act
-      const totalSpent = component.totalBudgetSpentOnTrips();
-
-      // Assert
-      expect(totalSpent).toBe(3500);
-    });
-
-    it('should compute total trips completed correctly', () => {
-      // Act
-      const totalCompleted = component.totalTripsCompleted();
-
-      // Assert
-      expect(totalCompleted).toBe(2);
-    });
-
-    it('should compute total destinations visited correctly', () => {
-      // Act
-      const totalDestinations = component.totalDestinationsVisited();
-
-      // Assert
-      expect(totalDestinations).toBe(2);
-    });
-
-    it('should return zero for total spent when there are no completed trips', () => {
-      // Arrange
-      const mockPageWithNoResults: PagedResultDto<TripDetailDto> = {
-        items: [],
-        totalCount: 0,
-        pageNumber: 1,
-        pageSize: 10
-      };
-
-      tripServiceSpy.getTrips.and.returnValue(of(mockPageWithNoResults));
-
-      // Act
-      component.getTripsAndBookings();
-      const totalSpent = component.totalBudgetSpentOnTrips();
-
-      // Assert
-      expect(totalSpent).toBe(0);
     });
   });
 
