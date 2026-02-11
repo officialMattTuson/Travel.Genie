@@ -1,8 +1,8 @@
 import { Component, computed, input } from '@angular/core';
-import { TripDetailsWithBookings } from '../../../../models/trip-details.model';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { TripStatus } from '../../../../models/trip-type.model';
+import { TripDetailDto } from '../../../../models/dtos/trip.dtos';
 
 @Component({
   selector: 'app-trip-statistics',
@@ -12,17 +12,17 @@ import { TripStatus } from '../../../../models/trip-type.model';
 })
 export class TripStatisticsComponent {
 
-  activeTrips = input.required<TripDetailsWithBookings[]>();
-  completedTrips = input.required<TripDetailsWithBookings[]>();
-  upcomingTrips = input.required<TripDetailsWithBookings[]>();
+  activeTrips = input.required<TripDetailDto[]>();
+  completedTrips = input.required<TripDetailDto[]>();
+  upcomingTrips = input.required<TripDetailDto[]>();
 
   totalDestinationsVisited = computed(() => {
     const visitedDestinations = new Set<string>();
     this.completedTrips().forEach(completedTrip => {
-      if (completedTrip.trip.primaryDestination) {
-        visitedDestinations.add(completedTrip.trip.primaryDestination.id);
+      if (completedTrip.primaryDestination) {
+        visitedDestinations.add(completedTrip.primaryDestination.id);
       }
-      completedTrip.trip.destinations.forEach(destination => {
+      completedTrip.destinations.forEach(destination => {
         visitedDestinations.add(destination.id);
       });
     });
@@ -30,8 +30,8 @@ export class TripStatisticsComponent {
   });
 
   totalBudgetSpentOnTrips = computed(() => {
-    return this.completedTrips().reduce((sum, tripWithBooking) => {
-      return sum + (tripWithBooking.trip.budget?.totalBudget || 0);
+    return this.completedTrips().reduce((sum, trip) => {
+      return sum + (trip.budget?.totalBudget || 0);
     }, 0)
   });
 
@@ -40,18 +40,18 @@ export class TripStatisticsComponent {
     if (trips.length === 0) return 0;
 
     const MS_PER_DAY = 1000 * 60 * 60 * 24;
-    const totalDays = trips.reduce((sum, t) => {
-      return sum + (new Date(t.trip.endDate).getTime() - new Date(t.trip.startDate).getTime()) / MS_PER_DAY;
+    const totalDays = trips.reduce((sum, trip) => {
+      return sum + (new Date(trip.endDate).getTime() - new Date(trip.startDate).getTime()) / MS_PER_DAY;
     }, 0);
 
     return Math.round(totalDays / trips.length);
   });
 
   activeTripDays = computed(() => {
-    const activeTrip = this.activeTrips().find((t) => t.trip.status === TripStatus.InProgress);
+    const activeTrip = this.activeTrips().find((trip) => trip.status === TripStatus.InProgress);
     if (!activeTrip) return 0;
     const today = new Date();
-    const endDate = new Date(activeTrip.trip.endDate);
+    const endDate = new Date(activeTrip.endDate);
     return Math.max(0, Math.ceil((endDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)));
   });
 

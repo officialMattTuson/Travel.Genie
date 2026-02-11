@@ -1,6 +1,6 @@
 <div [class.trip--completed]="isPast()" class="trip">
   <div class="trip__header">
-    <h3 class="trip__destination">{{ tripDetails().trip.primaryDestination?.name }}</h3>
+    <h3 class="trip__destination">{{ tripDetails().primaryDestination?.name }}</h3>
     <span [class.trip__status--completed]="isPast()" class="trip__status">
       {{ isActive() ? 'Active' : isPast() ? 'Completed' : 'Upcoming' }}
     </span>
@@ -18,11 +18,7 @@
     </div>
     <div class="trip__stat">
       <span class="trip__stat-label">Budget</span>
-      <span class="trip__stat-value">${{ tripDetails().trip.budget?.totalBudget || 0 }}</span>
-    </div>
-    <div class="trip__stat">
-      <span class="trip__stat-label">Bookings</span>
-      <span class="trip__stat-value">{{ tripDetails().bookings.length }}</span>
+      <span class="trip__stat-value">${{ tripDetails().budget?.totalBudget || 0 }}</span>
     </div>
     } @else if (!isPast()) {
     <div class="trip__stat">
@@ -35,11 +31,7 @@
     </div>
     <div class="trip__stat">
       <span class="trip__stat-label">Budget</span>
-      <span class="trip__stat-value">${{ tripDetails().trip.budget?.totalBudget || 0 }}</span>
-    </div>
-    <div class="trip__stat">
-      <span class="trip__stat-label">Bookings</span>
-      <span class="trip__stat-value">{{ tripDetails().bookings.length }}</span>
+      <span class="trip__stat-value">${{ tripDetails().budget?.totalBudget || 0 }}</span>
     </div>
     } @else {
     <div class="trip__stat">
@@ -52,11 +44,7 @@
     </div>
     <div class="trip__stat">
       <span class="trip__stat-label">Budget</span>
-      <span class="trip__stat-value">${{ tripDetails().trip.budget?.totalBudget || 0 }}</span>
-    </div>
-    <div class="trip__stat">
-      <span class="trip__stat-label">Bookings</span>
-      <span class="trip__stat-value">{{ tripDetails().bookings.length }}</span>
+      <span class="trip__stat-value">${{ tripDetails().budget?.totalBudget || 0 }}</span>
     </div>
     }
   </div>

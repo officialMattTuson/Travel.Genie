@@ -2,15 +2,11 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TripStatisticsComponent } from './trip-statistics.component';
 import { mockTrips } from '../../../../mocks/mock-trips';
 import { TripStatus } from '../../../../models/trip-type.model';
-import { TripDetailsWithBookings } from '../../../../models/trip-details.model';
+import { TripDetailDto } from '../../../../models/dtos/trip.dtos';
 
-function getMockTrips(status: TripStatus): TripDetailsWithBookings[] {
+function getMockTrips(status: TripStatus): TripDetailDto[] {
   return mockTrips
-    .filter(trip => trip.status === status)
-    .map(trip => ({
-      trip: trip,
-      bookings: []
-    }));
+    .filter(trip => trip.status === status);
 }
 describe('TripStatisticsComponent', () => {
   let component: TripStatisticsComponent;
