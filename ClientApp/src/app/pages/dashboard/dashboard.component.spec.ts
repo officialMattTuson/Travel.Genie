@@ -1,33 +1,26 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DashboardComponent } from './dashboard.component';
 import { TripService } from '../../services/trip.service';
-import { BookingService } from '../../services/booking.service';
 import { AlertService } from '../../services/alert.service';
 import { of } from 'rxjs';
 import { mockPagedTripResults, mockTrips } from '../../mocks/mock-trips';
-import { mockPagedBookingResults } from '../../mocks/mock-bookings';
 import { Router } from '@angular/router';
-import { TripDetailDto } from '../../models/dtos/trip.dtos';
-import { PagedResultDto } from '../../models/dtos/common.dtos';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
   let tripServiceSpy: jasmine.SpyObj<TripService>;
-  let bookingServiceSpy: jasmine.SpyObj<BookingService>;
   let alertServiceSpy: jasmine.SpyObj<AlertService>;
   let router: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
     tripServiceSpy = jasmine.createSpyObj('TripService', ['getTrips']);
-    bookingServiceSpy = jasmine.createSpyObj('BookingService', ['getBookings']);
     alertServiceSpy = jasmine.createSpyObj('AlertService', ['displayError', 'displaySuccess']);
     router = jasmine.createSpyObj('Router', ['navigate']);
     await TestBed.configureTestingModule({
       imports: [DashboardComponent],
       providers: [
         { provide: TripService, useValue: tripServiceSpy },
-        { provide: BookingService, useValue: bookingServiceSpy },
         { provide: AlertService, useValue: alertServiceSpy },
         { provide: Router, useValue: router },
       ],
@@ -36,7 +29,6 @@ describe('DashboardComponent', () => {
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
     tripServiceSpy.getTrips.and.returnValue(of(mockPagedTripResults));
-    bookingServiceSpy.getBookings.and.returnValue(of(mockPagedBookingResults));
     fixture.detectChanges();
   });
 
@@ -44,22 +36,22 @@ describe('DashboardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('tripsAndBookingsResource', () => {
-    it('should load trips and bookings and separate by status', async () => {
+  describe('tripsResource', () => {
+    it('should load trips and separate by status', async () => {
       // Arrange
       await fixture.whenStable();
 
       // Assert
-      expect(component.tripsAndBookingsResource.isLoading()).toBe(false);
-      expect(component.tripsAndBookingsResource.error()).toBeUndefined();
-      expect(component.tripsAndBookingsResource.value()).toBeDefined();
+      expect(component.tripsResource.isLoading()).toBe(false);
+      expect(component.tripsResource.error()).toBeUndefined();
+      expect(component.tripsResource.value()).toBeDefined();
       
       // Assert
       expect(component.activeTrips().length).toBe(0);
       expect(component.plannedTrips().length).toBe(1);
       expect(component.completedTrips().length).toBe(2);
-      expect(component.plannedTrips()[0].trip).toEqual(mockTrips[1]);
-      expect(component.completedTrips()[0].trip).toEqual(mockTrips[0]);
+      expect(component.plannedTrips()[0]).toEqual(mockTrips[1]);
+      expect(component.completedTrips()[0]).toEqual(mockTrips[0]);
     });
   });
 
@@ -120,17 +112,6 @@ describe('DashboardComponent', () => {
 
       // Assert
       expect(router.navigate).toHaveBeenCalledWith(['/create-trip']);
-    });
-
-    it('should display alert message when "add-booking" quick action is clicked', () => {
-      // Arrange
-      const action = 'add-booking';
-
-      // Act
-      component.onQuickActionClick(action);
-
-      // Assert
-      expect(alertServiceSpy.displaySuccess).toHaveBeenCalledWith('Add Booking feature coming soon!');
     });
 
     it('should display alert message when "generate-itinerary" quick action is clicked', () => {

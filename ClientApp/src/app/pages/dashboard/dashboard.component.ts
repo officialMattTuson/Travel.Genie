@@ -1,10 +1,7 @@
 import { Component, inject, computed, resource } from '@angular/core';
 import { TripService } from '../../services/trip.service';
 import { AlertService } from '../../services/alert.service';
-import { BookingService } from '../../services/booking.service';
-import { TripDetailsWithBookings } from '../../models/trip-details.model';
-import { TripDetailDto, TripStatus } from '../../models/dtos/trip.dtos';
-import { Booking } from '../../models/booking.model';
+import { TripStatus } from '../../models/dtos/trip.dtos';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -29,7 +26,6 @@ export enum DashboardHeaderActions {
 export class DashboardComponent {
   private readonly tripService = inject(TripService);
   private readonly alertService = inject(AlertService);
-  private readonly bookingService = inject(BookingService);
   private readonly router = inject(Router);
 
   pageHeaderActions: Array<{ label: string; icon: string }> = [
@@ -39,16 +35,11 @@ export class DashboardComponent {
   ];
 
   // Using Resource API with observables converted to promise
-  // tripsAndBookingsResource = resource({
+  // tripsResource = resource({
   //   loader: () => {
   //     return firstValueFrom(
-  //       combineLatest([
-  //         this.tripService.getTrips(),
-  //         this.bookingService.getBookings()
-  //       ]).pipe(
-  //         map(([pagedTrips, pagedBookings]) => 
-  //           this.processTripsWithBookings(pagedTrips.items, pagedBookings.items || [])
-  //         ),
+  //         this.tripService.getTrips().items
+  //       ).pipe(
   //         catchError((error) => {
   //           const message = error instanceof Error ? error.message : 'Unknown error occurred';
   //           this.alertService.displayError(`Failed to fetch trips: ${message}`);
@@ -60,12 +51,11 @@ export class DashboardComponent {
   // });
 
   // Using Resource API using promises
-  tripsAndBookingsResource = resource({
+  tripsResource = resource({
     loader: async () => {
       try {
         const pagedTrips = await firstValueFrom(this.tripService.getTrips());
-        const pagedBookings = await firstValueFrom(this.bookingService.getBookings());
-        return this.processTripsWithBookings(pagedTrips.items, pagedBookings.items || []);
+        return pagedTrips.items;
       } catch (error) {
         const message = error instanceof Error ? error.message : 'Unknown error occurred';
         this.alertService.displayError(`Failed to fetch trips: ${message}`);
@@ -75,28 +65,19 @@ export class DashboardComponent {
   });
 
   activeTrips = computed(() => {
-    const trips = this.tripsAndBookingsResource.value();
-    return trips?.filter((t) => t.trip.status === TripStatus.InProgress) || [];
+    const trips = this.tripsResource.value();
+    return trips?.filter((trip) => trip.status === TripStatus.InProgress) || [];
   });
 
   plannedTrips = computed(() => {
-    const trips = this.tripsAndBookingsResource.value();
-    return trips?.filter((t) => t.trip.status === TripStatus.Planned) || [];
+    const trips = this.tripsResource.value();
+    return trips?.filter((trip) => trip.status === TripStatus.Planned) || [];
   });
 
   completedTrips = computed(() => {
-    const trips = this.tripsAndBookingsResource.value();
-    return trips?.filter((t) => t.trip.status === TripStatus.Completed) || [];
+    const trips = this.tripsResource.value();
+    return trips?.filter((trip) => trip.status === TripStatus.Completed) || [];
   });
-
-  private processTripsWithBookings(trips: TripDetailDto[], bookings: Booking[]): TripDetailsWithBookings[] {
-    const tripsWithBookings: TripDetailsWithBookings[] = [];
-    trips.forEach((trip) => {
-      const tripBookings = bookings.filter((booking) => booking.tripId === trip.id);
-      tripsWithBookings.push({ trip: trip, bookings: tripBookings });
-    });
-    return tripsWithBookings;
-  }
 
   onHeaderActionClick(actionLabel: string): void {
     switch (actionLabel) {
@@ -117,9 +98,6 @@ export class DashboardComponent {
       case 'plan-trip':
         this.navigateToCreateTripPage();
         break;
-      case 'add-booking':
-        this.handleAddBooking();
-        break;
       case 'generate-itinerary':
         this.handleGenerateItinerary();
         break;
@@ -131,10 +109,6 @@ export class DashboardComponent {
 
   private navigateToCreateTripPage(): void {
     this.router.navigate(['/create-trip']);
-  }
-
-  private handleAddBooking(): void {
-    this.alertService.displaySuccess('Add Booking feature coming soon!');
   }
 
   private handleGenerateItinerary(): void {

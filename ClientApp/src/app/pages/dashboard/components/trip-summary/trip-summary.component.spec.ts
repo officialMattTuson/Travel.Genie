@@ -1,9 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TripSummaryComponent } from './trip-summary.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { TripDetailsWithBookings } from '../../../../models/trip-details.model';
 import { mockTrips } from "../../../../mocks/mock-trips";
-import { mockBookings } from "../../../../mocks/mock-bookings";
+import { TripDetailDto } from '../../../../models/dtos/trip.dtos';
 
 describe('TripSummaryComponent', () => {
   let component: TripSummaryComponent;
@@ -40,13 +39,9 @@ describe('TripSummaryComponent', () => {
     ];
     trip.startDate = new Date(futureDate.getTime() + 86400000).toISOString(); // 1 day after futureDate
     trip.endDate = new Date(futureDate.getTime() + 432000000).toISOString(); // 5 days after futureDate
-    const tripDetails: TripDetailsWithBookings = {
-      trip: trip,
-      bookings: mockBookings
-    };
 
     // Act
-    fixture.componentRef.setInput('tripDetails', tripDetails);
+    fixture.componentRef.setInput('tripDetails', trip);
     fixture.detectChanges();
 
     // Assert
@@ -70,13 +65,9 @@ describe('TripSummaryComponent', () => {
     ];
     trip.startDate = pastDate.toISOString();
     trip.endDate = futureDate.toISOString();
-    const tripDetails: TripDetailsWithBookings = {
-      trip: trip,
-      bookings: mockBookings
-    };
 
     // Act
-    fixture.componentRef.setInput('tripDetails', tripDetails);
+    fixture.componentRef.setInput('tripDetails', trip);
     fixture.detectChanges();
 
     // Assert
@@ -105,13 +96,9 @@ describe('TripSummaryComponent', () => {
     trip.startDate = farPastDate.toISOString();
     trip.endDate = pastDate.toISOString();
     trip.budget = { currencyCode: 'EUR', totalBudget: 1200 };
-    const tripDetails: TripDetailsWithBookings = {
-      trip: trip,
-      bookings: mockBookings
-    };
 
     // Act
-    fixture.componentRef.setInput('tripDetails', tripDetails);
+    fixture.componentRef.setInput('tripDetails', trip);
     fixture.detectChanges();
 
     // Assert
@@ -127,7 +114,7 @@ describe('TripSummaryComponent', () => {
 
     const stats = fixture.nativeElement.querySelectorAll('.trip__stat-label');
     const labels = Array.from(stats as HTMLElement[]).map((el: HTMLElement) => el.textContent);
-    expect(labels).toEqual([ 'Duration', 'Destinations', 'Budget', 'Bookings' ]);
+    expect(labels).toEqual([ 'Duration', 'Destinations', 'Budget']);
   });
 
   it('should display correct number of days until for upcoming trip', () => {
@@ -139,13 +126,8 @@ describe('TripSummaryComponent', () => {
     trip.startDate = startDate.toISOString();
     trip.endDate = new Date(startDate.getTime() + 86400000 * 5).toISOString();
 
-    const tripDetails: TripDetailsWithBookings = {
-      trip: trip,
-      bookings: mockBookings
-    };
-
     // Act
-    fixture.componentRef.setInput('tripDetails', tripDetails);
+    fixture.componentRef.setInput('tripDetails', trip);
     fixture.detectChanges();
 
     // Assert
@@ -161,13 +143,8 @@ describe('TripSummaryComponent', () => {
     trip.startDate = new Date(today.getTime() - 86400000 * 2).toISOString();
     trip.endDate = new Date(today.getTime() + 86400000 * daysLeft).toISOString();
 
-    const tripDetails: TripDetailsWithBookings = {
-      trip: trip,
-      bookings: mockBookings
-    };
-
     // Act
-    fixture.componentRef.setInput('tripDetails', tripDetails);
+    fixture.componentRef.setInput('tripDetails', trip);
     fixture.detectChanges();
 
     // Assert
@@ -176,30 +153,6 @@ describe('TripSummaryComponent', () => {
     expect(daysLeftValue).toBeGreaterThanOrEqual(daysLeft - 1);
   });
 
-  it('should render correct number of bookings in active trip', () => {
-    // Arrange
-    const trip = { ...mockTrips[0] };
-    trip.startDate = futureDate.toISOString();
-    trip.endDate = new Date(futureDate.getTime() + 432000000).toISOString();
-
-    const tripDetails: TripDetailsWithBookings = {
-      trip: trip,
-      bookings: [mockBookings[0]]
-    };
-
-    // Act
-    fixture.componentRef.setInput('tripDetails', tripDetails);
-    fixture.detectChanges();
-
-    const tripStatLabels = Array.from(fixture.nativeElement.querySelectorAll('.trip__stat-label')) as Element[];
-    const bookingLabelIndex = tripStatLabels.findIndex((el: Element) => el.textContent?.includes('Bookings'));
-
-    // Assert
-    expect(bookingLabelIndex).toBeGreaterThanOrEqual(0);
-    
-    const tripStatValues = Array.from(fixture.nativeElement.querySelectorAll('.trip__stat-value'));
-    expect((tripStatValues[bookingLabelIndex] as HTMLElement)?.textContent).toContain('1');
-  });
 
   it('should return null for numberOfDaysLeft when trip is not active', () => {
     // Arrange
@@ -207,13 +160,8 @@ describe('TripSummaryComponent', () => {
     trip.startDate = futureDate.toISOString();
     trip.endDate = new Date(futureDate.getTime() + 432000000).toISOString();
 
-    const tripDetails: TripDetailsWithBookings = {
-      trip: trip,
-      bookings: mockBookings
-    };
-
     // Act
-    fixture.componentRef.setInput('tripDetails', tripDetails);
+    fixture.componentRef.setInput('tripDetails', trip);
     fixture.detectChanges();
 
     // Assert
@@ -226,13 +174,8 @@ describe('TripSummaryComponent', () => {
     trip.startDate = farPastDate.toISOString();
     trip.endDate = pastDate.toISOString();
 
-    const tripDetails: TripDetailsWithBookings = {
-      trip: trip,
-      bookings: mockBookings
-    };
-
     // Act
-    fixture.componentRef.setInput('tripDetails', tripDetails);
+    fixture.componentRef.setInput('tripDetails', trip);
     fixture.detectChanges();
 
     // Assert
@@ -247,13 +190,8 @@ describe('TripSummaryComponent', () => {
     trip.startDate = startDate.toISOString();
     trip.endDate = endDate.toISOString();
 
-    const tripDetails: TripDetailsWithBookings = {
-      trip: trip,
-      bookings: mockBookings
-    };
-
     // Act
-    fixture.componentRef.setInput('tripDetails', tripDetails);
+    fixture.componentRef.setInput('tripDetails', trip);
     fixture.detectChanges();
 
     // Assert
@@ -270,13 +208,8 @@ describe('TripSummaryComponent', () => {
     trip.startDate = startDate.toISOString();
     trip.endDate = endDate.toISOString();
 
-    const tripDetails: TripDetailsWithBookings = {
-      trip: trip,
-      bookings: mockBookings
-    };
-
     // Act
-    fixture.componentRef.setInput('tripDetails', tripDetails);
+    fixture.componentRef.setInput('tripDetails', trip);
     fixture.detectChanges();
 
     const computedStartDate = component.startDate();

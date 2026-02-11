@@ -26,7 +26,6 @@ namespace Travel.Genie.Data
     public DbSet<AiChatMessage> AiChatMessages { get; set; }
 
     public DbSet<TripDetails> TripDetails { get; set; }
-    public DbSet<Booking> Bookings { get; set; }
     public DbSet<TransportType> TransportTypes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
